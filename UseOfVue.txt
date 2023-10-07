@@ -1,0 +1,8 @@
+1.  als erstes node.js installieren
+    https://nodejs.org/en/download/
+
+2.  danach in terminal folgendes eingeben:
+    npm install -g @vue/cli
+
+3.  zum starte in terminal de befehl eingeben:
+    \aichatbot> npm run serve
