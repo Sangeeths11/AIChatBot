@@ -1,19 +1,20 @@
 <template>
-    <div class="login-container">
+    <div class="register-container">
       <h1>Welcome to our Dashboard</h1>
       <img src="@/assets/logo.png" alt="Profile Image" class="profile-img">
       <input type="text" placeholder="Username">
       <input type="password" placeholder="Password">
-      <button>Login</button>
+      <input type="passwordConfirmation" placeholder="Password Confirmation">
+      <button>Sign up</button>
       <div class="helper-texts">
-        <router-link to="/UserRegister">Don't have an account? Sign up</router-link>
+        <router-link href="/UserLogin">Do you have an account? Log In</router-link>
       </div>
     </div>
   </template>
   
   <script>
   export default {
-    name: 'UserLogin'
+    name: 'UserRegister'
   }
   </script>
   
@@ -23,7 +24,7 @@
     font-size: 30px;
     color: #4caf50;
   }
-  .login-container {
+  .register-container{
     max-width: 400px;
     margin: 0 auto;
     text-align: center;
