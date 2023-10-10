@@ -6,7 +6,7 @@
       <input type="password" placeholder="Password">
       <button>Login</button>
       <div class="helper-texts">
-        <a href="#">Forgot Username / Password?</a> I want this forgot in a seperate color then username and password
+        <a href="#">Forgot Username / Password?</a>
         <a href="#">Don't have an account? Sign up</a>
       </div>
     </div>
