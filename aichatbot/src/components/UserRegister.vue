@@ -7,7 +7,7 @@
       <input type="passwordConfirmation" placeholder="Password Confirmation">
       <button>Sign up</button>
       <div class="helper-texts">
-        <router-link to="/UserLogin">Do you have an account? Log in</router-link>
+        <router-link to="#/UserLogin">Do you have an account? Log in</router-link>
       </div>
     </div>
   </template>

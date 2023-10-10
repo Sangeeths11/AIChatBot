@@ -6,7 +6,7 @@
       <input type="password" placeholder="Password">
       <button>Login</button>
       <div class="helper-texts">
-        <router-link to="/UserRegister">Don't have an account? Sign up</router-link>
+        <router-link to="/register">Don't have an account? Sign up</router-link>
       </div>
     </div>
   </template>
