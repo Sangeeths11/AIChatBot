@@ -1,10 +1,16 @@
 <template>
     <div class="register-container">
       <h1>Welcome to our Dashboard</h1>
-      <img src="@/assets/logo.png" alt="Profile Image" class="profile-img">
-      <input type="text" placeholder="Username">
-      <input type="password" placeholder="Password">
-      <input type="passwordConfirmation" placeholder="Password Confirmation">
+      <label class="label">
+        <span class="label-text">Username:</span>
+      </label>
+      <input type="text" placeholder="Type here" class="input input-bordered input-success w-full" />
+      
+      <label class="label">
+        <span class="label-text">Password:</span>
+      </label>
+      <input type="password" placeholder="Type here" class="input input-bordered input-success w-full" />
+      <input type="password" placeholder="Type here again" class="input input-bordered input-success w-full" />
       <button>Sign up</button>
       <div class="helper-texts">
         <router-link to="login">Do you have an account? Log in</router-link>
@@ -38,13 +44,12 @@
     margin: 20px 0;
   }
   
-  input[type="text"], input[type="password"], button {
+  input[type="text"], input[type="password"], input[type="passwordConfirmation"], button {
     display: block;
     width: 100%;
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
-    box-sizing: border-box;
   }
   
   button {
