@@ -8,8 +8,9 @@ import UserRegister from './components/UserRegister.vue'
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/login', component: UserLogin },
-        { path: '/register', component: UserRegister },
+        { path: '/login', component: UserLogin, name: 'login' },
+        { path: '/', component: UserLogin, name: 'home' },
+        { path: '/register', component: UserRegister, name: 'register' },
     ]
 });
 
