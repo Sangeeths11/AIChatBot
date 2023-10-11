@@ -8,6 +8,7 @@ defineProps({
     msg: {
         type: String,
         required: true
+        asd
     }
 })
 </script>
