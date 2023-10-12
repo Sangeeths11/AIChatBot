@@ -1,11 +1,11 @@
 <template>
   <div>
-    <clicker :msg="msg" />
+    <login/>
   </div>
 </template>
 
 <script lang="ts" setup>
+import Login from './login.vue';
 
-const msg = ref("Grüeziiii");
 
 </script>
