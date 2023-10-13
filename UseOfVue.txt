@@ -3,6 +3,9 @@
 
 2.  danach in terminal folgendes eingeben:
     npm install -g @vue/cli
+    npm install --global yarn
+    npm install -g create-nuxt-app
+    \aichatbot-nuxt> yarn add nuxt
 
 3.  zum starte in terminal de befehl eingeben:
-    \aichatbot> npm run serve
+    \aichatbot-nuxt> yarn run dev
