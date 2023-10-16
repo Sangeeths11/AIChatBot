@@ -1,7 +1,6 @@
 <template>
     <div class="login-container">
-      <h1>Welcome to our Dashboard</h1>
-      <img src="@/assets/logo.png" alt="Profile Image" class="profile-img">
+      <h1 class="p-10">Welcome to our Dashboard</h1>
       <input type="text" placeholder="Username">
       <input type="password" placeholder="Password">
       <button>Login</button>

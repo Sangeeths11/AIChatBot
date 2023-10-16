@@ -4,17 +4,17 @@
       <label class="label">
         <span class="label-text">Upload your Profile</span>
       </label>
-      <input type="text" placeholder="Type here" class="input input-bordered input-success w-full" />
+      <input type="file" accept="image/*" class="file-input file-input-bordered file-input-md w-full" />
       <label class="label">
         <span class="label-text">Username:</span>
       </label>
-      <input type="text" placeholder="Type here" class="input input-bordered input-success w-full" />
+      <input type="text" placeholder="Type here" class="input input-bordered  w-full" />
       
       <label class="label">
         <span class="label-text">Password:</span>
       </label>
-      <input type="password" placeholder="Type here" class="input input-bordered input-success w-full" />
-      <input type="password" placeholder="Type here again" class="input input-bordered input-success w-full" />
+      <input type="password" placeholder="Type here" class="input input-bordered  w-full" />
+      <input type="password" placeholder="Type here again" class="input input-bordered w-full" />
       <button>Sign up</button>
       <div class="helper-texts">
         <router-link to="login">Do you have an account? Log in</router-link>
