@@ -9,6 +9,9 @@
                 <!-- Sample image (replace with actual image paths) -->
                 <img src="path_to_images/image_placeholder.png" alt="Subject Image" class="w-full h-32 object-cover rounded-md">
                 <h2 class="mt-2 text-center">Subject {{ i }}</h2>
+                <button class="absolute bottom-2 left-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded focus:outline-none">
+                    Lernen
+                </button>
             </div>
 
             <!-- The last (36th) card with a plus icon -->
