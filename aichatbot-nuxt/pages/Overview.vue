@@ -38,4 +38,10 @@ h1 {
     font-size: 30px;
     color: #4caf50;
 }
+
+button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+}
 </style>
