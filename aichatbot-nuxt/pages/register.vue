@@ -2,6 +2,10 @@
     <div class="register-container">
       <h1>Welcome to our Dashboard</h1>
       <label class="label">
+        <span class="label-text">Upload your Profile</span>
+      </label>
+      <input type="text" placeholder="Type here" class="input input-bordered input-success w-full" />
+      <label class="label">
         <span class="label-text">Username:</span>
       </label>
       <input type="text" placeholder="Type here" class="input input-bordered input-success w-full" />
