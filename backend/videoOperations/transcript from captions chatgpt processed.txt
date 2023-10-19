@@ -1,0 +1,45 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0
+
+Today, I'm going to introduce you to the world of Principal Component Analysis, or PCA. I'm Josh Stommer, and this is Stat Quest. If you want more detailed information, you can check out my other video on PCA.
+
+Let's start with a scenario: we have some normal cells, but we suspect they're different in some way, even though they look the same. These cells could represent various things - people, cars, cities, you name it. Since we can't observe the differences from the outside, we sequence the messenger RNA in each cell to identify which genes are active, giving us insights into what these cells are doing.
+
+Now, looking at our data, each column represents how much each gene is transcribed in each cell. For simplicity, let's imagine we have only two cells. We can plot the measurements for each gene. Gene one is highly transcribed in cell one but lowly transcribed in cell two, while gene nine is lowly transcribed in cell one but highly transcribed in cell two. Generally, cell one and cell two have an inverse correlation, indicating they are likely two different types of cells.
+
+Let's expand this to three cells. We can compare cell one to cell two and cell three. Cell one and cell three are positively correlated, suggesting they are doing similar things. On the other hand, cell two is negatively correlated with cell three, indicating they are doing different things.
+
+When we have more cells, plotting tons of two-cell comparisons becomes unwieldy. We don't want to create crazy graphs with an axis for each cell either. Instead, we use Principal Component Analysis, or PCA. A PCA plot converts the correlations (or lack thereof) among the cells into a 2D graph. Highly correlated cells cluster together. We can color-code these clusters to make them easier to distinguish.
+
+Identifying clusters in the PCA plot allows us to go back to the original cells and see that they represent three different types of cells, each engaged in different activities with their genes. It's a powerful visualization tool.
+
+One last important idea about PCA plots: the axes are ranked in order of importance. Differences along the first principal component axis (PC1) are more important than differences along the second principal component axis (PC2). If the plot looks like this, where the distance between two clusters is about the same as the distance between the other two clusters, the two clusters are more different from each other.
+
+Before we conclude, remember that PCA is just one way to make sense of this kind of data. There are other methods, such as heat maps, t-SNE plots, and multiple dimension scaling plots. Don't worry; I have Stat Quests for all of these. If you're still confused, check out my original Stat Quest on PCA.
+
+That's it for today's Stat Quest. If you found this video helpful, please subscribe, and if you have any ideas for additional Stat Quests, feel free to share them in the comments below. Until next time, quest on!
