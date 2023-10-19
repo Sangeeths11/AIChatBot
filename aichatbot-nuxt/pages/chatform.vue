@@ -1,34 +1,20 @@
-<!-- src/components/ChatComponent.vue -->
 <template>
     <div class="p-20">
-        <div class="chat chat-start">
+        <div v-for="message in messages" :key="message.time" :class="['chat', message.sender === 'You' ? 'chat-end' : 'chat-start']">
             <div class="chat-image avatar">
                 <div class="w-10 rounded-full">
                     <img src="../assets/images/Chatbot.png" />
                 </div>
             </div>
             <div class="chat-header">
-                Obi-Wan Kenobi
-                <time class="text-xs opacity-50">12:45</time>
+                {{ message.sender }}
+                <time class="text-xs opacity-50">{{ message.time }}</time>
             </div>
-            <div class="chat-bubble chat-bubble-primary">You were the Chosen One!</div>
+            <div :class="['chat-bubble', message.sender === 'You' ? 'chat-bubble-success' : 'chat-bubble-primary']">
+                {{ message.content }}
+            </div>
             <div class="chat-footer opacity-50">
-                Delivered
-            </div>
-            </div>
-            <div class="chat chat-end">
-                <div class="chat-image avatar">
-                    <div class="w-10 rounded-full">
-                        <img src="../assets/images/Chatbot.png" alt="Image 1" />
-                    </div>
-                </div>
-                <div class="chat-header">
-                    Anakin
-                    <time class="text-xs opacity-50">12:46</time>
-                </div>
-            <div class="chat-bubble chat-bubble-success">I hate you!</div>
-            <div class="chat-footer opacity-50">
-                Seen at 12:46
+                {{ message.status }}
             </div>
         </div>
         
@@ -38,6 +24,7 @@
                 placeholder="Type your message..."
                 v-model="newMessage"
                 class="p-2 border border-gray-300 rounded-l-md focus:outline-none focus:border-blue-400 flex-grow w-11/12 center"
+                @keyup.enter="sendMessage"
             />
             <button
                 @click="sendMessage"
@@ -50,27 +37,42 @@
         </div>
     </div>
 </template>
-  
-  <script>
-    export default {
-        name: 'ChatComponent',
-        data() {
-            return {
-            newMessage: '', // Store the new message input
-        };
-    },
-    methods: {
-        sendMessage() {
-        // You can handle sending the message here
-        // For now, let's just log the message to the console
-        console.log('Message sent:', this.newMessage);
 
-        // Clear the input field after sending the message
-        this.newMessage = '';
-        },
-    },
+  
+<script lang="ts" setup>
+interface Message {
+    sender: string;
+    content: string;
+    time: string;
+    status: string;
+}
+
+
+const messages = ref<Message[]>([]);
+
+const newMessage = ref('');
+
+const sendMessage = () => {
+    if (newMessage.value.trim() !== '') {
+        messages.value.push({
+            sender: 'You',
+            content: newMessage.value,
+            time: new Date().toLocaleTimeString(),
+            status: 'Delivered'
+        });
+        newMessage.value = '';
+
+        setTimeout(() => {
+            messages.value.push({
+                sender: 'Chatbot',
+                content: 'I received your message!',
+                time: new Date().toLocaleTimeString(),
+                status: 'Delivered'
+            });
+        }, 1000);
     }
-  </script>
+};
+</script>
   
   <style>
   /* You can adjust more styles as per your needs */
