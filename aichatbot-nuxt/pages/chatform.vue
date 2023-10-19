@@ -17,7 +17,7 @@
                 {{ message.status }}
             </div>
         </div>
-        
+
         <div class="message-input flex items-center p-20">
             <input
                 type="text"
@@ -38,8 +38,9 @@
     </div>
 </template>
 
-  
+
 <script lang="ts" setup>
+// Typescript interface for the message object
 interface Message {
     sender: string;
     content: string;
@@ -73,8 +74,7 @@ const sendMessage = () => {
     }
 };
 </script>
-  
+
   <style>
   /* You can adjust more styles as per your needs */
   </style>
-  
