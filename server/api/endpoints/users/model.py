@@ -1,37 +1,50 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
+from flask_restful import Resource, reqparse
+from flask import jsonify
 
-# Initialize Firebase
-cred = credentials.Certificate('path/to/your/serviceAccountKey.json')
-firebase_admin.initialize_app(cred)
 
-# Initialize Firestore
+
 db = firestore.client()
 
-# User Model
-class User:
-    def __init__(self, id, name, email):
-        self.id = id
-        self.name = name
-        self.email = email
-        self.topics = []
 
-    def to_dict(self):
-        return {
-            'name': self.name,
-            'email': self.email,
-            'topics': self.topics
-        }
-        
-    # Function to get all users from the database
-    @classmethod
-    def get_all_users_from_db(cls):
-        users = []
+# Functions to interact with your database (e.g., Firestore) would be defined here
+# You should replace these placeholders with actual database operations
 
-        # Retrieve user data from the database (Firestore in this case)
-        # You should implement the code to fetch user data from your database here.
-        # It would typically involve querying your database using Firebase Admin SDK.
+def getUserById(userId):
+    user_ref = db.collection("Users").document(userId)
+    user_data = user_ref.get()
+    
+    if user_data.exists:
+        return user_data.to_dict()
+    else:
+        return None
 
-        return users
+def createNewUser(firstName, lastName, email):
+        time, id = db.collection("users").add({
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email})        
+        return id
 
-# Topic Model
+def updateUser(userId, firstName, lastName, email):
+    user_ref = db.collection("Users").document(userId)
+    
+    user_data = {
+        "firstname": firstName,
+        "lastname": lastName,
+        "email": email
+    }
+
+    # Update the user document with the new data
+    user_ref.update(user_data)
+    
+    return True  # Assuming the update operation succeeded
+
+def deleteUser(userId):
+    user_ref = db.collection("Users").document(userId)
+    
+    # Delete the user document
+    user_ref.delete()
+    
+    return True  # Assuming the delete operation succeeded

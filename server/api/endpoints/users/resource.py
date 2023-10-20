@@ -1,20 +1,52 @@
-from flask import Flask, request, jsonify
-from model import User
+import firebase_admin
+from firebase_admin import credentials, firestore
+from flask_restful import Resource, reqparse
+from flask import jsonify
+from .model import *
 
-app = Flask(__name__)
 
-# Route to create a new user
-@app.route('/users', methods=['POST'])
-def create_user():
-    data = request.get_json()
-    user = User(id=None, name=data['name'], email=data['email'])
-    user_id = save_user(user)
-    return jsonify({'id': user_id}), 201
+db = firestore.client()
+
+
+class User(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('firstName')
+        self.parser.add_argument('lastName')
+        self.parser.add_argument('email')
+
+    def get(self, userId):
+        # Implement logic to retrieve a user by their ID
+        userData = getUserById(userId)
+        if userData is None:
+            return {'message': 'User not found'}, 404
+        return jsonify(userData)
+
+    def post(self):
+        # Implement logic to create a new user
+        args = self.parser.parse_args()
+        newUserId = createNewUser(args['firstName'], args['lastName'], args['email'])
+        return {'message': 'User created', 'userId': newUserId}, 201
+
+    def put(self, userId):
+        # Implement logic to update an existing user by their ID
+        args = self.parser.parse_args()
+        success = updateUser(userId, args['firstName'], args['lastName'], args['email'])
+        if success:
+            return {'message': 'User updated'}, 200
+        return {'message': 'User not found'}, 404
+
+    def delete(self, userId):
+        # Implement logic to delete a user by their ID
+        success = deleteUser(userId)
+        if success:
+            return {'message': 'User deleted'}, 200
+        return {'message': 'User not found'}, 404
 
 # Route to get all users
-@app.route('/users', methods=['GET'])
-def get_all_users():
-    users = get_all_users_from_db()
-    user_dicts = [user.to_dict() for user in users]
-    return jsonify({'users': user_dicts})
+# @app.route('/users', methods=['GET'])
+# def get_all_users():
+#     users = User.getAll()
+#     user_dicts = [user.to_dict() for user in users]
+#     return jsonify({'users': user_dicts})
 
