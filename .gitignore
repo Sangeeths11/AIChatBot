@@ -24,4 +24,4 @@ logs
 !.env.example
 
 # credentials
-credentialsFirestore
+credsFirestore.json
