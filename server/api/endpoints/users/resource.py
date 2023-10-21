@@ -12,12 +12,16 @@ class User(Resource):
         self.parser.add_argument('lastName')
         self.parser.add_argument('email')
 
-    def get(self, userId):
-        # Implement logic to retrieve a user by their ID
-        userData = getUserById(userId)
-        if userData is None:
-            return {'message': 'User not found'}, 404
-        return jsonify(userData)
+    def get(self, userId= None):
+        if userId is None:
+            users = getAllUsers()
+            return jsonify({'users': users})
+        else:
+            userData = getUserById(userId)
+            if userData is None:
+                return {'message': 'User not found'}, 404
+            return jsonify(userData)
+
 
     def post(self):
         # Implement logic to create a new user
@@ -39,11 +43,5 @@ class User(Resource):
         if success:
             return {'message': 'User deleted'}, 200
         return {'message': 'User not found'}, 404
-
-# Route to get all users
-# @app.route('/users', methods=['GET'])
-# def get_all_users():
-#     users = User.getAll()
-#     user_dicts = [user.to_dict() for user in users]
-#     return jsonify({'users': user_dicts})
+    
 

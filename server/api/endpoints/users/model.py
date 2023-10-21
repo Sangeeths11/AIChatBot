@@ -28,7 +28,7 @@ def createNewUser(firstName, lastName, email):
         return id
 
 def updateUser(userId, firstName, lastName, email):
-    user_ref = db.collection("Users").document(userId)
+    user_ref = db.collection("users").document(userId)
     
     user_data = {
         "firstname": firstName,
@@ -42,9 +42,15 @@ def updateUser(userId, firstName, lastName, email):
     return True  # Assuming the update operation succeeded
 
 def deleteUser(userId):
-    user_ref = db.collection("Users").document(userId)
+    user_ref = db.collection("users").document(userId)
     
     # Delete the user document
     user_ref.delete()
     
     return True  # Assuming the delete operation succeeded
+
+def getAllUsers():
+    usersRef = db.collection("users")  
+    users = usersRef.stream()
+    return [user.to_dict() for user in users]
+    

@@ -31,8 +31,9 @@ api.prefix = '/api'
 
 # import ressources
 from endpoints.users.resource import User
-
+from endpoints.subjects.resource import Subject
 api.add_resource(User, '/users', '/users/<string:userId>')
+api.add_resource(Subject, '/users/<string:userId>/subjects', '/users/<string:userId>/subjects/<string:subjectId>')
 
 
 if __name__ == '__main__':
