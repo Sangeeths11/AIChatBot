@@ -4,11 +4,6 @@ from firebase_admin import firestore
 from google.cloud import storage
 import appconfig as config
 
-cred = credentials.Certificate("server\credsFirestore.json")
-firebase_admin.initialize_app(cred)
-
-
-db = firestore.client()
 
 
 

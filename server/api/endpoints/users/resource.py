@@ -5,9 +5,6 @@ from flask import jsonify
 from .model import *
 
 
-db = firestore.client()
-
-
 class User(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()

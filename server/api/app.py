@@ -21,8 +21,6 @@ for ex in default_exceptions:
     app.register_error_handler(ex, handle_error)
 
 
-
-
 # Initialize Firebase
 cred = credentials.Certificate(config.CREDENTIALS_PATH)
 firebase_admin.initialize_app(cred)
@@ -34,7 +32,7 @@ api.prefix = '/api'
 # import ressources
 from endpoints.users.resource import User
 
-api.add_resource(User, '/users', '/users/<string:user_id>')
+api.add_resource(User, '/users', '/users/<string:userId>')
 
 
 if __name__ == '__main__':
