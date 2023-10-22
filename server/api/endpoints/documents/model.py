@@ -1,8 +1,5 @@
-import firebase_admin
 from firebase_admin import credentials, firestore
-from flask_restful import Resource, reqparse
 from flask import jsonify
-import appconfig as config
 
 db = firestore.client()
 
@@ -14,17 +11,19 @@ def getDocumentById(userId, subjectId, documentId):
     else:
         return None
 
-def createNewDocument(userId, subjectId, title):
+def createNewDocument(userId, subjectId, name, url):
         time, ref = db.collection("users").document(userId).collection("subjects").document(subjectId).collection("documents").add({
-            "title": title
+            "name": name,
+            "url": url
             })        
         return ref.id
 
-def updateDocument(userId, subjectId, documentId, title):
+def updateDocument(userId, subjectId, documentId, name, url):
     ref = db.collection("users").document(userId).collection("subjects").document(subjectId).collection("documents").document(documentId)
     data = {
-        "title": title
-    }
+            "name": name,
+            "url": url
+            }
 
     ref.update(data)
     return True

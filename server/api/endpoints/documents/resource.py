@@ -8,11 +8,12 @@ from .model import *
 class Document(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('title')
+        self.parser.add_argument('name')
+        self.parser.add_argument('url')
 
     def get(self, userId, subjectId, documentId=None):
         if documentId is None:
-            documents = getAllDocuents(userId, subjectId)
+            documents = getAllDocuments(userId, subjectId)
             return jsonify({'documents': documents})
         else:
             subjectData = getDocumentById(userId, subjectId, documentId)
@@ -20,14 +21,14 @@ class Document(Resource):
                 return {'message': 'Document not found'}, 404
             return jsonify(subjectData)
 
-    def post(self, userId, subjectId, documentId):
+    def post(self, userId, subjectId):
         args = self.parser.parse_args()
-        newDocumentId = createNewDocument(userId, subjectId, documentId, args['title'])
+        newDocumentId = createNewDocument(userId, subjectId, args['name'], args['url'])
         return {'message': 'Document created', 'documentId': newDocumentId}, 201
 
     def put(self, userId, subjectId, documentId):
         args = self.parser.parse_args()
-        success = updateDocument(userId, subjectId, documentId, args['title'])
+        success = updateDocument(userId, subjectId, documentId,  args['name'], args['url'])
         if success:
             return {'message': 'document updated'}, 200
         return {'message': 'document not found'}, 404
