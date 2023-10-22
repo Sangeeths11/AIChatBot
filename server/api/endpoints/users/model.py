@@ -21,11 +21,11 @@ def getUserById(userId):
         return None
 
 def createNewUser(firstName, lastName, email):
-        time, id = db.collection("users").add({
-            "firstName": firstName,
-            "lastName": lastName,
+        time, ref = db.collection("users").add({
+            "firstname": firstName,
+            "lastname": lastName,
             "email": email})        
-        return id
+        return ref.id
 
 def updateUser(userId, firstName, lastName, email):
     user_ref = db.collection("users").document(userId)

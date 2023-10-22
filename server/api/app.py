@@ -29,7 +29,7 @@ firebase_admin.initialize_app(cred)
 api = Api(app)
 api.prefix = '/api'
 
-# import ressources
+# import resources
 from endpoints.users.resource import User
 from endpoints.subjects.resource import Subject
 api.add_resource(User, '/users', '/users/<string:userId>')
