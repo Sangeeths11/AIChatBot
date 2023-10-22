@@ -20,9 +20,9 @@ class Subject(Resource):
                 return {'message': 'Subject not found'}, 404
             return jsonify(subjectData)
 
-    def post(self):
+    def post(self, userId):
         args = self.parser.parse_args()
-        newSubjectId = createNewSubject(args['name'])
+        newSubjectId = createNewSubject(userId, args['name'])
         return {'message': 'Subject created', 'subjectId': newSubjectId}, 201
 
     def put(self, subjectId):
