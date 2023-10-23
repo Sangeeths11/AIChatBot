@@ -20,20 +20,19 @@ def getUserById(userId):
     else:
         return None
 
-def createNewUser(firstName, lastName, email):
+def createNewUser(name, password):
         time, ref = db.collection("users").add({
-            "firstname": firstName,
-            "lastname": lastName,
-            "email": email})        
+            "name": name,
+            "password": password
+            })        
         return ref.id
 
-def updateUser(userId, firstName, lastName, email):
+def updateUser(userId, name, password):
     ref = db.collection("users").document(userId)
     data = {
-        "firstname": firstName,
-        "lastname": lastName,
-        "email": email
-    }
+            "name": name,
+            "password": password
+            }
 
     # Update the user document with the new data
     ref.update(data)

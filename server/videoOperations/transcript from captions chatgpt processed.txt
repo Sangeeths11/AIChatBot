@@ -1,29 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 0
 
 Today, I'm going to introduce you to the world of Principal Component Analysis, or PCA. I'm Josh Stommer, and this is Stat Quest. If you want more detailed information, you can check out my other video on PCA.

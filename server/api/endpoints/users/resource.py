@@ -8,9 +8,8 @@ from .model import *
 class User(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('firstname')
-        self.parser.add_argument('lastname')
-        self.parser.add_argument('email')
+        self.parser.add_argument('name')
+        self.parser.add_argument('password')
 
     def get(self, userId= None):
         if userId is None:
@@ -26,13 +25,13 @@ class User(Resource):
     def post(self):
         # Implement logic to create a new user
         args = self.parser.parse_args()
-        newUserId = createNewUser(args['firstname'], args['lastname'], args['email'])
+        newUserId = createNewUser(args["name"], args["password"])
         return {'message': 'User created', 'userId': newUserId}, 201
 
     def put(self, userId):
         # Implement logic to update an existing user by their ID
         args = self.parser.parse_args()
-        success = updateUser(userId, args['firstname'], args['lastname'], args['email'])
+        success = updateUser(userId, args["name"], args["password"])
         if success:
             return {'message': 'User updated'}, 200
         return {'message': 'User not found'}, 404

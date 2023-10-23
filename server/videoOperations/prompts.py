@@ -1,6 +1,6 @@
 def getVideoSearchQuery(topic, count=10):
     return """You are a searcher for the best educational content on youtube. 
-    Your students wants some helpful ressources on "topic": """ + topic + """.
+    Your students wants some helpful resources on "topic": """ + topic + """.
 
     Recommend """ + str(count) + """ different search queries that he can try on youtube, to find the best possible educational content exactly on the "topic" that he needs help with.
     When you make a recommendation take into consideration, that not every student has the same level and previous knowledge, so provide queries to search for different levels of knowledge from beginner to advanced.
@@ -30,7 +30,7 @@ def getBestVideosPrompt(videos, count=3):
     Select the top """ + str(count) + """ videos to learn about dimensionality reduction from the options provided in the Json below.
     Use the "title", "url", "sentimentScore" attributes of each video to determine which three are the best ones.
 
-    If presented to an unknown user, there should be a video for everyone, from beginner to  advanced.
+    If presented to an unknown user, there should be a video for everyone, from beginner to advanced.
     So keep in mind to not only select beginner or only videos that cover advanced topics.
 
     Return a Json with the same structure as the provided one below, containing your top """ + str(count) + """ videos, starting with the best one.
