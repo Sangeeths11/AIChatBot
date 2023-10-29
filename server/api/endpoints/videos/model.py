@@ -10,20 +10,21 @@ def getVideoById(userId, subjectId, videoId):
     else:
         return None
 
-def createNewVideo(userId, subjectId, name, url):
+def createNewVideo(userId, subjectId, name, url, transcriptUrl=""):
         time, ref = db.collection("users").document(userId).collection("subjects").document(subjectId).collection("videos").add({
             "name": name,
-            "url": url
+            "url": url,
+            "transcriptUrl": transcriptUrl
             })        
         return ref.id
 
-def updateVideo(userId, subjectId, videoId, name, url):
+def updateVideo(userId, subjectId, videoId, name, url, transcriptUrl):
     ref = db.collection("users").document(userId).collection("subjects").document(subjectId).collection("videos").document(videoId)
     data = {
             "name": name,
-            "url": url
+            "url": url,
+            "transcriptUrl": transcriptUrl
             }
-
     ref.update(data)
     return True
 

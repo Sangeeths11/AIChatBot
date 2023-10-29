@@ -25,10 +25,10 @@ def getVideoSearchQuery(topic, count=10):
         
     
     
-def getBestVideosPrompt(videos, count=3):
+def getBestVideosPrompt(topic, videos, count=3):
     return """
-    Select the top """ + str(count) + """ videos to learn about dimensionality reduction from the options provided in the Json below.
-    Use the "title", "url", "sentimentScore" attributes of each video to determine which three are the best ones.
+    Select the top """ + str(count) + """ videos to learn about """+ topic + """ from the options provided in the Json below.
+    Use the "name", "url", "sentimentScore" attributes of each video to determine which three are the best ones.
 
     If presented to an unknown user, there should be a video for everyone, from beginner to advanced.
     So keep in mind to not only select beginner or only videos that cover advanced topics.

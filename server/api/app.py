@@ -1,6 +1,8 @@
+import sys
+sys.path.append('server')
+
 from flask import Flask, jsonify
 from flask_restful import Api
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
 from werkzeug.exceptions import default_exceptions
 import appconfig as config
@@ -37,14 +39,15 @@ from endpoints.users.resource import User
 from endpoints.subjects.resource import Subject
 from endpoints.documents.resource import Document
 from endpoints.videos.resource import Video
+from endpoints.subjects.resource import VideoContentGenerator
 
-api.add_resource(User, '/users', '/users/<string:userId>')
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
+api.add_resource(User, '/users', '/users/<string:userId>')
 api.add_resource(Subject, '/users/<string:userId>/subjects', '/users/<string:userId>/subjects/<string:subjectId>')
 api.add_resource(Document, '/users/<string:userId>/subjects/<string:subjectId>/documents','/users/<string:userId>/subjects/<string:subjectId>/documents/<string:documentId>')
 api.add_resource(Video, '/users/<string:userId>/subjects/<string:subjectId>/videos','/users/<string:userId>/subjects/<string:subjectId>/videos/<string:videoId>')
-
+api.add_resource(VideoContentGenerator, '/users/<string:userId>/subjects/<string:subjectId>/generate')
 
 if __name__ == '__main__':
     app.run()

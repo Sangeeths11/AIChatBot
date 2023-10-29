@@ -39,4 +39,15 @@ class Subject(Resource):
         return {'message': 'subject not found'}, 404
     
     
-    
+class VideoContentGenerator(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        
+        
+    def post(self, userId, subjectId):
+        args = self.parser.parse_args()
+
+        generate(userId, subjectId)
+        
+        
+        

@@ -9,8 +9,15 @@ import json
 import time
 
 
-os.environ["OPENAI_API_KEY"] = "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"
+from videoOperations.fileStorageHelper import *
+
+
+os.environ["OPENAI_API_KEY"] = "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"
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+folderName = "youtubeAudio"
+if not os.path.exists(folderName):
+    os.makedirs(folderName)
 
 
 def getCompletion(prompt, model="gpt-3.5-turbo", temperature=0.0):
@@ -22,60 +29,62 @@ def getCompletion(prompt, model="gpt-3.5-turbo", temperature=0.0):
 
 
 # pip install -U openai-whisper
-def getTranscript(url):
-    start_time = time.time()
-
-    #getAudio("https://youtu.be/HMOI_lkzW08")
-    print(f"Time for getAudio:  {time.time() - start_time}")
+def getTranscript(url, transcriptionName):
     
+    transcriptionPath = getVideoData(url, transcriptionName)
+    url = uploadTranscriptFile(transcriptionPath,transcriptionName)
+    return url
     
-    testpath = "youtubeAudio/audioTest.mp3"
-    options = whisper.DecodingOptions()
+    # options = whisper.DecodingOptions()
+    # whisperModel = whisper.load_model("tiny.en")
+    # result = whisperModel.transcribe(audioFilePath) 
+    # text = result.get("text", None)
     
-    print("Start model load")
-    whisper_model = whisper.load_model("tiny.en")
-    print("end model load")
-    start_time = time.time()
-    print("start transcribe")
-    result = whisper_model.transcribe(testpath)
-    print("end transcribe")
-    print(f"Time for getAudio:  {time.time() - start_time}")
-    text = result.get('text', None)
-    print(text)
+    # with open("transcript.txt", "w") as file:
+    #     # save to db
+    #     file.write(text)
     
-    with open('transcript.txt', 'w') as file:
-        file.write(text)
-    
-def extract_text(data):
+def extractText(data):
     text = ""
     if isinstance(data, list):
         for item in data:
-            text += extract_text(item)
+            text += extractText(item)
     elif isinstance(data, dict):
         for key, value in data.items():
-            if key == 'utf8':
-                text += value + ' '
-            text += extract_text(value)
+            if key == "utf8":
+                text += value + " "
+            text += extractText(value)
     return text
-
-
     
-def getAudio(url):
+def getVideoData(url, transcriptionName):
     yt = YouTube(url)
-    audioStreamItag = yt.streams.filter(only_audio=True).order_by(attribute_name="abr").first().itag
-    audio = yt.streams.get_by_itag(audioStreamItag).download(max_retries=5, filename="audioTest.mp3", output_path="youtubeAudio")
+    
+    # # Download audio
+    # audioStreamItag = yt.streams.filter(only_audio=True).order_by(attribute_name="abr").first().itag
+    # audioFilePath = yt.streams.get_by_itag(audioStreamItag).download(max_retries=5, filename=transcriptionName,  output_path="youtubeAudio")
+    
+    # Do it with the captions first
+    
+    # if the captions dont work, generate the transcript with whisper
+     
     
     # Get the available caption tracks (subtitles)
     caption = yt.captions["a.en"]
-    text = extract_text(caption.json_captions)
+    text = extractText(caption.json_captions)
 
     text = text.strip()
-    # Download the captions to a file
-    print(text)
 
-
-    # If you want to save the captions to a file
-    with open('captions.txt', 'w', encoding='utf-8') as file:
+    filePath = f"transcripts/{transcriptionName}.txt"
+    with open(filePath, "w", encoding="utf-8") as file:
         file.write(text)
+        
+    return filePath
     
-    return audio
+    # post-process with chat-gpt
+    
+    
+    
+    # Then write file to cloud storage
+    
+    
+    # return audioFilePath

@@ -5,7 +5,7 @@ from textblob import TextBlob
 import json
 
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyBx3979KBRUd8ZnAlofo4HP-Kf5whLe8IQ"
+os.environ["GOOGLE_API_KEY"] = "AIzaSyDfEie7hdPPft-0PeTxBHEkzT16l_8rnKA"
 youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))
 
 
@@ -25,7 +25,7 @@ def youtubeSearch(query, count=3):
             videoLink = f"https://www.youtube.com/watch?v={videoId}"
             sentimentScore = getSentimentOfVideo(videoId)
             if sentimentScore:
-                results.append({"title": videoTitle, "url": videoLink, "sentimentScore": sentimentScore})
+                results.append({"name": videoTitle, "url": videoLink, "sentimentScore": sentimentScore})
             else:
                 continue
     return results    
