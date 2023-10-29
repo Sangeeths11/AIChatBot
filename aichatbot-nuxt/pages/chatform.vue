@@ -1,5 +1,32 @@
 <template>
-    <div class="p-20">
+    <div class="p-4">
+        <h1 class="mb-2">Mode Selection</h1>
+        <div class="flex space-x-0 mb-6">
+            <button 
+                :class="[mode.valueOf() === 'General' ? 'bg-green-600 text-white' : 'bg-gray-300']" 
+                @click="setMode('General')" 
+                class="py-2 px-4 rounded-tl-lg focus:outline-none transition-colors duration-200">
+                General
+            </button>
+            <button 
+                :class="[mode.valueOf() === 'Resources' ? 'bg-green-600 text-white' : 'bg-gray-300']" 
+                @click="setMode('Resources')" 
+                class="py-2 px-4 rounded-tr-lg focus:outline-none transition-colors duration-200">
+                Resources
+            </button>
+        </div>
+        <div v-if="mode.valueOf() === 'Resources'" class="p-4">
+                <label class="mb-2 text-green" for="resourceSelect">Resource Select</label>
+                <select id="resourceSelect" class="border p-2 rounded w-full mb-4">
+                    <option>Doc 1</option>
+                    <option>Doc 2</option>
+                    <option>Video 1</option>
+                    <option>Video 2</option>
+                </select>
+        </div>
+        
+    </div>
+    <div class="">
         <div v-for="message in messages" :key="message.time" :class="['chat', message.sender === 'You' ? 'chat-end' : 'chat-start']">
             <div class="chat-image avatar">
                 <div class="w-10 rounded-full">
@@ -40,6 +67,7 @@
 
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 // Typescript interface for the message object
 interface Message {
     sender: string;
@@ -48,6 +76,11 @@ interface Message {
     status: string;
 }
 
+const mode = ref('General');  // Hier erstellen Sie eine ref
+
+const setMode = (selectedMode: string) => {
+    mode.value = selectedMode;  // Hier greifen Sie auf die .value-Eigenschaft der ref zu
+};
 
 const messages = ref<Message[]>([]);
 
@@ -75,6 +108,19 @@ const sendMessage = () => {
 };
 </script>
 
-  <style>
-  /* You can adjust more styles as per your needs */
-  </style>
+<style>
+    h1 {
+        font-size: 30px;
+        color: #4caf50;
+    }
+    /* ... vorhandene Stile ... */
+
+    button {
+        border-top: 2px solid transparent;
+    }
+
+    button:focus, button:active {
+        border-top-color: #4caf50;  /* Grün wie im H1-Tag */
+    }
+
+</style>
