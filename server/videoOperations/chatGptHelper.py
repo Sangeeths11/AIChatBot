@@ -9,13 +9,13 @@ import json
 import time
 
 
-from videoOperations.fileStorageHelper import *
+from videoOperations.fileStorageHelper import uploadTranscriptFile
 
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-folderName = "youtubeAudio"
+folderName = "server/videoOperations/youtubeAudio"
 if not os.path.exists(folderName):
     os.makedirs(folderName)
 
@@ -32,17 +32,10 @@ def getCompletion(prompt, model="gpt-3.5-turbo", temperature=0.0):
 def getTranscript(url, transcriptionName):
     
     transcriptionPath = getVideoData(url, transcriptionName)
-    url = uploadTranscriptFile(transcriptionPath,transcriptionName)
+    url = uploadTranscriptFile(transcriptionPath)
     return url
     
-    # options = whisper.DecodingOptions()
-    # whisperModel = whisper.load_model("tiny.en")
-    # result = whisperModel.transcribe(audioFilePath) 
-    # text = result.get("text", None)
-    
-    # with open("transcript.txt", "w") as file:
-    #     # save to db
-    #     file.write(text)
+
     
 def extractText(data):
     text = ""
@@ -57,34 +50,48 @@ def extractText(data):
     return text
     
 def getVideoData(url, transcriptionName):
-    yt = YouTube(url)
-    
-    # # Download audio
-    # audioStreamItag = yt.streams.filter(only_audio=True).order_by(attribute_name="abr").first().itag
-    # audioFilePath = yt.streams.get_by_itag(audioStreamItag).download(max_retries=5, filename=transcriptionName,  output_path="youtubeAudio")
-    
-    # Do it with the captions first
-    
-    # if the captions dont work, generate the transcript with whisper
-     
-    
+    yt = YouTube(url)  
+
+
+
     # Get the available caption tracks (subtitles)
-    caption = yt.captions["a.en"]
-    text = extractText(caption.json_captions)
+    print(f"captions: {yt.captions}")
+    language = ""
+    captions = yt.caption_tracks
+    if "en" in captions:
+        language = "en"
+    elif "a.en" in captions:
+        language = "a.en"
+    elif "de" in captions:
+        language = "de"
+    
+    if language != "":
+        print(f"Language: {language}")
+        caption = yt.captions[language]
+        text = extractText(caption.json_captions)
+        text = text.strip()
+    else:
+        # If no captions are available, transcribe using whisper
+        audioStreamItag = yt.streams.filter(only_audio=True).order_by(attribute_name="abr").first().itag
+        audioFilePath = yt.streams.get_by_itag(audioStreamItag).download(max_retries=5, filename=f"{transcriptionName}.txt",  output_path="server/videoOperations/youtubeAudio")
+        print(f"Downloaded audio for {yt.title}")
+        options = whisper.DecodingOptions()
+        whisperModel = whisper.load_model("tiny.en")
+        result = whisperModel.transcribe(audioFilePath) 
+        text = result.get("text", None)
+        print(f"transcribing for {yt.title} successful")
 
-    text = text.strip()
+        try:
+            os.remove(audioFilePath)
+            print(f"{audioFilePath} has been deleted.")
+        except FileNotFoundError:
+            print(f"{audioFilePath} does not exist.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
-    filePath = f"transcripts/{transcriptionName}.txt"
-    with open(filePath, "w", encoding="utf-8") as file:
+    filePath = f"server/videoOperations/transcripts/{transcriptionName}.txt"
+    with open(filePath, "w") as file:
         file.write(text)
         
     return filePath
     
-    # post-process with chat-gpt
-    
-    
-    
-    # Then write file to cloud storage
-    
-    
-    # return audioFilePath

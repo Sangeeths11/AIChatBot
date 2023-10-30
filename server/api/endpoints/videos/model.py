@@ -19,6 +19,7 @@ def createNewVideo(userId, subjectId, name, url, transcriptUrl=""):
         return ref.id
 
 def updateVideo(userId, subjectId, videoId, name, url, transcriptUrl):
+    print(transcriptUrl)
     ref = db.collection("users").document(userId).collection("subjects").document(subjectId).collection("videos").document(videoId)
     data = {
             "name": name,

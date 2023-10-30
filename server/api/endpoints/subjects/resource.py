@@ -39,6 +39,7 @@ class Subject(Resource):
         return {'message': 'subject not found'}, 404
     
     
+from api.endpoints.videos.model import getAllVideos
 class VideoContentGenerator(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -47,7 +48,6 @@ class VideoContentGenerator(Resource):
     def post(self, userId, subjectId):
         args = self.parser.parse_args()
 
-        generate(userId, subjectId)
-        
-        
-        
+        url = generate(userId, subjectId)
+        videosForSubject = getAllVideos(userId, subjectId)
+        return {'message': 'Subject content generated', 'subjectId': subjectId, "transcripts":  videosForSubject}, 201

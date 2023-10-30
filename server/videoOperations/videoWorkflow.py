@@ -1,3 +1,6 @@
+# If Debug
+# import sys
+# sys.path.append('server')
 import os
 import json
 from google.auth.transport.requests import Request
@@ -9,10 +12,26 @@ from googleapiclient.errors import HttpError
 import json
 import pandas as pd
 
+# If DEBUG
+# from flask import Flask, jsonify
+# from flask_restful import Api
+# from werkzeug.exceptions import HTTPException
+# from werkzeug.exceptions import default_exceptions
+# import api.appconfig as config
+# import firebase_admin
+# from firebase_admin import credentials, firestore
+# cred = credentials.Certificate(config.CREDENTIALS_PATH)
+# firebase_admin.initialize_app(cred)
+
+
 import videoOperations.chatGptHelper as gpt
 import videoOperations.googleHelper as google
 import videoOperations.prompts as prompts
 from api.endpoints.videos.model import createNewVideo, updateVideo
+
+
+
+
 
 def videoWorkflow(userId, subjectId, subject):
     queries = generateSearchQuery(subject, count=3)
@@ -23,9 +42,10 @@ def videoWorkflow(userId, subjectId, subject):
     bestVideos = selectBestVideos(subject, json.dumps(outputJson, indent=2))
     
     for v in bestVideos["videos"]:
+        print(v["name"])
         videoId = createNewVideo(userId, subjectId, v["name"],v["url"])
         transcriptUrl = transcribeVideo(v["url"], videoId)
-        updateVideo(userId, subjectId, v["name"],v["url"], transcriptUrl)
+        updateVideo(userId, subjectId, videoId, v["name"],v["url"], transcriptUrl)
     
 def generateSearchQuery(subject = "learning", count = 3):
     prompt = prompts.getVideoSearchQuery(subject, count)
@@ -59,4 +79,11 @@ def summarizeVideo():
 def generateQuestionsForVideo():
     pass
 
+
+## If DEBUG
+# def main():
+#     videoWorkflow("0izCCZBtsVolmwwMIgav", "4tvay47dSKSiuUoJRlas", "Machine Leraning Clustering")
+    
+# if __name__ == "__main__":
+#     main()
 
