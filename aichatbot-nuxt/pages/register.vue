@@ -15,17 +15,20 @@
       <div class="helper-texts">
         <router-link to="login">Do you have an account? Log in</router-link>
       </div>
+      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
 </template>
   
 <script lang="ts" setup>
   import { ref } from 'vue';
   import axios from 'axios';
+  const router = useRouter();
 
   const username = ref('');
   const password = ref('');
   const passwordConfirmation = ref('');
-  const baseUrl = 'http://example.com'; // Replace with your actual base URL
+  const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
+  const errorMessage = ref(''); // Variable to hold the error message 
 
   const register = async () => {
     try {
@@ -36,11 +39,15 @@
       });
       console.log(response.data);
       // Handle success - you can redirect or show a success message
+      router.push('/login');
+
     } catch (error) {
       console.error(error);
       // Handle errors - you can show error messages to the user
+      errorMessage.value = 'An error occurred during registration. Please try again later.';
     }
   };
+
 </script>
 
 <style scoped>
@@ -81,6 +88,10 @@
     margin: 10px 0;
     text-decoration: none;
     color: #236925;
+  }
+  .error-message {
+    color: red;
+    margin-top: 10px;
   }
 </style>
   

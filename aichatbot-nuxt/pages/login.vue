@@ -1,32 +1,37 @@
 <template>
     <div class="login-container">
       <h1 class="p-10">Welcome to our Dashboard</h1>
-      <input type="text" placeholder="Username" v-model=username>
-      <input type="password" placeholder="Password" v-model=password>
-      <button>Login</button>
+      <input type="text" placeholder="Username" v-model=loginName>
+      <input type="password" placeholder="Password" v-model=loginPassword>
+      <button @click="login">Login</button>
       <div class="helper-texts">
         <router-link to="register">Don't have an account? Sign up</router-link>
       </div>
+      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
 </template>
   
 <script lang="ts" setup>
   import { ref } from 'vue';
   import axios from 'axios';
+  const router = useRouter();
 
-  const username = ref('');
-  const password = ref('');
-  const baseUrl = 'http://example.com'; // Replace with your actual base URL
+  const loginName = ref('');
+  const loginPassword = ref('');
+  const errorMessage = ref(''); // Variable to hold the error message
+  const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
 
-  const register = async () => {
+  const login = async () => {
     try {
       const response = await axios.post(`${baseUrl}/login`, {
-        name: username.value,
-        password: password.value,
+        name: loginName.value,
+        password: loginPassword.value
       });
       console.log(response.data);
+      router.push('/overview');
       // Handle success - you can redirect or show a success message
     } catch (error) {
+      errorMessage.value = 'An error occurred during login. Please try again later.';
       console.error(error);
       // Handle errors - you can show error messages to the user
     }
@@ -74,5 +79,9 @@ button {
   text-decoration: none;
   color: #236925;
 }
+.error-message {
+    color: red;
+    margin-top: 10px;
+  }
 </style>
   

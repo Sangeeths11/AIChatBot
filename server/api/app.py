@@ -8,8 +8,12 @@ from werkzeug.exceptions import default_exceptions
 import appconfig as config
 import firebase_admin
 from firebase_admin import credentials, firestore
+from flask import Flask, jsonify
+from flask_restful import Api
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.errorhandler(Exception)
