@@ -14,11 +14,11 @@ def uploadTranscriptFile(localTranscriptPath):
 
         storageClient = storage.Client.from_service_account_json(config.CREDENTIALS_PATH)
         bucket = storageClient.get_bucket(config.BUCKET_NAME)
-
         parsedUrl = urlparse(localTranscriptPath)
         fileName = os.path.basename(parsedUrl.path)
         transcriptBlob = bucket.blob(f"transcripts/{fileName}")
         transcriptBlob.upload_from_filename(localTranscriptPath)
+        transcriptBlob.make_public()
         transcriptUrl = transcriptBlob.public_url
         
     # Delete local file after uploading        
@@ -37,8 +37,9 @@ def uploadDocumentFile(file):
 
         storageClient = storage.Client.from_service_account_json(config.CREDENTIALS_PATH)
         bucket = storageClient.get_bucket(config.BUCKET_NAME)
-
         documentBlob = bucket.blob(f"documents/{file.filename}")
         documentBlob.upload_from_file(file)
+        documentBlob.make_public()
+        
         documentUrl = documentBlob.public_url
         return documentUrl
