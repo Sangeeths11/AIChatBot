@@ -19,6 +19,8 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^1.6.0",
     "daisyui": "^3.9.2"
   }
 }
