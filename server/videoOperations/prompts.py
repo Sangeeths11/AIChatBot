@@ -32,6 +32,8 @@ def getBestVideosPrompt(topic, videos, count=3):
 
     If presented to an unknown user, there should be a video for everyone, from beginner to advanced.
     So keep in mind to not only select beginner or only videos that cover advanced topics.
+    
+    Additionally, DO NOT return multiple videos with the same "name" or "url", return a set of """ + str(count) + """ unique videos.
 
     Return a Json with the same structure as the provided one below, containing your top """ + str(count) + """ videos, starting with the best one.
     Return the modified  json and the modified json only!!!

@@ -38,3 +38,9 @@ def getAllDocuments(userId, subjectId):
     documents = ref.stream()
     return [docs.to_dict() for docs in documents]
     
+    
+    
+from videoOperations.fileStorageHelper import uploadDocumentFile
+def uploadFile(file):
+    return uploadDocumentFile(file)
+    
