@@ -5,21 +5,21 @@
         <!-- Subject Image Upload -->
         <div class="my-6">
             <label class="block text-white-600 font-bold mb-2">Upload Subject Image:</label>
-            <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input w-9/12" />
+            <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input w-9/12" v-on="image"/>
 
         </div>
         
         <!-- Subject Name -->
         <div class="my-6">
             <label class="block text-white-600 font-bold mb-2">Subject Name:</label>
-            <input type="text" placeholder="Enter subject name" class="p-2 border rounded w-9/12" />
+            <input type="text" placeholder="Enter subject name" class="p-2 border rounded w-9/12" v-model="subjectName"/>
         </div>
         
         <!-- Files for the Subject -->
         <div class="my-6">
             <label class="block text-white-600 font-bold mb-2">Upload Files:</label>
             <!-- Here, you might want to loop over the files using v-for or display them dynamically -->
-            <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input w-9/12" />
+            <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input w-9/12" v-on="files"/>
         </div>
 
         <div class="my-6">
@@ -40,10 +40,36 @@
     </div>
 </template>
 
-<script>
-export default {
-    // ...
-}
+<script lang="ts" setup>
+
+    import { ref } from 'vue';
+    import axios from 'axios';
+
+    const router = useRouter();
+    const errorMessage = ref(''); // Variable to hold the error message
+    const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
+    const userId = ref('0izCCZBtsVolmwwMIgav');
+    const image = ref('');
+    const subjectName = ref('');
+    const files = ref([]);
+
+    const saveSettings = async () => {
+        try {
+            const response = await axios.post(`${baseUrl}/users/${userId}/subjects`, {
+                name: subjectName.value,
+            });
+            console.log(response.data);
+            const documentResponse = await axios.post(`${baseUrl}/documents`, {
+                name: files.value,
+            });
+            console.log(documentResponse.data);
+            // Handle success - you can redirect or show a success message
+        } catch (error) {
+        errorMessage.value = 'An error occurred during login. Please try again later.';
+        console.error(error);
+        // Handle errors - you can show error messages to the user
+        }
+    }
 </script>
 
 <style scoped>
