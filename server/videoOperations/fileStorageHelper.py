@@ -46,3 +46,18 @@ def uploadDocumentFile(file):
 
         documentUrl = documentBlob.public_url
         return documentUrl
+    
+    
+def downloadAllFilesToLocalDirectory(bucketName, localDirectory):
+    storageClient = storage.Client.from_service_account_json(config.CREDENTIALS_PATH)
+    bucket = storageClient.get_bucket(config.BUCKET_NAME)
+
+    for blob in bucket.list_blobs():
+        destinationBlobPath = f"{localDirectory}/{blob.name}"
+        blob.download_to_filename(destinationBlobPath)
+        print(f"Downloaded {blob.name} to {destinationBlobPath}")
+
+if __name__ == '__main__':
+    bucketName = 'YOUR_BUCKET_NAME'
+    localDirectory = 'LOCAL_DIRECTORY'
+    downloadAllFilesToLocalDirectory(bucketName, localDirectory)
