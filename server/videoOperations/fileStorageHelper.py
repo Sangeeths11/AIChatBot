@@ -16,7 +16,7 @@ def uploadTranscriptFile(localTranscriptPath):
         bucket = storageClient.get_bucket(config.BUCKET_NAME)
         parsedUrl = urlparse(localTranscriptPath)
         fileName = os.path.basename(parsedUrl.path)
-        transcriptBlob = bucket.blob(f"transcripts/{fileName}")
+        transcriptBlob = bucket.blob(config.BUCKET_TRANSCRIPTS_PATH + fileName)
         transcriptBlob.upload_from_filename(localTranscriptPath)
         transcriptBlob.content_type = 'text/html'  # For example, if it's an HTML file
         transcriptBlob.make_public()
@@ -38,8 +38,8 @@ def uploadDocumentFile(file):
     if file is not None:
         storageClient = storage.Client.from_service_account_json(config.CREDENTIALS_PATH)
         bucket = storageClient.get_bucket(config.BUCKET_NAME)
-        documentBlob = bucket.blob(f"documents/{file.filename}")
-        documentBlob.content_type = "application/pdf"  # For example, if it's a PDF file
+        documentBlob = bucket.blob(config.BUCKET_DOCUMENTS_PATH + file.filename)
+        documentBlob.content_type = "application/pdf"  
         documentBlob.upload_from_file(file)
 
         documentBlob.make_public()

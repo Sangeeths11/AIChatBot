@@ -3,9 +3,9 @@ import os
 from googleapiclient.discovery import build
 from textblob import TextBlob
 import json
+import api.appconfig as config
 
-
-os.environ["GOOGLE_API_KEY"] = "AIzaSyDfEie7hdPPft-0PeTxBHEkzT16l_8rnKA"
+os.environ["GOOGLE_API_KEY"] = config.GOOGLE_API_KEY
 youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))
 
 
@@ -32,7 +32,7 @@ def youtubeSearch(query, count=3):
     
     
 
-def getSentimentOfVideo(videoId, commentCount = 20):
+def getSentimentOfVideo(videoId, commentCount = 40):
     commentList = getCommentsOfVideo(videoId, commentCount)
     if commentList:
         return getSentimentOfComments(commentList)

@@ -10,12 +10,13 @@ import time
 
 
 from videoOperations.fileStorageHelper import uploadTranscriptFile
+import api.appconfig as config
+from pywin.debugger import configui
 
-
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] =  config.OPENAI_KEY
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-folderName = "server/videoOperations/youtubeAudio"
+folderName = config.YOUTUBE_AUDIO_DOWNLOAD_PATH
 if not os.path.exists(folderName):
     os.makedirs(folderName)
 
@@ -89,7 +90,7 @@ def getVideoData(url, transcriptionName):
         except Exception as e:
             print(f"An error occurred: {e}")
 
-    filePath = f"server/videoOperations/transcripts/{transcriptionName}.txt"
+    filePath = f"{config.YOUTUBE_AUDIO_TRANSCRIPS_PATH}{transcriptionName}.txt"
     with open(filePath, "w") as file:
         file.write(text)
         
