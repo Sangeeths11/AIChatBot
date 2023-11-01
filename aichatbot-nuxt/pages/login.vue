@@ -27,8 +27,9 @@
         name: loginName.value,
         password: loginPassword.value
       });
-      console.log(response.data);
-      router.push('/overview');
+      const userID = response.data.userId;
+      console.log(userID);
+      router.push({ path: '/overview'});
       // Handle success - you can redirect or show a success message
     } catch (error) {
       errorMessage.value = 'An error occurred during login. Please try again later.';
