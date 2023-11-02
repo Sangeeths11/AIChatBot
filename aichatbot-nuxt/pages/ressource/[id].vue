@@ -39,6 +39,7 @@
 
 <script lang="ts" setup>
     import axios from 'axios';
+
     const activeTab = ref('video');
 
     // Sample video and document names
@@ -74,9 +75,16 @@
     };
 
     const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
-    const userId = '0izCCZBtsVolmwwMIgav';
-    const subjectId = 'yXR6ea6BeOt8KABr7PZQ'
+    // const userId = '0izCCZBtsVolmwwMIgav';
+    // const subjectId = 'yXR6ea6BeOt8KABr7PZQ'
     const errorMessage = ref('');
+
+    const route = useRoute();
+    const subjectUserID = route.params.id;
+
+
+    const subjectId = (subjectUserID as string).split('&')[0];
+    const userId = (subjectUserID as string).split('&')[1];
 
     const getVideos = async () => {
         try {
