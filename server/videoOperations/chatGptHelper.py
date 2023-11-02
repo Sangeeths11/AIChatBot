@@ -2,12 +2,6 @@ import openai
 import os
 import whisper
 from pytube import YouTube
-import pprint
-
-import json
-
-import time
-
 
 from videoOperations.fileStorageHelper import uploadTranscriptFile
 import appconfig as config

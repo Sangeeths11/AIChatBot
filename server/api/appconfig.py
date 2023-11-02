@@ -20,4 +20,4 @@ CREDENTIALS_PATH = "server/credsFirestore.json"
 
 
 # OpenAI
-OPENAI_KEY = "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"
+OPENAI_KEY = "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"

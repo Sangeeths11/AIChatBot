@@ -14,8 +14,9 @@ def createNewVideo(userId, subjectId, name, url, transcriptUrl=""):
         time, ref = db.collection("users").document(userId).collection("subjects").document(subjectId).collection("videos").add({
             "name": name,
             "url": url,
-            "transcriptUrl": transcriptUrl
+            "transcriptUrl": transcriptUrl,
             })        
+        ref.update({"id": ref.id})
         return ref.id
 
 def updateVideo(userId, subjectId, videoId, name, url, transcriptUrl):

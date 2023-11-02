@@ -11,6 +11,7 @@ class Video(Resource):
         self.parser.add_argument("name")
         self.parser.add_argument("url")
         self.parser.add_argument("transcriptUrl")
+        self.parser.add_argument("id")
         #self.parser.add_argument("summary")
 
 
