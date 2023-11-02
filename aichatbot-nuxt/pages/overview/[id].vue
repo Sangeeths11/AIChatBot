@@ -15,12 +15,15 @@
                 <button @click="ressource(subject.id)" class="absolute bottom-2 left-2 ml-24 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded focus:outline-none">
                 Ressourcen
                 </button>
+                <button @click="addSubject(subject.id)" class="absolute bottom-2 right-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded focus:outline-none">
+                    Einstellungen
+                </button>
             </div>
 
             <!-- The last (36th) card with a plus icon -->
             <div class="card bg-white p-4 rounded shadow-lg flex items-center justify-center">
                 <!-- Plus icon -->
-                <button @click="addSubject" class="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <button @click="addSubject('new')" class="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
@@ -46,9 +49,9 @@ interface Subject {
 
 const subjects = ref<Subject[]>([]); // Ein leeres Array für die Fächer vom Typ 'Subject'
 
-
-const addSubject = () => {
-    router.push({ path: '/subjectSetting'});
+const addSubject = (subjectID : string) => {
+    const id = subjectID + '&' + userID;
+    router.push({ path: '/subjectSetting/' + id});
 };
 
 const learn = () => {
