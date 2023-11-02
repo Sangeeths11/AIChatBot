@@ -8,7 +8,7 @@
             <div v-for="(subject, index) in subjects" :key="index" class="card bg-white p-4 rounded shadow-lg">
                 <!-- Stellen Sie sicher, dass subject ein Objekt ist, das den Namen und andere Informationen enthält -->
                 <img :src="subject.image" alt="Fachbild" class="w-full h-32 object-cover rounded-md">
-                <h2 class="mt-2 text-center">{{ subject.name }}</h2>
+                <h1 class="mt-2 text-center">{{ subject.name }}</h1>
                 <button @click="learn" class="absolute bottom-2 left-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded focus:outline-none">
                 Lernen
                 </button>
@@ -35,7 +35,8 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 
-const route = useRouter();
+const router = useRouter();
+const route = useRoute();
 
 interface Subject {
   name: string;
@@ -46,22 +47,22 @@ const subjects = ref<Subject[]>([]); // Ein leeres Array für die Fächer vom Ty
 
 
 const addSubject = () => {
-    route.push({ path: '/subjectSetting'});
+    router.push({ path: '/subjectSetting'});
 };
 
 const learn = () => {
-    route.push({ path: '/chatform'});
+    router.push({ path: '/chatform'});
 };
 
 const ressource = () => {
-    route.push({ path: '/ressource'});
+    router.push({ path: '/ressource'});
 };
 
 onMounted(() => {
     getSubjects();
 });
 const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
-const userID = '0izCCZBtsVolmwwMIgav';
+const userID = route.params.id; // Get the user ID from the URL (the :id part
 
 const getSubjects = async () => {
   try {
