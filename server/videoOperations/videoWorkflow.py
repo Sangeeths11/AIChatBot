@@ -27,7 +27,7 @@ import pandas as pd
 import videoOperations.chatGptHelper as gpt
 import videoOperations.googleHelper as google
 import videoOperations.prompts as prompts
-from api.endpoints.videos.model import createNewVideo, updateVideo
+from endpoints.videos.model import createNewVideo, updateVideo
 
 
 
