@@ -14,25 +14,25 @@ def getSubjectById(userId, subjectId):
     else:
         return None
 
-# 1. generate new subject
-# 2. request transcription to be generated for this subject
+
 def createNewSubject(userId, name):
         time, ref = db.collection("users").document(userId).collection("subjects").add({
-            "name": name
+            "name": name,
+            "conversationHistory" : []
             })        
+        ref.update({"id": ref.id})       
         return ref.id
 
 def updateSubject(userId, subjectId, name):
-    ref = db.collection("users").document(userId).collection("subjects")
+    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
     data = {
-        "name": name
+        "name": name,
     }
-
     ref.update(data)
     return True
 
 def deleteSubject(userId, subjectId):
-    ref = db.collection("users").document(userId).collection("subjects")
+    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
     ref.delete()
     return True  
 
@@ -51,3 +51,14 @@ def generate(userId, subjectId):
     subject = data["name"]
     videoWorkflow(userId, subjectId, subject)
     
+    
+    
+# Chatbots
+
+from chatbots.documentQuestionAnswering import documentQA
+def postDocsPrompt(userId, subjectId, prompt):
+    
+    pass
+
+def postGeneralPrompt(userId, subjectId, prompt):
+    pass

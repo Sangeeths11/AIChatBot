@@ -10,6 +10,7 @@ class Document(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument("name")
         self.parser.add_argument("url")
+        self.parser.add_argument("id")
 
     def get(self, userId, subjectId, documentId=None):
         if documentId is None:

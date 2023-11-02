@@ -16,8 +16,8 @@ BUCKET_TRANSCRIPTS_PATH = "transcripts/"
 GOOGLE_API_KEY = "AIzaSyDfEie7hdPPft-0PeTxBHEkzT16l_8rnKA"
 
 # Firebase Firestorage
-CREDENTIALS_PATH = "server\credsFirestore.json"
+CREDENTIALS_PATH = "server/credsFirestore.json"
 
 
 # OpenAI
-OPENAI_KEY = "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"
+OPENAI_KEY = "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"
