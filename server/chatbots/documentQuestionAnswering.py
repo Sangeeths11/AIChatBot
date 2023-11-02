@@ -15,9 +15,9 @@ from langchain.memory import ConversationBufferMemory
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.prompts import PromptTemplate
 
-import api.appconfig as config
+import appconfig as config
 
-os.environ["OPENAI_API_KEY"] =  config.OPENAI_KEY
+os.environ["OPENAI_API_KEY"] = config.OPENAI_KEY
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 testDocList = [

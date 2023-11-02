@@ -10,8 +10,8 @@ import time
 
 
 from videoOperations.fileStorageHelper import uploadTranscriptFile
-import api.appconfig as config
-from pywin.debugger import configui
+import appconfig as config
+# from pywin.debugger import configui
 
 os.environ["OPENAI_API_KEY"] =  config.OPENAI_KEY
 openai.api_key = os.getenv("OPENAI_API_KEY")
