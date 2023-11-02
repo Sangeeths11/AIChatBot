@@ -3,7 +3,7 @@ import os
 from googleapiclient.discovery import build
 from textblob import TextBlob
 import json
-import api.appconfig as config
+import appconfig as config
 
 os.environ["GOOGLE_API_KEY"] = config.GOOGLE_API_KEY
 youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))

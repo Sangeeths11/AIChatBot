@@ -32,6 +32,7 @@
 </template>
 
 <script lang="ts" setup>
+    import axios from 'axios';
     const activeTab = ref('video');
 
     // Sample video and document names
@@ -43,6 +44,30 @@
 
     const getYoutubeLink = () => {
         return "https://www.youtube.com/embed/dQw4w9WgXcQ";
+    };
+
+    const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
+    const userId = ref('0izCCZBtsVolmwwMIgav');
+    const subjectId = ref('0izCCZBtsVolmwwMIgav')
+    const videosResponse = ref([]);
+    const documentsResponse = ref([]);
+    const errorMessage = ref('');
+
+    const getVideos = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/users/${userId}/subjects/${subjectId}/videos`);
+            videosResponse.value = response.data;
+        } catch (error) {
+            errorMessage.value = 'An error occurred while fetching the videos. Please try again later.';
+        }
+    };
+    const getDocuments = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/users/${userId}/subjects/${subjectId}/documents`);
+            documentsResponse.value = response.data;
+        } catch (error) {
+            errorMessage.value = 'An error occurred while fetching the documents. Please try again later.';
+        }
     };
 </script>
 

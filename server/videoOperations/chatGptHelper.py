@@ -4,7 +4,8 @@ import whisper
 from pytube import YouTube
 
 from videoOperations.fileStorageHelper import uploadTranscriptFile
-import api.appconfig as config
+import appconfig as config
+# from pywin.debugger import configui
 
 os.environ["OPENAI_API_KEY"] =  config.OPENAI_KEY
 openai.api_key = os.getenv("OPENAI_API_KEY")

@@ -40,7 +40,7 @@ class Subject(Resource):
         return {"message": "subject not found"}, 404
     
     
-from api.endpoints.videos.model import getAllVideos
+from endpoints.videos.model import getAllVideos
 class VideoContentGenerator(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()

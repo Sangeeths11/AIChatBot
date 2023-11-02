@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
 from flask import jsonify
-import api.appconfig as config
+# import server.api.appconfig as config
 
 db = firestore.client()
 
