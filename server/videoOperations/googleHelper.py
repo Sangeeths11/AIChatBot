@@ -5,6 +5,8 @@ from textblob import TextBlob
 import json
 import appconfig as config
 
+from pytube import YouTube
+
 os.environ["GOOGLE_API_KEY"] = config.GOOGLE_API_KEY
 youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))
 
@@ -22,10 +24,14 @@ def youtubeSearch(query, count=3):
         if result["id"]["kind"] == "youtube#video":
             videoId = result["id"]["videoId"]
             videoTitle = result["snippet"]["title"]
-            videoLink = f"https://www.youtube.com/watch?v={videoId}"
+            
+            yt = YouTube(f"https://www.youtube.com/watch?v={videoId}")
+            videoStream = yt.streams.get_highest_resolution()
+            videoEmbedUrl = videoStream.url
+            
             sentimentScore = getSentimentOfVideo(videoId)
             if sentimentScore:
-                results.append({"name": videoTitle, "url": videoLink, "sentimentScore": sentimentScore})
+                results.append({"name": videoTitle, "url": videoEmbedUrl, "sentimentScore": sentimentScore})
             else:
                 continue
     return results    
