@@ -1,3 +1,5 @@
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 # File locations
 YOUTUBE_AUDIO_DOWNLOAD_PATH = "server/videoOperations/youtubeAudio"
 YOUTUBE_AUDIO_TRANSCRIPS_PATH = "server/videoOperations/transcripts/"
@@ -18,6 +20,3 @@ GOOGLE_API_KEY = "AIzaSyDfEie7hdPPft-0PeTxBHEkzT16l_8rnKA"
 # Firebase Firestorage
 CREDENTIALS_PATH = "server/credsFirestore.json"
 
-
-# OpenAI
-OPENAI_KEY = "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"
