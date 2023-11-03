@@ -25,6 +25,7 @@ def createNewUser(name, password):
             "name": name,
             "password": password
             })        
+        ref.update({"id": ref.id})
         return ref.id
 
 def updateUser(userId, name, password):

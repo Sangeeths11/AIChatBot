@@ -14,8 +14,9 @@ def getDocumentById(userId, subjectId, documentId):
 def createNewDocument(userId, subjectId, name, url):
         time, ref = db.collection("users").document(userId).collection("subjects").document(subjectId).collection("documents").add({
             "name": name,
-            "url": url
-            })        
+            "url": url,
+            }) 
+        ref.update({"id": ref.id})       
         return ref.id
 
 def updateDocument(userId, subjectId, documentId, name, url):

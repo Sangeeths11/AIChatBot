@@ -29,7 +29,7 @@
       });
       const userID = response.data.userId;
       console.log(userID);
-      router.push({ path: '/overview'});
+      router.push({ path: '/overview/' + userID});
       // Handle success - you can redirect or show a success message
     } catch (error) {
       errorMessage.value = 'An error occurred during login. Please try again later.';
