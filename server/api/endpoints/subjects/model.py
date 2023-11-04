@@ -23,16 +23,21 @@ def createNewSubject(userId, name, imageUrl=None):
             })        
         ref.update({"id": ref.id})       
         
-        if imageUrl is not None:
+        if imageUrl:
             ref.update({"imageUrl" : imageUrl})
         return ref.id
 
-def updateSubject(userId, subjectId, name):
+def updateSubject(userId, subjectId, name=None, conversationHistoryDocs=None, conversationHistoryGeneral=None):
     ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
-    data = {
-        "name": name,
-    }
-    ref.update(data)
+    data = {} 
+    if name:
+        data["name"] = name
+    if conversationHistoryDocs:
+        data["conversationHistoryDocs"] = conversationHistoryDocs
+    if conversationHistoryGeneral:
+        data["conversationHistoryGeneral"] = conversationHistoryGeneral
+    if data:
+        ref.update(data)
     return True
 
 def deleteSubject(userId, subjectId):

@@ -35,7 +35,7 @@ def documentQA(userId, subjectId, prompt):
     extendChatHistoryWithPrompt(userId, subjectId, prompt)
     
     
-    chat_history = getChatHistory(userId, subjectId)
+    chat_history = getConversationHistoryDocs(userId, subjectId)
     urlList = getAllDocumentsOnSubject(userId, subjectId)
     documents = splitFiles(urlList)
     
@@ -73,6 +73,8 @@ def splitFiles(urlList):
         elif file.endswith('.txt'):
             loader = TextLoader(file)
             documents.extend(loader.load())
+            
+        #for mathematical pdfs, maybe try to convert to latex, then upload as latex, for better undestanding
     return documents
     
     
@@ -89,15 +91,29 @@ def buildVectorstore(documents):
 
 
 
-def getChatHistory(userId, subjectId):
-    pass
-
-
+from api.endpoints.subjects.model import getSubjectById, updateSubject
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
-    pass
+    hist = getConversationHistoryDocs(userId, subjectId)
+    hist.append([prompt, ""])
+    updateSubject(userId, subjectId, conversationHistoryDocs=hist)
+    
 
 def extendChatHistoryWithAnswer(userId, subjectId, answer):
-    pass
+    hist = getConversationHistoryDocs(userId, subjectId)
+    hist[-1][1] = answer
+    updateSubject(userId, subjectId, conversationHistoryDocs=hist)
 
-def clearConversationHistory():
-    pass
+
+def clearConversationHistoryDocs(userId, subjectId):
+    updateSubject(userId, subjectId, conversationHistoryDocs=[])
+
+def clearConversationHistoryGeneral(userId, subjectId):
+    updateSubject(userId, subjectId, conversationHistoryGeneral=[])
+    
+def getConversationHistoryDocs(userId, subjectId):
+    subject = getSubjectById(userId, subjectId)
+    return subject["conversationHistoryDocs"]
+
+def getConversationHistoryGeneral(userId, subjectId):
+    subject = getSubjectById(userId, subjectId)
+    return subject["conversationHistoryGeneral"]

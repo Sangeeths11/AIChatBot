@@ -47,7 +47,10 @@ def getBucket():
     return storageClient.get_bucket(config.BUCKET_NAME)
 
 def uploadPublicFile(blob, file, fromFilename = False):
-        blob.content_type = getMimetype(file)  
+        if fromFilename:
+            blob.content_type = getMimetype(file)  
+        else:
+            blob.content_type = getMimetype(file.filename)  
         if fromFilename == False:
             blob.upload_from_file(file)
         else: 
