@@ -8,13 +8,13 @@
             <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input" 
             :class="documents.length !== 0 ? 'w-9/12' : 'w-full'"
             v-on="image"/>
-
         </div>
         
         <!-- Subject Name -->
         <div class="my-6">
             <label class="block text-white-600 font-bold mb-2">Subject Name:</label>
             <input type="text" placeholder="Enter subject name" class="p-2 border rounded"
+            :disabled="documents.length !== 0 ? true : false"
             :class="documents.length !== 0 ? 'w-9/12' : 'w-full'"
             v-model="subjectName"/>
         </div>
@@ -34,7 +34,6 @@
             >Save</button>
         </div>
         
-
         <!-- Data Sidebar -->
         <div v-if="documents.length !== 0" class="absolute right-0 top-0 h-full w-1/4 bg-white shadow-md p-4">
             <h2 class="text-gray-600 font-bold mb-4">Data Overview</h2>
