@@ -55,7 +55,7 @@ def documentQA(userId, subjectId, prompt):
     print(f"Answer: " + result["answer"])
     
     
-    extendChatHistory(prompt, result["answer"])
+    extendChatHistoryWithAnswer(prompt, result["answer"])
     # add answer to history
 
 def getAllDocumentsOnSubject(userId, subjectId):
@@ -94,7 +94,7 @@ def getChatHistory(userId, subjectId):
 
 
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
-    
+    pass
 
 def extendChatHistoryWithAnswer(userId, subjectId, answer):
     pass
