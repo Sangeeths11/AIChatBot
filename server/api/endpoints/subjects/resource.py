@@ -44,8 +44,8 @@ class Subject(Resource):
             return {"message": "subject updated"}, 200
         return {"message": "subject not found"}, 404
 
-    def delete(self, subjectId):
-        success = deleteSubject(subjectId)
+    def delete(self, userId, subjectId):
+        success = deleteSubject(userId, subjectId)
         if success:
             return {"message": "subject deleted"}, 200
         return {"message": "subject not found"}, 404
