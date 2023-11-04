@@ -122,6 +122,7 @@
             console.error(error);
             // Handle errors - Sie können Fehlermeldungen für den Benutzer anzeigen
         }
+        router.push({ path: '/overview/' + userId});
     };
 
 

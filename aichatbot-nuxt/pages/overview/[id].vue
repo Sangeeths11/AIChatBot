@@ -73,6 +73,7 @@ const deleteSubject = async(subjectID : string) => {
     try {
         const response = await axios.delete(`${baseUrl}/users/${userID}/subjects/${subjectID}`);
         console.log(response.data);
+        getSubjects();
     } catch (error) {
         console.error(error);
     }
