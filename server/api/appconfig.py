@@ -13,6 +13,9 @@ VECTORSTORE_PATH = "/server/chatbots/vectorstore/"
 BUCKET_NAME = "aitutor-e6db8.appspot.com"
 BUCKET_DOCUMENTS_PATH = "documents/"
 BUCKET_TRANSCRIPTS_PATH = "transcripts/"
+BUCKET_SUBJECT_IMAGES_PATH = "subjects/images"
+BUCKET_USER_IMAGES_PATH = "users/images"
+
 
 # Google Key
 GOOGLE_API_KEY = "AIzaSyDfEie7hdPPft-0PeTxBHEkzT16l_8rnKA"

@@ -1,6 +1,11 @@
+# Prepare
 import sys
 sys.path.append('server')
 
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
+# Imports
 from flask import Flask, jsonify
 from flask_restful import Api
 from werkzeug.exceptions import HTTPException

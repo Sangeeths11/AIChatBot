@@ -5,7 +5,6 @@ from pytube import YouTube
 
 from videoOperations.fileStorageHelper import uploadTranscriptFile
 import appconfig as config
-# from pywin.debugger import configui
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 

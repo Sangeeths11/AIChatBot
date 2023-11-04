@@ -15,13 +15,16 @@ def getSubjectById(userId, subjectId):
         return None
 
 
-def createNewSubject(userId, name):
+def createNewSubject(userId, name, imageUrl=None):
         time, ref = db.collection("users").document(userId).collection("subjects").add({
             "name": name,
             "conversationHistoryDocs" : [],
             "conversationHistoryGeneral" : [],
             })        
         ref.update({"id": ref.id})       
+        
+        if imageUrl is not None:
+            ref.update({"imageUrl" : imageUrl})
         return ref.id
 
 def updateSubject(userId, subjectId, name):
@@ -42,6 +45,9 @@ def getAllSubjects(userId):
     subjects = ref.stream()
     return [subject.to_dict() for subject in subjects]
     
+from videoOperations.fileStorageHelper import uploadSubjectImage
+def uploadImage(file):
+    uploadSubjectImage(file)
     
 # ------- VideoContentGenerator --------
 

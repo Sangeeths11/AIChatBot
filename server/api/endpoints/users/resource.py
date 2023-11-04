@@ -1,7 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
-from flask import jsonify
+from flask import jsonify,request
 from .model import *
 
 
@@ -24,13 +24,19 @@ class User(Resource):
 
 
     def post(self):
-        # Implement logic to create a new user
         args = self.parser.parse_args()
-        newUserId = createNewUser(args["name"], args["password"])
-        return {"message": "User created", "userId": newUserId}, 201
+        if "file" not in request.files:
+            newUserId = createNewUser(args["name"], args["password"])
+            return {"message": "User created", "userId": newUserId}, 201
+        file = request.files["file"]      
+        imageUrl = uploadImage(file)
+        if imageUrl is None:
+            return {"message": "Fileupload failed"}, 400
+        newUserId = createNewUser(args["name"], args["password"], imageUrl)
+        return {"message": "User created", "userId": newUserId, "imageUrl" : imageUrl}, 201
+
 
     def put(self, userId):
-        # Implement logic to update an existing user by their ID
         args = self.parser.parse_args()
         success = updateUser(userId, args["name"], args["password"])
         if success:
@@ -38,7 +44,6 @@ class User(Resource):
         return {"message": "User not found"}, 404
 
     def delete(self, userId):
-        # Implement logic to delete a user by their ID
         success = deleteUser(userId)
         if success:
             return {"message": "User deleted"}, 200
