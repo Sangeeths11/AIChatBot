@@ -1,5 +1,5 @@
-import sys
-sys.path.append('server')
+# import sys
+# sys.path.append('server')
 
 import os
 import openai
@@ -29,12 +29,16 @@ testDocList = [
 
     
 def documentQA(userId, subjectId, prompt):
+    #chat hist
+    # [ ("question", "answer"), ("question", "answer"), ("question", "answer")]
+    
+    # Add prompt to history
+    extendChatHistoryWithPrompt(userId, subjectId, prompt)
+    
     
     chat_history = getChatHistory(userId, subjectId)
-    # get User, clear chat history, if he has one on the subject already, evtl in the future, not its a F E A T U R E
     urlList = getAllDocumentsOnSubject(userId, subjectId)
     documents = splitFiles(urlList)
-    
     
     # IF NECESSARY
     vectordb = buildVectorstore(documents)
@@ -53,7 +57,7 @@ def documentQA(userId, subjectId, prompt):
     
     
     extendChatHistory(prompt, result["answer"])
-
+    # add answer to history
 
 def getAllDocumentsOnSubject(userId, subjectId):
     return ["url1", "url2", "...."]
@@ -90,11 +94,11 @@ def getChatHistory(userId, subjectId):
     pass
 
 
-def extendChatHistory(prompt, answer):
+def extendChatHistoryWithPrompt(userId, subjectId, prompt):
+    
 
+def extendChatHistoryWithAnswer(userId, subjectId, answer):
     pass
-
-
 
 def clearConversationHistory():
     pass

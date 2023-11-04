@@ -18,7 +18,8 @@ def getSubjectById(userId, subjectId):
 def createNewSubject(userId, name):
         time, ref = db.collection("users").document(userId).collection("subjects").add({
             "name": name,
-            "conversationHistory" : []
+            "conversationHistoryDocs" : [],
+            "conversationHistoryGeneral" : [],
             })        
         ref.update({"id": ref.id})       
         return ref.id
@@ -53,12 +54,53 @@ def generate(userId, subjectId):
     
     
     
-# Chatbots
+# ------------- Chatbots ---------------
 
 from chatbots.documentQuestionAnswering import documentQA
 def postDocsPrompt(userId, subjectId, prompt):
     
-    pass
+    # add prompt
+    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
+    hist = ref.get().to_dict()["conversationHistoryDocs"]
+    hist.append([prompt, ""])
+    data = {
+        "conversationHistoryDocs" : hist
+    }
+    ref.update(data)
 
+    # get answer
+    answer = documentQA(userId, subjectId, prompt)
+    
+    # add the answer
+    hist[-1] = [prompt, answer]
+    data = {
+        "conversationHistoryDocs" : hist
+    }
+    ref.update(data)
+    
+    
+    
+    
+# from chatbots.generalQuestionAnswering import ......
 def postGeneralPrompt(userId, subjectId, prompt):
-    pass
+    
+    # add prompt
+    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
+    hist = ref.get().to_dict()["conversationHistoryGeneral"]
+    hist.append([prompt, ""])
+    data = {
+        "conversationHistoryGeneral" : hist
+    }
+    ref.update(data)
+
+
+    answer = "Get General bot answer"
+
+
+    # add the answer
+    hist[-1] = [prompt, answer]
+    data = {
+        "conversationHistoryGeneral" : hist
+    }
+    ref.update(data)
+    

@@ -10,6 +10,9 @@ class Subject(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument("name")
         self.parser.add_argument("id")
+        self.parser.add_argument("conversationHistoryDocs")
+        self.parser.add_argument("conversationHistoryGeneral")
+
 
     def get(self, userId, subjectId=None):
         if subjectId is None:
@@ -54,22 +57,20 @@ class VideoContentGenerator(Resource):
         return {"message": "Subject content generated", "subjectId": subjectId, "transcripts":  videosForSubject}, 201
 
 
-# New endpoint for this too, since idk how otherwise :D
 class Conversation(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument("botType")
         self.parser.add_argument("userPromp")
         
-    # post new conversation entry, add it to the subjects list of messages of the current converation
     def post(self, userId, subjectId):
-        args = self.parser.parse_args() # whats passed in the body
+        args = self.parser.parse_args() 
         
         
         user = args["userPromp"]
         
         
-        if args["botType"] == "documents":
+        if args["botType"] == "docs":
             postDocsPrompt(userId, subjectId, args["userPrompt"])
             
         
