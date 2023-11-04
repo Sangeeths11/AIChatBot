@@ -71,7 +71,7 @@ const ressource = (subjectID : string) => {
 
 const deleteSubject = async(subjectID : string) => {
     try {
-        const response = await axios.get(`${baseUrl}/users/${userID}/subjects/${subjectID}`);
+        const response = await axios.delete(`${baseUrl}/users/${userID}/subjects/${subjectID}`);
         console.log(response.data);
     } catch (error) {
         console.error(error);
