@@ -18,6 +18,12 @@
                 <button @click="addSubject(subject.id)" class="absolute bottom-2 right-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded focus:outline-none">
                     Einstellungen
                 </button>
+                <!-- Delete -->
+                <button @click="deleteSubject(subject.id)" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
 
             <!-- The last (36th) card with a plus icon -->
@@ -61,6 +67,15 @@ const learn = () => {
 const ressource = (subjectID : string) => {
     const id = subjectID + '&' + userID;
     router.push({ path: '/ressource/' + id});
+};
+
+const deleteSubject = async(subjectID : string) => {
+    try {
+        const response = await axios.get(`${baseUrl}/users/${userID}/subjects/${subjectID}`);
+        console.log(response.data);
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 onMounted(() => {
