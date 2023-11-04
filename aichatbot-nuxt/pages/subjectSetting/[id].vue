@@ -23,9 +23,10 @@
         <div class="my-6">
             <label class="block text-white-600 font-bold mb-2">Upload Files:</label>
             <!-- Here, you might want to loop over the files using v-for or display them dynamically -->
-            <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input"
+            <input type="file" accept="pdf/*" class="file-input file-input-bordered custom-file-input"
             :class="documents.length !== 0 ? 'w-9/12' : 'w-full'" 
-            v-on="files"/>
+            @change="handleFilesChange" multiple
+            />
         </div>
 
         <div class="my-6">
@@ -80,23 +81,50 @@
         id: '',
     });
 
+    // create a ref to hold the documents
+    const documentsFile: Ref<File[]> = ref([]);
+
+    const handleFilesChange = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+        documentsFile.value = Array.from(input.files);
+        alert(documentsFile.value)
+    };
+    
     const saveSettings = async () => {
         try {
+            // Erster API-Aufruf, um das Subject zu speichern
             const response = await axios.post(`${baseUrl}/users/${userId}/subjects`, {
                 name: subjectName.value,
             });
-            console.log(response.data);
-            const documentResponse = await axios.post(`${baseUrl}/documents`, {
-                name: files.value,
-            });
-            console.log(documentResponse.data);
-            // Handle success - you can redirect or show a success message
+            console.log('Subject saved:', response.data);
+            
+
+            const subjectIdResponse = response.data.subjectId;
+            if (documentsFile.value.length > 0) {
+                // Prepare FormData to upload files
+                const formData = new FormData();
+                documentsFile.value.forEach((file) => {
+                    formData.append('file', file); // 'files' should be the field expected by your API
+                });
+                  
+                console.log('formData', formData);
+                const documentResponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}/documents`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                console.log('Documents saved:', documentResponse.data);
+            }
         } catch (error) {
-        errorMessage.value = 'An error occurred during login. Please try again later.';
-        console.error(error);
-        // Handle errors - you can show error messages to the user
+            errorMessage.value = 'An error occurred. Please try again later.';
+            console.error(error);
+            // Handle errors - Sie können Fehlermeldungen für den Benutzer anzeigen
         }
-    }
+    };
+
+
     const getSubject = async () => {
         try {
             const response = await axios.get(`${baseUrl}/users/${userId}/subjects/${subjectId}`);
