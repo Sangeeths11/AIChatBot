@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="p-10">Overview Subejects</h1>
+        <h1 class="p-10">Overview Subjects</h1>
         
         <!-- 6x6 grid -->
         <div class="grid grid-cols-2 gap-4 p-10">
