@@ -17,7 +17,6 @@ from langchain.prompts import PromptTemplate
 
 import appconfig as config
 
-os.environ["OPENAI_API_KEY"] = config.OPENAI_KEY
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
