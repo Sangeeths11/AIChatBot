@@ -91,7 +91,7 @@ def buildVectorstore(documents):
 
 
 
-from server.api.endpoints.subjects.model import getSubjectById, updateSubject
+from api.endpoints.subjects.model import getSubjectById, updateSubject
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
     hist = getConversationHistoryDocs(userId, subjectId)
     hist.append([prompt, ""])
