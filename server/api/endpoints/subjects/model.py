@@ -15,12 +15,16 @@ def getSubjectById(userId, subjectId):
         return None
 
 
-def createNewSubject(userId, name):
+def createNewSubject(userId, name, imageUrl=None):
         time, ref = db.collection("users").document(userId).collection("subjects").add({
             "name": name,
-            "conversationHistory" : []
+            "conversationHistoryDocs" : [],
+            "conversationHistoryGeneral" : [],
             })        
         ref.update({"id": ref.id})       
+        
+        if imageUrl is not None:
+            ref.update({"imageUrl" : imageUrl})
         return ref.id
 
 def updateSubject(userId, subjectId, name):
@@ -41,6 +45,9 @@ def getAllSubjects(userId):
     subjects = ref.stream()
     return [subject.to_dict() for subject in subjects]
     
+from videoOperations.fileStorageHelper import uploadSubjectImage
+def uploadImage(file):
+    uploadSubjectImage(file)
     
 # ------- VideoContentGenerator --------
 
@@ -53,12 +60,53 @@ def generate(userId, subjectId):
     
     
     
-# Chatbots
+# ------------- Chatbots ---------------
 
 from chatbots.documentQuestionAnswering import documentQA
 def postDocsPrompt(userId, subjectId, prompt):
     
-    pass
+    # add prompt
+    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
+    hist = ref.get().to_dict()["conversationHistoryDocs"]
+    hist.append([prompt, ""])
+    data = {
+        "conversationHistoryDocs" : hist
+    }
+    ref.update(data)
 
+    # get answer
+    answer = documentQA(userId, subjectId, prompt)
+    
+    # add the answer
+    hist[-1] = [prompt, answer]
+    data = {
+        "conversationHistoryDocs" : hist
+    }
+    ref.update(data)
+    
+    
+    
+    
+# from chatbots.generalQuestionAnswering import ......
 def postGeneralPrompt(userId, subjectId, prompt):
-    pass
+    
+    # add prompt
+    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
+    hist = ref.get().to_dict()["conversationHistoryGeneral"]
+    hist.append([prompt, ""])
+    data = {
+        "conversationHistoryGeneral" : hist
+    }
+    ref.update(data)
+
+
+    answer = "Get General bot answer"
+
+
+    # add the answer
+    hist[-1] = [prompt, answer]
+    data = {
+        "conversationHistoryGeneral" : hist
+    }
+    ref.update(data)
+    

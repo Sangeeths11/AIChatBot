@@ -1,0 +1,22 @@
+Install
+-----------------
+whisper
+flask
+... 
+...
+...
+
+
+Credentials
+-------------------
+Put credsFirestore.json into /server
+Put the .env file into /server
+
+
+
+Starting the server
+---------------------
+1. start the app.py in server/api
+2. Follow UseOfVue.txt for Vue related installation procedure
+3. In the terminal: cd aichatbot-nuxt
+4. Start the Vue webapplication with: yarn run dev

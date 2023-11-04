@@ -5,9 +5,7 @@ from pytube import YouTube
 
 from videoOperations.fileStorageHelper import uploadTranscriptFile
 import appconfig as config
-# from pywin.debugger import configui
 
-os.environ["OPENAI_API_KEY"] =  config.OPENAI_KEY
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 folderName = config.YOUTUBE_AUDIO_DOWNLOAD_PATH

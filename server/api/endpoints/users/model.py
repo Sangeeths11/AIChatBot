@@ -20,34 +20,36 @@ def getUserById(userId):
     else:
         return None
 
-def createNewUser(name, password):
-        time, ref = db.collection("users").add({
-            "name": name,
-            "password": password
-            })        
-        ref.update({"id": ref.id})
-        return ref.id
-
+def createNewUser(name, password, imageUrl = None):
+    time, ref = db.collection("users").add({
+        "name": name,
+        "password": password
+        })        
+    ref.update({"id": ref.id})
+    if imageUrl is not None:
+        ref.update({"imageUrl" : imageUrl})
+    return ref.id
+    
+    
 def updateUser(userId, name, password):
     ref = db.collection("users").document(userId)
     data = {
             "name": name,
             "password": password
             }
-
-    # Update the user document with the new data
     ref.update(data)
-    
-    return True  # Assuming the update operation succeeded
+    return True 
 
 def deleteUser(userId):
     user_ref = db.collection("users").document(userId)
     user_ref.delete()
-    
-    return True  # Assuming the delete operation succeeded
+    return True 
 
 def getAllUsers():
     usersRef = db.collection("users")  
     users = usersRef.stream()
     return [user.to_dict() for user in users]
     
+from videoOperations.fileStorageHelper import uploadUserImage
+def uploadImage(file):
+    uploadUserImage(file)

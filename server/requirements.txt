@@ -1,6 +1,0 @@
-pip freeze > requirements.txt
-conda list --export > conda_environment.yml
-
-conda env create -f conda_environment.yml
-conda activate my_env
-pip install -r requirements.txt

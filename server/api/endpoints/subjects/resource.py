@@ -1,7 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
-from flask import jsonify
+from flask import jsonify, request
 from .model import *
 
 
@@ -10,6 +10,10 @@ class Subject(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument("name")
         self.parser.add_argument("id")
+        self.parser.add_argument("imageUrl")
+        self.parser.add_argument("conversationHistoryDocs")
+        self.parser.add_argument("conversationHistoryGeneral")
+
 
     def get(self, userId, subjectId=None):
         if subjectId is None:
@@ -23,8 +27,15 @@ class Subject(Resource):
 
     def post(self, userId):
         args = self.parser.parse_args()
-        newSubjectId = createNewSubject(userId, args["name"])
-        return {"message": "Subject created", "subjectId": newSubjectId}, 201
+        if "file" not in request.files:
+            newSubjectId = createNewSubject(userId, args["name"])
+            return {"message": "Subject created", "subjectId": newSubjectId}, 201
+        file = request.files["file"]      
+        imageUrl = uploadImage(file)
+        if imageUrl is None:
+            return {"message": "Fileupload failed"}, 400
+        newSubjectId = createNewSubject(userId, args["name"], imageUrl)
+        return {"message": "Subject created", "subjectId": newSubjectId, "imageUrl" : imageUrl}, 201
 
     def put(self, userId, subjectId):
         args = self.parser.parse_args()
@@ -54,22 +65,20 @@ class VideoContentGenerator(Resource):
         return {"message": "Subject content generated", "subjectId": subjectId, "transcripts":  videosForSubject}, 201
 
 
-# New endpoint for this too, since idk how otherwise :D
 class Conversation(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument("botType")
         self.parser.add_argument("userPromp")
         
-    # post new conversation entry, add it to the subjects list of messages of the current converation
     def post(self, userId, subjectId):
-        args = self.parser.parse_args() # whats passed in the body
+        args = self.parser.parse_args() 
         
         
         user = args["userPromp"]
         
         
-        if args["botType"] == "documents":
+        if args["botType"] == "docs":
             postDocsPrompt(userId, subjectId, args["userPrompt"])
             
         
