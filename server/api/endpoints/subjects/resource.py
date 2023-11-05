@@ -39,7 +39,14 @@ class Subject(Resource):
 
     def put(self, userId, subjectId):
         args = self.parser.parse_args()
-        success = updateSubject(userId, subjectId, args["name"])
+        
+        if "file" in request.files:
+            file = request.files["file"]      
+            imageUrl = uploadImage(file)
+        if imageUrl is None:
+            return {"message": "Fileupload failed"}, 400
+        
+        success = updateSubject(userId, subjectId, name=args["name"], imageUrl=imageUrl)
         if success:
             return {"message": "subject updated"}, 200
         return {"message": "subject not found"}, 404
@@ -50,7 +57,7 @@ class Subject(Resource):
             return {"message": "subject deleted"}, 200
         return {"message": "subject not found"}, 404
     
-    
+
 from endpoints.videos.model import getAllVideos
 class VideoContentGenerator(Resource):
     def __init__(self):
@@ -60,9 +67,10 @@ class VideoContentGenerator(Resource):
     def post(self, userId, subjectId):
         args = self.parser.parse_args()
 
-        url = generate(userId, subjectId)
-        videosForSubject = getAllVideos(userId, subjectId)
-        return {"message": "Subject content generated", "subjectId": subjectId, "transcripts":  videosForSubject}, 201
+        # resultId of celery worker
+        #generate.apply_async(args=[userId, subjectId])
+        generate(userId,subjectId)
+        return {"message": "Subject content is being generated", "subjectId": subjectId}, 201
 
 
 class Conversation(Resource):

@@ -6,6 +6,11 @@ flask
 ...
 ...
 
+download
+-------------------
+message-broker rabbitMQ: https://www.rabbitmq.com/install-windows.html#installer
+
+
 
 Credentials
 -------------------
