@@ -1,6 +1,6 @@
 # Prepare
-import sys
-sys.path.append('server')
+# import sys
+# sys.path.append('server')
 
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
@@ -41,14 +41,14 @@ api = Api(app)
 api.prefix = '/api'
 
 # import resources
-from endpoints.register.resource import Register
-from endpoints.login.resource import Login
+from server.api.endpoints.register.resource import Register
+from server.api.endpoints.login.resource import Login
 
-from endpoints.users.resource import User
-from endpoints.subjects.resource import Subject
-from endpoints.documents.resource import Document
-from endpoints.videos.resource import Video
-from endpoints.subjects.resource import VideoContentGenerator
+from server.api.endpoints.users.resource import User
+from server.api.endpoints.subjects.resource import Subject
+from server.api.endpoints.documents.resource import Document
+from server.api.endpoints.videos.resource import Video
+from server.api.endpoints.subjects.resource import VideoContentGenerator
 
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
