@@ -29,4 +29,4 @@ textblob==0.15.3
 unicodedata2==15.1.0
 # wandb==0.15.12
 # wheel==0.41.2
-whisper==1.1.5
+openai-whisper==20230918

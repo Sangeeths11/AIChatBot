@@ -1,3 +1,4 @@
+import os
 import shutil
 import subprocess
 import re
@@ -30,13 +31,19 @@ def create_conda_environment_from_file(file_path, env_name):
         print("An error occurred while creating the Conda environment from the .yml file.")
         print(e.output.decode())
 
+def get_conda_env_name():
+    return os.environ.get('CONDA_DEFAULT_ENV', None)
+
 
 def create_conda_env(file_path='environment.yml'):
-    try:
-        active_env_name = subprocess.check_output(['conda', 'info', '--envs'], stderr=subprocess.STDOUT).decode().split('\n')[0].split()[-1]
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        active_env_name = 'base'
 
+    current_env_name = get_conda_env_name()
+    if current_env_name is not None:
+        active_env_name = current_env_name
+        print(f'The currently activated Conda environment is: {current_env_name}')
+    else:
+        print('No Conda environment is currently activated.')
+        active_env_name = 'base'
     # Read the .yml file
     with open(file_path, 'r') as file:
         env_yml = file.read()
@@ -51,7 +58,7 @@ def create_conda_env(file_path='environment.yml'):
     if r.lower() == 'y':
         env_yml = re.sub(r'^name: .+$', f'name: {active_env_name}', env_yml, flags=re.MULTILINE)
         env_name = active_env_name
-    if r.lower() != 'n' and r.lower() != 'y' and r != '':
+    if (r.lower() != 'n') and (r.lower() != 'y') and (r != ''):
         new_env_name = r
         # Use regular expression to replace the name
         env_yml = re.sub(r'^name: .+$', f'name: {new_env_name}', env_yml, flags=re.MULTILINE)
