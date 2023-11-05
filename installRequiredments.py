@@ -72,7 +72,7 @@ def create_conda_env(file_path='environment.yml'):
 def install_with_pip():
     """Install packages using pip."""
     try:
-        subprocess.check_call(['python.exe', '-m', 'pip', 'install', '--upgrade', 'pip'])
+        subprocess.check_call(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
         subprocess.check_call(['pip', 'install', '-r', 'requirements.txt'])
         print("Packages installed using pip.")
         time.sleep(5)
