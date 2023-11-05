@@ -14,6 +14,23 @@ def check_conda():
         return False
 
 
+def create_conda_environment_from_file(file_path, env_name):
+    """Create a new Conda environment from a .yml file."""
+    try:
+        # ckeck if name of environment is already taken
+        env_name_list = subprocess.check_output(['conda', 'env', 'list'], stderr=subprocess.STDOUT).decode().split('\n')
+        env_name_list = [env.split()[0] for env in env_name_list if len(env) > 1]
+        if env_name in env_name_list:
+            subprocess.check_call(['cond', 'env', 'update', '-f', file_path, '--name', env_name])
+            print(f"Conda environment ({env_name}) updated from '{file_path}'.")
+        else:
+            subprocess.check_call(['conda', 'env', 'create', '-f', file_path])
+            print(f"Conda environment ({env_name}) created from '{file_path}'.")
+    except subprocess.CalledProcessError as e:
+        print("An error occurred while creating the Conda environment from the .yml file.")
+        print(e.output.decode())
+
+
 def create_conda_env(file_path='environment.yml'):
     try:
         active_env_name = subprocess.check_output(['conda', 'info', '--envs'], stderr=subprocess.STDOUT).decode().split('\n')[0].split()[-1]
@@ -52,23 +69,6 @@ def create_conda_env(file_path='environment.yml'):
     create_conda_environment_from_file(file_path, env_name)
 
 
-def create_conda_environment_from_file(file_path, env_name):
-    """Create a new Conda environment from a .yml file."""
-    try:
-        # ckeck if name of environment is already taken
-        env_name_list = subprocess.check_output(['conda', 'env', 'list'], stderr=subprocess.STDOUT).decode().split('\n')
-        env_name_list = [env.split()[0] for env in env_name_list if len(env) > 1]
-        if env_name in env_name_list:
-            subprocess.check_call(['cond', 'env', 'update', '-f', file_path, '--name', env_name])
-            print(f"Conda environment ({env_name}) updated from '{file_path}'.")
-        else:
-            subprocess.check_call(['conda', 'env', 'create', '-f', file_path])
-            print(f"Conda environment ({env_name}) created from '{file_path}'.")
-    except subprocess.CalledProcessError as e:
-        print("An error occurred while creating the Conda environment from the .yml file.")
-        print(e.output.decode())
-
-
 def install_with_pip():
     """Install packages using pip."""
     try:
@@ -88,7 +88,14 @@ def setup_requirements():
         sys.exit(1)
     if check_conda():
         print("Conda is available. Will attempt to create environment from .yml file.")
-        create_conda_env()
+        r = input("Continue with conda (y) or pip (n)? [y] / [n]: ")
+        if r.lower() == 'y':
+            create_conda_env()
+        elif r.lower() == 'n':
+            install_with_pip()
+        else:
+            print("Invalid input. Start again.")
+            sys.exit(1)
     else:
         print("Conda is not available. Falling back to pip for package installation.")
         install_with_pip()
