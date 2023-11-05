@@ -29,15 +29,14 @@ if r.lower() == 'n':
     if r2.lower() == 'y':
         setup_frontend()
     else:
-        print(sys.path)
         print("Okay, let's start the Application.")
 elif r.lower() == 'y':
     create_environment_variable_file()
     setup_requirements()
+    setup_frontend()
 else:
     print("Invalid input. Start again.")
     sys.exit(1)
-
 
 create_environment_variable_file()
 
@@ -48,8 +47,7 @@ load_dotenv()
 
 # Function to run a command in a separate thread and print its output
 def run_process(command, cwd=None, ready_future=None, ready_signal=None):
-    if command[0] == 'python':
-        command[0] = sys.executable  # replace 'python' with the path of the current Python interpreter
+    print(os.getcwd())
     process = subprocess.Popen(command, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
 
     def check_ready():
@@ -60,6 +58,7 @@ def run_process(command, cwd=None, ready_future=None, ready_signal=None):
         process.stdout.close()
 
     threading.Thread(target=check_ready).start()
+    print(os.getcwd())
     return process
 
 
@@ -84,8 +83,8 @@ backend_process = run_process(
 
 # Start the frontend server and wait for it to be ready
 frontend_process = run_process(
-    ['cd aichatbot-nuxt && yarn dev'],
-    cwd='AIChatbot-Testing',
+    ['yarn dev'],
+    cwd='./aichatbot-nuxt/',
     ready_future=frontend_ready,
     ready_signal='Nuxt DevTools'  # Adjust this to the actual signal from your server output
 )
