@@ -63,7 +63,8 @@ def main():
     from endpoints.documents.resource import Document
     from endpoints.videos.resource import Video
     from endpoints.subjects.resource import VideoContentGenerator
-
+    #from endpoints.chatbots.resource import Chatbot
+    
     api.add_resource(Register, "/register")
     api.add_resource(Login, "/login")
     api.add_resource(User, "/users", "/users/<string:userId>")
@@ -71,7 +72,7 @@ def main():
     api.add_resource(Document, "/users/<string:userId>/subjects/<string:subjectId>/documents","/users/<string:userId>/subjects/<string:subjectId>/documents/<string:documentId>")
     api.add_resource(Video, "/users/<string:userId>/subjects/<string:subjectId>/videos","/users/<string:userId>/subjects/<string:subjectId>/videos/<string:videoId>")
     api.add_resource(VideoContentGenerator, "/users/<string:userId>/subjects/<string:subjectId>/generate")
-
+    #api.add_resource(Chatbot, "/users/<string:userId>/subjects/<string:subjectId>/chats")
 
     app.run()
 
