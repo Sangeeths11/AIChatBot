@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
 from flask import jsonify, request
-from server.api.endpoints.documents.model import *
+from api.endpoints.documents.model import *
 
 
 class Document(Resource):

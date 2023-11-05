@@ -9,10 +9,10 @@ from googleapiclient.errors import HttpError
 import json
 import pandas as pd
 
-import server.videoOperations.chatGptHelper as gpt
-import server.videoOperations.googleHelper as google
-import server.videoOperations.prompts as prompts
-from server.api.endpoints.videos.model import createNewVideo, updateVideo
+import videoOperations.chatGptHelper as gpt
+import videoOperations.googleHelper as google
+import videoOperations.prompts as prompts
+from api.endpoints.videos.model import createNewVideo, updateVideo
 
 
 def videoWorkflow(userId, subjectId, subject):

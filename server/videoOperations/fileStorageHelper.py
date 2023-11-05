@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from google.cloud import storage
-import server.api.appconfig as config
+import api.appconfig as config
 from urllib.parse import urlparse
 import os
 import pathlib

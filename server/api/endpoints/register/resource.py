@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
 from flask import jsonify, request
-from server.api.endpoints.register.model import *
+from api.endpoints.register.model import uploadImage, tryRegisterUser, RegisterError
 
 
 class Register(Resource):
@@ -15,6 +15,7 @@ class Register(Resource):
 
     def post(self):
         args = self.parser.parse_args()
+        imageUrl = None
         if "file" not in request.files:
             newUserId = tryRegisterUser(args["name"], args["password"], args["passwordConfirmation"])
         else:
@@ -28,4 +29,7 @@ class Register(Resource):
             return {'message': 'Passwords do not match'}, 400
         elif newUserId is RegisterError.USER_ALREADY_EXISTS:
             return {'message': 'A user with this name already exists, login instead'}, 409
+        
+        if imageUrl is None:
+            return {'message': 'User created', 'userId': newUserId}, 201
         return {'message': 'User created', 'userId': newUserId, "imageUrl": imageUrl}, 201

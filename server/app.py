@@ -10,7 +10,7 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from werkzeug.exceptions import HTTPException
 from werkzeug.exceptions import default_exceptions
-import server.api.appconfig as config
+import api.appconfig as config
 import firebase_admin
 from firebase_admin import credentials, firestore
 from flask import Flask, jsonify
@@ -55,14 +55,14 @@ def main():
     api.prefix = "/api"
 
     # import resources
-    from server.api.endpoints.register.resource import Register
-    from server.api.endpoints.login.resource import Login
+    from api.endpoints.register.resource import Register
+    from api.endpoints.login.resource import Login
 
-    from server.api.endpoints.users.resource import User
-    from server.api.endpoints.subjects.resource import Subject
-    from server.api.endpoints.documents.resource import Document
-    from server.api.endpoints.videos.resource import Video
-    from server.api.endpoints.subjects.resource import VideoContentGenerator
+    from api.endpoints.users.resource import User
+    from api.endpoints.subjects.resource import Subject
+    from api.endpoints.documents.resource import Document
+    from api.endpoints.videos.resource import Video
+    from api.endpoints.subjects.resource import VideoContentGenerator
     #from server.api.endpoints.chatbots.resource import Chatbot
 
     api.add_resource(Register, "/register")

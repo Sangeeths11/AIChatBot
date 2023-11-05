@@ -20,9 +20,10 @@ def create_conda_environment_from_file(file_path, env_name):
     try:
         # ckeck if name of environment is already taken
         env_name_list = subprocess.check_output(['conda', 'env', 'list'], stderr=subprocess.STDOUT).decode().split('\n')
-        env_name_list = [env.split()[0] for env in env_name_list if len(env) > 1]
-        if env_name in env_name_list:
-            subprocess.check_call(['cond', 'env', 'update', '-f', file_path, '--name', env_name])
+        env_name_list = [env.split()[0].lower() for env in env_name_list if len(env) > 1]
+        print(env_name_list)
+        if env_name.lower() in env_name_list:
+            subprocess.check_call(['conda', 'env', 'update', '-f', file_path, '--name', env_name])
             print(f"Conda environment ({env_name}) updated from '{file_path}'.")
         else:
             subprocess.check_call(['conda', 'env', 'create', '-f', file_path])
@@ -58,7 +59,7 @@ def create_conda_env(file_path='environment.yml'):
     if r.lower() == 'y':
         env_yml = re.sub(r'^name: .+$', f'name: {active_env_name}', env_yml, flags=re.MULTILINE)
         env_name = active_env_name
-    if (r.lower() != 'n') and (r.lower() != 'y') and (r != ''):
+    elif (r.lower() != 'n') and (r.lower() != 'y') and (r != ''):
         new_env_name = r
         # Use regular expression to replace the name
         env_yml = re.sub(r'^name: .+$', f'name: {new_env_name}', env_yml, flags=re.MULTILINE)
@@ -66,7 +67,7 @@ def create_conda_env(file_path='environment.yml'):
         # Write the changes back to a new .yml file
         with open(file_path, 'w') as file:
             file.write(env_yml)
-    if r.lower() == 'n':
+    elif r.lower() == 'n' or r.lower() == 'y':
         env_name = file_env_name
     else:
         raise ValueError(f'Input "{r}" is invalid.')

@@ -53,13 +53,13 @@ def getAllSubjects(userId):
     subjects = ref.stream()
     return [subject.to_dict() for subject in subjects]
     
-from server.videoOperations.fileStorageHelper import uploadSubjectImage
+from videoOperations.fileStorageHelper import uploadSubjectImage
 def uploadImage(file):
     return uploadSubjectImage(file)
     
 # ------- VideoContentGenerator --------
 
-from server.videoOperations.videoWorkflow import videoWorkflow
+from videoOperations.videoWorkflow import videoWorkflow
 # from api.app import celery
 
 # @celery.task
@@ -71,7 +71,7 @@ def generate(userId, subjectId):
     
 # ------------- Chatbots ---------------
 
-from server.chatbots.documentQuestionAnswering import documentQA
+from chatbots.documentQuestionAnswering import documentQA
 def postDocsPrompt(userId, subjectId, prompt):
     
     # add prompt
