@@ -14,7 +14,7 @@
         <div class="my-6">
             <label class="block text-white-600 font-bold mb-2">Subject Name:</label>
             <input type="text" placeholder="Enter subject name" class="p-2 border rounded"
-            :disabled="documents.length !== 0 ? true : false"
+            :disabled="subjectId !== 'new' ? true : false"
             :class="documents.length !== 0 ? 'w-9/12' : 'w-full'"
             v-model="subjectName"/>
         </div>
