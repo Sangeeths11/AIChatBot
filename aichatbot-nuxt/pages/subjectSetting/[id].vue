@@ -7,7 +7,8 @@
             <label class="block text-white-600 font-bold mb-2">Upload Subject Image:</label>
             <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input" 
             :class="documents.length !== 0 ? 'w-9/12' : 'w-full'"
-            v-on="image"/>
+            @change="handleImageChange"
+            />
         </div>
         
         <!-- Subject Name -->
@@ -65,7 +66,7 @@
     const errorMessage = ref(''); // Variable to hold the error message
     const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
     // const userId = ref('0izCCZBtsVolmwwMIgav');
-    const image = ref('');
+    
     const subjectName = ref('');
     const files = ref([]);
 
@@ -90,6 +91,16 @@
 
         documentsFile.value = Array.from(input.files);
         alert(documentsFile.value)
+    };
+
+    const image: Ref<File[]> = ref([]);
+
+    const handleImageChange = (event: Event) => {
+        const input = event.target as HTMLInputElement;
+        if (!input.files) return;
+    
+        image.value = Array.from(input.files);
+        alert(image.value)
     };
     
     const saveSettings = async () => {
@@ -117,6 +128,23 @@
                 });
                 console.log('Documents saved:', documentResponse.data);
             }
+
+            if (image.value.length > 0) {
+                // Prepare FormData to upload files
+                const formData = new FormData();
+                image.value.forEach((file) => {
+                    formData.append('file', file); // 'files' should be the field expected by your API
+                });
+                  
+                console.log('formData', formData);
+                const imageResponse = await axios.put(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                console.log('Image saved:', imageResponse.data);
+            }
+
         } catch (error) {
             errorMessage.value = 'An error occurred. Please try again later.';
             console.error(error);
