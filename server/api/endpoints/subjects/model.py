@@ -55,7 +55,7 @@ def getAllSubjects(userId):
     
 from videoOperations.fileStorageHelper import uploadSubjectImage
 def uploadImage(file):
-    uploadSubjectImage(file)
+    return uploadSubjectImage(file)
     
 # ------- VideoContentGenerator --------
 

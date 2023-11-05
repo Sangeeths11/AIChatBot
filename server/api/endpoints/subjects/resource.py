@@ -32,7 +32,7 @@ class Subject(Resource):
             return {"message": "Subject created", "subjectId": newSubjectId}, 201
         file = request.files["file"]      
         imageUrl = uploadImage(file)
-        if imageUrl is None:
+        if not imageUrl:
             return {"message": "Fileupload failed"}, 400
         newSubjectId = createNewSubject(userId, args["name"], imageUrl)
         return {"message": "Subject created", "subjectId": newSubjectId, "imageUrl" : imageUrl}, 201
@@ -43,7 +43,7 @@ class Subject(Resource):
         if "file" in request.files:
             file = request.files["file"]      
             imageUrl = uploadImage(file)
-        if imageUrl is None:
+        if not imageUrl:
             return {"message": "Fileupload failed"}, 400
         
         success = updateSubject(userId, subjectId, name=args["name"], imageUrl=imageUrl)
