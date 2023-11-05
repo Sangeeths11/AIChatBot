@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
 from flask import jsonify, request
-from .model import *
+from server.api.endpoints.subjects.model import *
 
 
 class Subject(Resource):
@@ -51,7 +51,7 @@ class Subject(Resource):
         return {"message": "subject not found"}, 404
     
     
-from endpoints.videos.model import getAllVideos
+from server.api.endpoints.videos.model import getAllVideos
 class VideoContentGenerator(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()

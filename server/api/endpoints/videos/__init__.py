@@ -1,2 +1,2 @@
-from .resource import * 
-from .model import *
+# from .resource import *
+# from .model import *

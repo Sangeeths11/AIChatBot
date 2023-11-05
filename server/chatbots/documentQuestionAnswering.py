@@ -15,7 +15,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.prompts import PromptTemplate
 
-import appconfig as config
+import server.api.appconfig as config
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 

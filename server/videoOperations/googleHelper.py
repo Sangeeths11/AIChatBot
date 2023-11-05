@@ -3,11 +3,11 @@ import os
 from googleapiclient.discovery import build
 from textblob import TextBlob
 import json
-import appconfig as config
-
+#import appconfig as config
 from pytube import YouTube
-
-os.environ["GOOGLE_API_KEY"] = config.GOOGLE_API_KEY
+from dotenv import load_dotenv
+load_dotenv()
+#os.environ["GOOGLE_API_KEY"] = config.GOOGLE_API_KEY
 youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))
 
 

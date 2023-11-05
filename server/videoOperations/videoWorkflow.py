@@ -24,10 +24,10 @@ import pandas as pd
 # firebase_admin.initialize_app(cred)
 
 
-import videoOperations.chatGptHelper as gpt
-import videoOperations.googleHelper as google
-import videoOperations.prompts as prompts
-from endpoints.videos.model import createNewVideo, updateVideo
+import server.videoOperations.chatGptHelper as gpt
+import server.videoOperations.googleHelper as google
+import server.videoOperations.prompts as prompts
+from server.api.endpoints.videos.model import createNewVideo, updateVideo
 
 
 

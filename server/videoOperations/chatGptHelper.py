@@ -3,8 +3,8 @@ import os
 import whisper
 from pytube import YouTube
 
-from videoOperations.fileStorageHelper import uploadTranscriptFile
-import appconfig as config
+from server.videoOperations.fileStorageHelper import uploadTranscriptFile
+import server.api.appconfig as config
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 

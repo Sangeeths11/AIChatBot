@@ -41,7 +41,7 @@ def getAllDocuments(userId, subjectId):
     
     
     
-from videoOperations.fileStorageHelper import uploadDocumentFile
+from server.videoOperations.fileStorageHelper import uploadDocumentFile
 def uploadFile(file):
     return uploadDocumentFile(file)
     

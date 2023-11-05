@@ -45,13 +45,13 @@ def getAllSubjects(userId):
     subjects = ref.stream()
     return [subject.to_dict() for subject in subjects]
     
-from videoOperations.fileStorageHelper import uploadSubjectImage
+from server.videoOperations.fileStorageHelper import uploadSubjectImage
 def uploadImage(file):
     uploadSubjectImage(file)
     
 # ------- VideoContentGenerator --------
 
-from videoOperations.videoWorkflow import videoWorkflow
+from server.videoOperations.videoWorkflow import videoWorkflow
 
 def generate(userId, subjectId):
     data = getSubjectById(userId, subjectId)
@@ -62,7 +62,7 @@ def generate(userId, subjectId):
     
 # ------------- Chatbots ---------------
 
-from chatbots.documentQuestionAnswering import documentQA
+from server.chatbots.documentQuestionAnswering import documentQA
 def postDocsPrompt(userId, subjectId, prompt):
     
     # add prompt
@@ -87,7 +87,7 @@ def postDocsPrompt(userId, subjectId, prompt):
     
     
     
-# from chatbots.generalQuestionAnswering import ......
+# from server.chatbots.generalQuestionAnswering import ......
 def postGeneralPrompt(userId, subjectId, prompt):
     
     # add prompt
