@@ -33,7 +33,11 @@ if r.lower() == 'n':
 elif r.lower() == 'y':
     create_environment_variable_file()
     setup_requirements()
-    setup_frontend()
+    r2 = input("Do you want to setup the frontend? y / n: ")
+    if r2.lower() == 'y':
+        setup_frontend()
+    else:
+        print("Okay, let's start the Application.")
 else:
     print("Invalid input. Start again.")
     sys.exit(1)
