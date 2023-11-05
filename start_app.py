@@ -83,8 +83,8 @@ backend_process = run_process(
 
 # Start the frontend server and wait for it to be ready
 frontend_process = run_process(
-    ['yarn dev'],
-    cwd='./aichatbot-nuxt/',
+    ['yarn', 'run', 'dev'],
+    cwd='aichatbot-nuxt',
     ready_future=frontend_ready,
     ready_signal='Nuxt DevTools'  # Adjust this to the actual signal from your server output
 )
