@@ -54,3 +54,6 @@ BUCKET_USER_IMAGES_PATH = "users/images"
 # Firebase Firestorage
 # CREDENTIALS_PATH = "server/credsFirestore.json"
 
+# Celery Config
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"

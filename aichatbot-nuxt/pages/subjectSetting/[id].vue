@@ -7,14 +7,15 @@
             <label class="block text-white-600 font-bold mb-2">Upload Subject Image:</label>
             <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input" 
             :class="documents.length !== 0 ? 'w-9/12' : 'w-full'"
-            v-on="image"/>
-
+            @change="handleImageChange"
+            />
         </div>
         
         <!-- Subject Name -->
         <div class="my-6">
             <label class="block text-white-600 font-bold mb-2">Subject Name:</label>
             <input type="text" placeholder="Enter subject name" class="p-2 border rounded"
+            :disabled="subjectId !== 'new' ? true : false"
             :class="documents.length !== 0 ? 'w-9/12' : 'w-full'"
             v-model="subjectName"/>
         </div>
@@ -23,9 +24,10 @@
         <div class="my-6">
             <label class="block text-white-600 font-bold mb-2">Upload Files:</label>
             <!-- Here, you might want to loop over the files using v-for or display them dynamically -->
-            <input type="file" accept="image/*" class="file-input file-input-bordered custom-file-input"
+            <input type="file" accept="pdf/*" class="file-input file-input-bordered custom-file-input"
             :class="documents.length !== 0 ? 'w-9/12' : 'w-full'" 
-            v-on="files"/>
+            @change="handleFilesChange" multiple
+            />
         </div>
 
         <div class="my-6">
@@ -34,7 +36,6 @@
             >Save</button>
         </div>
         
-
         <!-- Data Sidebar -->
         <div v-if="documents.length !== 0" class="absolute right-0 top-0 h-full w-1/4 bg-white shadow-md p-4">
             <h2 class="text-gray-600 font-bold mb-4">Data Overview</h2>
@@ -65,7 +66,7 @@
     const errorMessage = ref(''); // Variable to hold the error message
     const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
     // const userId = ref('0izCCZBtsVolmwwMIgav');
-    const image = ref('');
+    
     const subjectName = ref('');
     const files = ref([]);
 
@@ -81,23 +82,78 @@
         id: '',
     });
 
+    // create a ref to hold the documents
+    const documentsFile: Ref<File[]> = ref([]);
+
+    const handleFilesChange = (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+        documentsFile.value = Array.from(input.files);
+        alert(documentsFile.value)
+    };
+
+    const image: Ref<File[]> = ref([]);
+
+    const handleImageChange = (event: Event) => {
+        const input = event.target as HTMLInputElement;
+        if (!input.files) return;
+    
+        image.value = Array.from(input.files);
+        alert(image.value)
+    };
+    
     const saveSettings = async () => {
         try {
+            // Erster API-Aufruf, um das Subject zu speichern
             const response = await axios.post(`${baseUrl}/users/${userId}/subjects`, {
                 name: subjectName.value,
             });
-            console.log(response.data);
-            const documentResponse = await axios.post(`${baseUrl}/documents`, {
-                name: files.value,
-            });
-            console.log(documentResponse.data);
-            // Handle success - you can redirect or show a success message
+            console.log('Subject saved:', response.data);
+            
+
+            const subjectIdResponse = response.data.subjectId;
+            if (documentsFile.value.length > 0) {
+                // Prepare FormData to upload files
+                const formData = new FormData();
+                documentsFile.value.forEach((file) => {
+                    formData.append('file', file); // 'files' should be the field expected by your API
+                });
+                  
+                console.log('formData', formData);
+                const documentResponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}/documents`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                console.log('Documents saved:', documentResponse.data);
+            }
+
+            if (image.value.length > 0) {
+                // Prepare FormData to upload files
+                const formData = new FormData();
+                image.value.forEach((file) => {
+                    formData.append('file', file); // 'files' should be the field expected by your API
+                });
+                  
+                console.log('formData', formData);
+                const imageResponse = await axios.put(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                console.log('Image saved:', imageResponse.data);
+            }
+
         } catch (error) {
-        errorMessage.value = 'An error occurred during login. Please try again later.';
-        console.error(error);
-        // Handle errors - you can show error messages to the user
+            errorMessage.value = 'An error occurred. Please try again later.';
+            console.error(error);
+            // Handle errors - Sie können Fehlermeldungen für den Benutzer anzeigen
         }
-    }
+        router.push({ path: '/overview/' + userId});
+    };
+
+
     const getSubject = async () => {
         try {
             const response = await axios.get(`${baseUrl}/users/${userId}/subjects/${subjectId}`);

@@ -27,14 +27,24 @@ class Document(Resource):
 
         if "file" not in request.files:
             return {"message": "No file provided"}, 400
-        file = request.files["file"]      
-        url = uploadFile(file)
         
-        if url is None:
-            return {"message": "Fileupload failed"}, 400
+        documentIds = []
+        urls = []
+        filenames = []
+        files = request.files.getlist("file")
+
+        for file in files:
+            url = uploadFile(file)
+            if url is None:
+                return {"message": "Fileupload failed", "AlreadyDone": {"documentIds": documentIds, "urls": urls, "filenames": filenames}}, 400
+                
+            newDocumentId = createNewDocument(userId, subjectId, file.filename, url)
             
-        newDocumentId = createNewDocument(userId, subjectId, file.filename, url)
-        return {"message": "Document created", "documentId": newDocumentId, "url": url}, 201
+            filenames.append(file.filename)
+            urls.append(url)
+            documentIds.append(newDocumentId)
+            
+        return {"message": "Documents created", "documentIds": documentIds, "urls": urls, "filenames": filenames}, 201
 
     def put(self, userId, subjectId, documentId):      
         args = self.parser.parse_args()

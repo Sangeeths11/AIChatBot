@@ -2,7 +2,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
 from flask import jsonify
-# import server.api.appconfig as config
+
+
 
 db = firestore.client()
 
@@ -16,23 +17,30 @@ def getSubjectById(userId, subjectId):
 
 
 def createNewSubject(userId, name, imageUrl=None):
-        time, ref = db.collection("users").document(userId).collection("subjects").add({
-            "name": name,
-            "conversationHistoryDocs" : [],
-            "conversationHistoryGeneral" : [],
-            })        
-        ref.update({"id": ref.id})       
-        
-        if imageUrl is not None:
-            ref.update({"imageUrl" : imageUrl})
-        return ref.id
-
-def updateSubject(userId, subjectId, name):
-    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
-    data = {
+    time, ref = db.collection("users").document(userId).collection("subjects").add({
         "name": name,
-    }
-    ref.update(data)
+        "conversationHistoryDocs" : [],
+        "conversationHistoryGeneral" : [],
+        })
+    ref.update({"id": ref.id})
+
+    if imageUrl:
+        ref.update({"imageUrl" : imageUrl})
+    return ref.id
+
+def updateSubject(userId, subjectId, imageUrl=None, name=None, conversationHistoryDocs=None, conversationHistoryGeneral=None):
+    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
+    data = {}
+    if name:
+        data["name"] = name
+    if imageUrl:
+        data["imageUrl"] = imageUrl
+    if conversationHistoryDocs:
+        data["conversationHistoryDocs"] = conversationHistoryDocs
+    if conversationHistoryGeneral:
+        data["conversationHistoryGeneral"] = conversationHistoryGeneral
+    if data:
+        ref.update(data)
     return True
 
 def deleteSubject(userId, subjectId):
@@ -47,18 +55,19 @@ def getAllSubjects(userId):
     
 from server.videoOperations.fileStorageHelper import uploadSubjectImage
 def uploadImage(file):
-    uploadSubjectImage(file)
+    return uploadSubjectImage(file)
     
 # ------- VideoContentGenerator --------
 
 from server.videoOperations.videoWorkflow import videoWorkflow
+# from api.app import celery
 
+# @celery.task
 def generate(userId, subjectId):
     data = getSubjectById(userId, subjectId)
     subject = data["name"]
-    videoWorkflow(userId, subjectId, subject)
-    
-    
+    result = videoWorkflow(userId, subjectId, subject)
+    return result.id
     
 # ------------- Chatbots ---------------
 

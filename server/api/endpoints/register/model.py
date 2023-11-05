@@ -7,12 +7,9 @@ from enum import Enum
 
 db = firestore.client()
 
-# Functions to interact with your database (e.g., Firestore) would be defined here
-# You should replace these placeholders with actual database operations
 class RegisterError(Enum):
     PASSWORD_MISSMATCH = 1
     USER_ALREADY_EXISTS = 2
-    
     
 def tryRegisterUser(name, password, passwordConfirmation):
         if password != passwordConfirmation:
@@ -30,3 +27,8 @@ def tryRegisterUser(name, password, passwordConfirmation):
             "password": password
             })        
         return ref.id
+    
+    
+from videoOperations.fileStorageHelper import uploadUserImage
+def uploadImage(file):
+    uploadUserImage(file)

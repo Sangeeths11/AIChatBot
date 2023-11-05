@@ -9,3 +9,6 @@
 
 3.  zum starte in terminal de befehl eingeben:
     \aichatbot-nuxt> yarn run dev
+
+
+yarn add axios

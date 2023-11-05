@@ -1,6 +1,3 @@
-# If Debug
-# import sys
-# sys.path.append('server')
 import os
 import json
 from google.auth.transport.requests import Request
@@ -12,25 +9,10 @@ from googleapiclient.errors import HttpError
 import json
 import pandas as pd
 
-# If DEBUG
-# from flask import Flask, jsonify
-# from flask_restful import Api
-# from werkzeug.exceptions import HTTPException
-# from werkzeug.exceptions import default_exceptions
-# import api.appconfig as config
-# import firebase_admin
-# from firebase_admin import credentials, firestore
-# cred = credentials.Certificate(config.CREDENTIALS_PATH)
-# firebase_admin.initialize_app(cred)
-
-
 import server.videoOperations.chatGptHelper as gpt
 import server.videoOperations.googleHelper as google
 import server.videoOperations.prompts as prompts
 from server.api.endpoints.videos.model import createNewVideo, updateVideo
-
-
-
 
 
 def videoWorkflow(userId, subjectId, subject):
@@ -78,12 +60,4 @@ def summarizeVideo():
 
 def generateQuestionsForVideo():
     pass
-
-
-## If DEBUG
-# def main():
-#     videoWorkflow("0izCCZBtsVolmwwMIgav", "4tvay47dSKSiuUoJRlas", "Machine Leraning Clustering")
-    
-# if __name__ == "__main__":
-#     main()
 
