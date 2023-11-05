@@ -48,11 +48,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 # Function to run a command in a separate thread and print its output
-def run_process(command, cwd=None, ready_future=None, ready_signal=None):
+def run_process(command, shell=True, ready_future=None, ready_signal=None):
     print(os.getcwd())
-    process = subprocess.Popen(command, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    process = subprocess.Popen(
+        command,
+        shell=shell,  # Necessary for commands like 'cd aichatbot-nuxt && yarn run dev'
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        universal_newlines=True
+    )
 
     def check_ready():
         for line in iter(process.stdout.readline, ''):
@@ -62,8 +67,8 @@ def run_process(command, cwd=None, ready_future=None, ready_signal=None):
         process.stdout.close()
 
     threading.Thread(target=check_ready).start()
-    print(os.getcwd())
     return process
+
 
 
 # Function to terminate all running processes and exit
@@ -81,14 +86,15 @@ frontend_ready = Future()
 # Start the backend server and wait for it to be ready
 backend_process = run_process(
     ['python', './server/app.py'],
+    shell=False,
     ready_future=backend_ready,
     ready_signal='Running on http://127.0.0.1:5000'  # Adjust this to the actual signal from your server output
 )
 
 # Start the frontend server and wait for it to be ready
 frontend_process = run_process(
-    ['yarn', 'run', 'dev'],
-    cwd='aichatbot-nuxt',
+    'cd aichatbot-nuxt && yarn run dev',
+    shell=True,
     ready_future=frontend_ready,
     ready_signal='Nuxt DevTools'  # Adjust this to the actual signal from your server output
 )
