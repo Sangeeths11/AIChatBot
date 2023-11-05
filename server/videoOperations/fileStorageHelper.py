@@ -47,22 +47,22 @@ def getBucket():
     return storageClient.get_bucket(config.BUCKET_NAME)
 
 def uploadPublicFile(blob, file, fromFilename = False):
-        if fromFilename:
-            blob.content_type = getMimetype(file)  
-        else:
-            blob.content_type = getMimetype(file.filename)  
-        if fromFilename == False:
-            blob.upload_from_file(file)
-        else: 
-            blob.upload_from_filename(file)
-            try:
-                os.remove(file)
-                print(f"{file} has been deleted.")
-            except Exception as e:
-                print(f"An error occurred: {e}")
-        
-        blob.make_public()
-        return blob.public_url
+    if fromFilename:
+        blob.content_type = getMimetype(file)  
+    else:
+        blob.content_type = getMimetype(file.filename)  
+    if fromFilename == False:
+        blob.upload_from_file(file)
+    else: 
+        blob.upload_from_filename(file)
+        try:
+            os.remove(file)
+            print(f"{file} has been deleted.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+    
+    blob.make_public()
+    return blob.public_url
 
 
 ## This does not work yet
