@@ -38,6 +38,8 @@ def getBestVideosPrompt(topic, videos, count=3):
     Return a Json with the same structure as the provided one below, containing your top """ + str(count) + """ videos, starting with the best one.
     Return the modified  json and the modified json only!!!
 
+    VERIFY THAT IT IS VALID JSON!!!
+    
     The Videos:
 
     """ +  videos

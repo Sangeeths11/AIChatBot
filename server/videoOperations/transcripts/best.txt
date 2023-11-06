@@ -1,0 +1,50 @@
+
+    Select the top 3 videos to learn about Linear Regression from the options provided in the Json below.
+    Use the "name", "url", "sentimentScore" attributes of each video to determine which three are the best ones.
+
+    If presented to an unknown user, there should be a video for everyone, from beginner to advanced.
+    So keep in mind to not only select beginner or only videos that cover advanced topics.
+    
+    Additionally, DO NOT return multiple videos with the same "name" or "url", return a set of 3 unique videos.
+
+    Return a Json with the same structure as the provided one below, containing your top 3 videos, starting with the best one.
+    Return the modified  json and the modified json only!!!
+
+    VERIFY THAT IT IS VALID JSON!!!
+    
+    The Videos:
+
+    {
+  "videos": [
+    {
+      "name": "How To... Perform Simple Linear Regression by Hand",
+      "url": "https://rr2---sn-1gi7znek.googlevideo.com/videoplayback?expire=1699247344&ei=kCBIZeqQG4XD6dsP_-SWmAk&ip=31.10.136.86&id=o-AHBTOmTrhFv-VIbKzVek6vK9LoOCwTh7QambyzeV6Quo&itag=22&source=youtube&requiressl=yes&mh=ka&mm=31%2C26&mn=sn-1gi7znek%2Csn-hpa7znzr&ms=au%2Conr&mv=m&mvi=2&pl=18&initcwndbps=2711250&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=654.942&lmt=1608453250031415&mt=1699225496&fvip=4&fexp=24007246&beids=24350018&c=ANDROID_EMBEDDED_PLAYER&txp=5432432&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=ANLwegAwRQIhAP0kGlxRzUEr9ABKXVPNAchC4uVjU0zBdCey7MpeH983AiBOUqyCn2AUM4VDqapYy-UAKsuKutMB7p5TGrr0LDFlgw%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AM8Gb2swRQIhANNeIXM7yejbf2L3V5v2OJUpzfXW-TlCgc2fgIIlg0hsAiANg0rFfTTF-8FVLQOkP_6H7FODHmBdLIyDxJ94--pmGQ%3D%3D",
+      "sentimentScore": 14
+    },
+    {
+      "name": "Linear Regression in 2 minutes",
+      "url": "https://rr2---sn-1gi7znek.googlevideo.com/videoplayback?expire=1699247346&ei=kSBIZfWBO4nr1gL02pjoAg&ip=31.10.136.86&id=o-AEW5EmhV523i0LSSAcNY223hqVjt_pzcklKTh7H2llhB&itag=22&source=youtube&requiressl=yes&mh=-i&mm=31%2C29&mn=sn-1gi7znek%2Csn-1gieen7e&ms=au%2Crdu&mv=m&mvi=2&pl=18&initcwndbps=2390000&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=153.762&lmt=1638096899691743&mt=1699225255&fvip=2&fexp=24007246&beids=24350018&c=ANDROID_EMBEDDED_PLAYER&txp=5311224&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=ANLwegAwRQIgDAYZZEUO24ef7AgL8fL8HImwi4GO-Qx8nlJU3eZa3_0CIQDPToskxiMYnDC34xVbO9jfJW-Ld6DoyU790QXWKJWVIg%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AM8Gb2swRAIgG_EWSuKEuDHqrrD7D_XLARh4tH9UC0OWHZit6E0EoAkCIDCD5flQyI9EIIHSNjJho3Cr52bUHg18vAP_TLiK0fH4",
+      "sentimentScore": 9
+    },
+    {
+      "name": "An Introduction to Linear Regression Analysis",
+      "url": "https://rr5---sn-1gieen7e.googlevideo.com/videoplayback?expire=1699247347&ei=kyBIZZCAL8jB6dsPxOSHsAs&ip=31.10.136.86&id=o-APW7kg2YQId3bzgrhripcmd0IJlu3VuKJXHnQap3E1ks&itag=22&source=youtube&requiressl=yes&mh=J4&mm=31%2C26&mn=sn-1gieen7e%2Csn-hpa7knl7&ms=au%2Conr&mv=m&mvi=5&pl=18&initcwndbps=2390000&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=317.532&lmt=1610106640914947&mt=1699225255&fvip=3&fexp=24007246&beids=24350018&c=ANDROID_EMBEDDED_PLAYER&txp=5432432&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=ANLwegAwRgIhALQ4EGEkqpWlVVTM7Ojd3aaACpfW4pNbnuEhb4g8r3uWAiEAjYOEchH2BdlpJn-FpiwFFMFFGFMDCzDYzEe6hnwG-Gk%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AM8Gb2swRgIhAMTj8TYY-Yaypq6T1TJ2780CLBEOcOapjZLH6b8DWK7PAiEA4VjHOHqW5Ogp1IilbmjZNjBB-S0mV-mfeudEdV2lX7o%3D",
+      "sentimentScore": 13
+    },
+    {
+      "name": "Regression Analysis: An introduction to Linear and Logistic Regression",
+      "url": "https://rr5---sn-1gieen7e.googlevideo.com/videoplayback?expire=1699247349&ei=lSBIZZybEuzD6dsPt-amkAE&ip=31.10.136.86&id=o-ABLn4Bus9kM1ufgGkoza0TOOlG3dtgC7zTtktzBT1GrF&itag=22&source=youtube&requiressl=yes&mh=ZN&mm=31%2C29&mn=sn-1gieen7e%2Csn-1gi7znek&ms=au%2Crdu&mv=m&mvi=5&pl=18&initcwndbps=2390000&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=578.083&lmt=1673606695710240&mt=1699225255&fvip=1&fexp=24007246&beids=24350018&c=ANDROID_EMBEDDED_PLAYER&txp=5311224&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=ANLwegAwRAIgOBW-dBYhWBZr6KjLjEVVNqC0eEjr-Unm9A_W2ifKOjwCIGyFlus9El7ipWrwVvhXpCatSnQ0HFGm_GRTsFJ-TwU8&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AM8Gb2swRQIgdwK6MWa1P3jiOZpxaD7VfQxzoAw2bRCwsikwc4bKed4CIQCFXUBlrZqv6sxXLmMuIfUYhO6A9WjEnVd_jKqH9z4h6g%3D%3D",
+      "sentimentScore": 12
+    },
+    {
+      "name": "Linear Regression in 2 minutes",
+      "url": "https://rr2---sn-1gi7znek.googlevideo.com/videoplayback?expire=1699247351&ei=lyBIZbajCfe66dsPgZe8qAI&ip=31.10.136.86&id=o-AADPw5LPaXCR53-VJ8vx2eGQ8UtGXICwz2I9OFuEyp4I&itag=22&source=youtube&requiressl=yes&mh=-i&mm=31%2C26&mn=sn-1gi7znek%2Csn-hpa7knle&ms=au%2Conr&mv=m&mvi=2&pl=18&initcwndbps=2390000&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=153.762&lmt=1638096899691743&mt=1699225255&fvip=4&fexp=24007246&beids=24350018&c=ANDROID_EMBEDDED_PLAYER&txp=5311224&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=ANLwegAwRQIhAKoOPlrchMX8WBNNt14GQnDdFXLAGe3apbQNtHnCVRzgAiA82hBdS5ZKpyVOKSBPTszdRGcOcndmgHfaV_sh2aWQsw%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AM8Gb2swRgIhANKQ22o9UHIa-K1U_TZp2kzyTJKFqtcSlSSUMVPFM3X0AiEAvB4YMjlIVAHWp3wZjUf0qbFBLBlJHmrZXvd2W1RyPJM%3D",
+      "sentimentScore": 9
+    },
+    {
+      "name": "Regression Analysis | Full Course",
+      "url": "https://rr5---sn-1gi7znek.googlevideo.com/videoplayback?expire=1699247352&ei=mCBIZdPqJbfN6dsPmJaqoAE&ip=31.10.136.86&id=o-AN5MsYh9Xb8jLycO1NMN3gQNxPg_QXBXhhl2y5x8P-Hv&itag=22&source=youtube&requiressl=yes&mh=kR&mm=31%2C26&mn=sn-1gi7znek%2Csn-hpa7znsz&ms=au%2Conr&mv=m&mvi=5&pl=18&initcwndbps=2711250&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=2716.479&lmt=1649500939458938&mt=1699225496&fvip=5&fexp=24007246&beids=24350018&c=ANDROID_EMBEDDED_PLAYER&txp=5432434&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=ANLwegAwRQIgcrspvME9o45zSqBL-4RybnnN_txyVqnRFCfaSfr9ydgCIQDdu8U4TGHsGPfC9qiSTu2AzpQ3xB3XJcbBAF9S7BIqxg%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AM8Gb2swRgIhALvFWXApHmYmgvEgOJ3kvetG9DZkDnmJkv3gwdmg3TviAiEAjstGoIkwsN41eskdrJhwtVHs4yZvFkaDJN2uUWbL_Ug%3D",
+      "sentimentScore": 12
+    }
+  ]
+}

@@ -3,50 +3,41 @@ from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
 from flask import jsonify
 import api.appconfig as config
-
+from chatbots.documentQuestionAnswering import documentQA, getConversationHistoryGeneral, getConversationHistoryResources
 
 
 db = firestore.client()
 
-# Functions to interact with your database (e.g., Firestore) would be defined here
-# You should replace these placeholders with actual database operations
 
-def getUserById(userId):
-    ref = db.collection("users").document(userId)
-    userData = ref.get()
+# gets the last [count] messages in the conversation history or the whole, if no count is given
+def getConversationHistory(userId, subjectId, chatbot, count = None):
+    hist = []
+    if chatbot is None: chatbot = "general"
     
-    if userData.exists:
-        return userData.to_dict()
-    else:
-        return None
+    if chatbot == "resources":
+        hist = getConversationHistoryResources(userId, subjectId)
+    elif chatbot == "general":
+        hist = getConversationHistoryGeneral(userId, subjectId)
 
-def createNewUser(name, password):
-        time, ref = db.collection("users").add({
-            "name": name,
-            "password": password
-            })        
-        return ref.id
-
-def updateUser(userId, name, password):
-    ref = db.collection("users").document(userId)
-    data = {
-            "name": name,
-            "password": password
-            }
-
-    # Update the user document with the new data
-    ref.update(data)
+    if not count or count == "":
+        return hist
     
-    return True  # Assuming the update operation succeeded
+    if len(hist) < count:
+        count = len(hist)
+        
+    # return last x elements from the end of the list
+    return hist[-count:]
 
-def deleteUser(userId):
-    user_ref = db.collection("users").document(userId)
-    user_ref.delete()
-    
-    return True  # Assuming the delete operation succeeded
 
-def getAllUsers():
-    usersRef = db.collection("users")  
-    users = usersRef.stream()
-    return [user.to_dict() for user in users]
+
+
+
+def promptChatbot(userId, subjectId, chatbot, prompt = "Erzähl mir etwas über das Subject"):
+    hist = []
+    if chatbot is None: chatbot = "general"
     
+    if chatbot == "resources":
+        hist = documentQA(userId, subjectId, prompt)
+    elif chatbot == "general":
+        pass
+        #chatbot general prompting 

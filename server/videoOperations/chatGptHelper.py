@@ -13,7 +13,7 @@ if not os.path.exists(folderName):
     os.makedirs(folderName)
 
 
-def getCompletion(prompt, model="gpt-3.5-turbo", temperature=0.0):
+def getCompletion(prompt, model="gpt-4", temperature=0.0):
     messages = [{"role": "user", "content": prompt}]
     response = openai.ChatCompletion.create(
         model=model, messages=messages, temperature=temperature,
