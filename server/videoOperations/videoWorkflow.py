@@ -37,14 +37,18 @@ def generateSearchQuery(subject = "learning", count = 3):
     return videoQueries    
     
 def getVideos(search_query = "How to learn"):
-    return google.youtubeSearch(search_query, 3)
+    return google.youtubeSearch(search_query, 2)
 
 
 
 # Select the most fitting / best video
 def selectBestVideos(subject, videos):
     prompt = prompts.getBestVideosPrompt(subject, videos, count=3)
+    with open("server/videoOperations/transcripts/best.txt", 'w') as file:
+        file.write(prompt)
     response = gpt.getCompletion(prompt)
+    with open("server/videoOperations/transcripts/log.txt", 'w') as file:
+        file.write(response)
     bestVideos = json.loads(response)
     return bestVideos
 

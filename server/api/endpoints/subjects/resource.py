@@ -26,6 +26,7 @@ class Subject(Resource):
             return jsonify(subjectData)
 
     def post(self, userId):
+        imageUrl = None
         args = self.parser.parse_args()
         if "file" not in request.files:
             newSubjectId = createNewSubject(userId, args["name"])

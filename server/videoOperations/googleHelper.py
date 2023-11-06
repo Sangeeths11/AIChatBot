@@ -26,6 +26,7 @@ def youtubeSearch(query, count=3):
             videoTitle = result["snippet"]["title"]
             
             yt = YouTube(f"https://www.youtube.com/watch?v={videoId}")
+            
             videoStream = yt.streams.get_highest_resolution()
             videoEmbedUrl = videoStream.url
             
@@ -38,7 +39,7 @@ def youtubeSearch(query, count=3):
     
     
 
-def getSentimentOfVideo(videoId, commentCount = 40):
+def getSentimentOfVideo(videoId, commentCount = 20):
     commentList = getCommentsOfVideo(videoId, commentCount)
     if commentList:
         return getSentimentOfComments(commentList)
@@ -54,7 +55,6 @@ def getCommentsOfVideo(videoId, commentCount):
             textFormat='plainText',
         ).execute()
         
-
         commentList = []
         for comment in comments['items'][:min(commentCount, comments["pageInfo"]["totalResults"], comments["pageInfo"]["resultsPerPage"])]:
             commentText = comment['snippet']['topLevelComment']['snippet']['textDisplay']

@@ -17,25 +17,20 @@ from langchain.prompts import PromptTemplate
 
 import api.appconfig as config
 
+from api.endpoints.subjects.model import getSubjectById, updateSubject
+from api.endpoints.documents.model import getAllDocuments
+from api.endpoints.videos.model import getAllVideos
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
-
-# get all the doc urls of subject and build vectorStore
-testDocList = [
-    "https://storage.googleapis.com/aitutor-e6db8.appspot.com/documents/documents_ML_HypotheseTests_DanielSchafh%C3%A4utle%20(2)%20(2).pdf",
-    "https://storage.googleapis.com/aitutor-e6db8.appspot.com/documentsHypothesisTesting_HANDOUT.pdf"
-]
 
     
 def documentQA(userId, subjectId, prompt):
-    #chat hist
-    # [ ("question", "answer"), ("question", "answer"), ("question", "answer")]
-    
+
     # Add prompt to history
     extendChatHistoryWithPrompt(userId, subjectId, prompt)
     
     
-    chat_history = getConversationHistoryDocs(userId, subjectId)
+    chat_history = getConversationHistoryResources(userId, subjectId)
     urlList = getAllDocumentsOnSubject(userId, subjectId)
     documents = splitFiles(urlList)
     
@@ -54,12 +49,17 @@ def documentQA(userId, subjectId, prompt):
         {"question": prompt, "chat_history": chat_history})
     print(f"Answer: " + result["answer"])
     
-    
-    extendChatHistoryWithAnswer(prompt, result["answer"])
     # add answer to history
+    extendChatHistoryWithAnswer(prompt, result["answer"])
 
+# Gets all the urls for documents and videos on the subject
 def getAllDocumentsOnSubject(userId, subjectId):
-    return ["url1", "url2", "...."]
+    docs = getAllDocuments(userId, subjectId)
+    videos = getAllVideos(userId, subjectId)
+    docUrls = [doc["url"] for doc in docs]
+    videoUrls = [video["transcriptUrl"] for video in videos]
+    urlList = docUrls + videoUrls
+    return urlList
 
 def splitFiles(urlList):
     documents = []
@@ -91,29 +91,32 @@ def buildVectorstore(documents):
 
 
 
-from api.endpoints.subjects.model import getSubjectById, updateSubject
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
-    hist = getConversationHistoryDocs(userId, subjectId)
+    hist = getConversationHistoryResources(userId, subjectId)
     hist.append([prompt, ""])
     updateSubject(userId, subjectId, conversationHistoryDocs=hist)
     
 
 def extendChatHistoryWithAnswer(userId, subjectId, answer):
-    hist = getConversationHistoryDocs(userId, subjectId)
+    hist = getConversationHistoryResources(userId, subjectId)
     hist[-1][1] = answer
     updateSubject(userId, subjectId, conversationHistoryDocs=hist)
 
 
-def clearConversationHistoryDocs(userId, subjectId):
+def clearConversationHistoryResources(userId, subjectId):
     updateSubject(userId, subjectId, conversationHistoryDocs=[])
 
 def clearConversationHistoryGeneral(userId, subjectId):
     updateSubject(userId, subjectId, conversationHistoryGeneral=[])
     
-def getConversationHistoryDocs(userId, subjectId):
+def getConversationHistoryResources(userId, subjectId):
     subject = getSubjectById(userId, subjectId)
+    if not subject:
+        return []
     return subject["conversationHistoryDocs"]
 
 def getConversationHistoryGeneral(userId, subjectId):
     subject = getSubjectById(userId, subjectId)
+    if not subject:
+        return []
     return subject["conversationHistoryGeneral"]

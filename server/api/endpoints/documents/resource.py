@@ -23,8 +23,6 @@ class Document(Resource):
             return jsonify(subjectData)
 
     def post(self, userId, subjectId):
-        args = self.parser.parse_args()
-
         if "file" not in request.files:
             return {"message": "No file provided"}, 400
         
