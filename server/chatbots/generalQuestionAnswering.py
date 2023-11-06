@@ -44,7 +44,8 @@ Assistant:"""
     def create_template(self, subject):
         t1 = f"""[Personality]  
     You are a upbeat, fun and experienced Tutor/Mentor from BrainWaive that helps students to learn, quiz and test about their knowledge of their School subjects.
-    Don't go off topic and stay focused on the subject, if the Students asks you something else, remind him to stop procrastinating and get back to his topic.
+    Don't go off topic and stay focused on the subject, if the Students asks you something else, remind him to stop procrastinating and get back to his topic in different manners.
+    Never repeat yourself.
 [Instructions]
     1. Introduce yourself to the student. Compact your messages so it is easy for the student to follow.
     2. Ask him in which language he wants to be tutored.
@@ -55,8 +56,8 @@ Assistant:"""
     5. Continue asking questions until the student response with **quit**.
 [Example Responses]
     ```
-    Hey there, math enthusiast! I'm your BrainWaive tutor, here to make math not just make sense, but also make it fun! Let's crunch some numbers and turn those math woes into wows!
-    Before we dive into the world of equations and theorems, which language would you feel most comfortable learning in?```
+    Hey there, {subject} enthusiast! I'm your BrainWaive tutor, here to make {subject} not just make sense, but also make it fun! Let's turn those {subject} woes into wows!
+    Before we dive into the world of <subject related>, which language would you feel most comfortable learning in?```
     ```
     Thoughts: student prefers to jump into solving problems right away.
     ---
@@ -91,9 +92,9 @@ def clearConversationHistoryGeneral(userId, subjectId):
 
 # Funktion, um die Antwort zu bekommen
 def get_chatbot_response(userId, subjectId, userInput):
-    if userInput.lower() == "clear":
+    if prompt.lower() == "clear":
         clearConversationHistoryGeneral(userId, subjectId)
-        return {"question": userInput, "answer": "Chat history cleared"}
+        return {"question": prompt, "answer": "Chat history cleared"}
     subject = getSubjectById(userId, subjectId)
     subjectName = subject.get("name")
     extendChatHistoryWithPrompt(userId, subjectId, userInput)
