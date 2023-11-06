@@ -95,7 +95,7 @@ def get_chatbot_response(userId, subjectId, userInput):
 
     # Erhalte die Antwort vom Chatbot
     response = chatbot.get_response(userInput)
-    print(response)
+    # print(response)
     extendChatHistoryWithAnswer(userId, subjectId, response)
 
     return {"question": userInput, "answer": response}
