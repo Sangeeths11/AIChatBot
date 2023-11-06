@@ -73,5 +73,5 @@ def generate(userId, subjectId):
     data = getSubjectById(userId, subjectId)
     subject = data["name"]
     result = videoWorkflow(userId, subjectId, subject)
-    return result.id
+    return result
     

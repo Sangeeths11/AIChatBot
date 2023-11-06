@@ -16,7 +16,7 @@ def uploadTranscriptFile(localTranscriptPath):
         bucket = getBucket()
         fileName = os.path.basename(urlparse(localTranscriptPath).path)
         transcriptBlob = bucket.blob(config.BUCKET_TRANSCRIPTS_PATH + fileName)
-        return uploadPublicFile(transcriptBlob, localTranscriptPath)
+        return uploadPublicFile(transcriptBlob, localTranscriptPath, fromFilename=True)
             
 def uploadDocumentFile(file):
     if file is not None:

@@ -28,7 +28,7 @@ def videoWorkflow(userId, subjectId, subject):
         v = addEmbedUrl(v)
         videoId = createNewVideo(userId, subjectId, v["name"],v["url"])
         transcriptUrl = transcribeVideo(v["watchUrl"], videoId)
-        updateVideo(userId, subjectId, videoId, v["name"],["url"], transcriptUrl)
+        updateVideo(userId, subjectId, videoId, v["name"],v["url"], transcriptUrl)
     
 def generateSearchQuery(subject = "learning", count = 3):
     prompt = prompts.getVideoSearchQuery(subject, count)
@@ -47,7 +47,7 @@ def addEmbedUrl(video):
     
 # Select the most fitting / best video
 def selectBestVideos(subject, videos):
-    prompt = prompts.getBestVideosPrompt(subject, videos, count=3)
+    prompt = prompts.getBestVideosPrompt(subject, videos, count=1)
     with open("server/videoOperations/transcripts/bestVideosPrompt.txt", 'w') as file:
         file.write(prompt)
     response = gpt.getCompletion(prompt)

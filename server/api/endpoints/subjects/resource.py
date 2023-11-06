@@ -70,6 +70,6 @@ class VideoContentGenerator(Resource):
 
         # resultId of celery worker
         #generate.apply_async(args=[userId, subjectId])
-        generate(userId,subjectId)
+        result = generate(userId,subjectId)
         return {"message": "Subject content is being generated", "subjectId": subjectId}, 201
 
