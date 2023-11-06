@@ -24,7 +24,7 @@ def getConversationHistory(userId, subjectId, chatbot, count=None):
     if not count or count == "":
         return hist
 
-    if len(hist) < count:
+    if len(hist) < int(count):
         count = len(hist)
 
     # return last x elements from the end of the list
