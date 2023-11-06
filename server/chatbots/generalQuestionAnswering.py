@@ -37,7 +37,7 @@ Assistant:"""
             llm=OpenAI(temperature=0),
             prompt=prompt,
             verbose=False,
-            memory=ConversationBufferWindowMemory(k=2),
+            memory=ConversationBufferWindowMemory(k=5),
         )
         self.user_id = user_id
 
@@ -73,6 +73,10 @@ Assistant:"""
 
     def get_response(self, user_input):
         return self.chain.predict(human_input=user_input)
+    
+    
+    def reset_memory(self):
+    	self.chain.memory.clear()
 
 
 # Liste der aktiven Chatbots
@@ -100,6 +104,10 @@ def get_chatbot_response(userId, subjectId, userInput):
 
     return {"question": userInput, "answer": response}
 
+def clearConversationHistoryGeneral(userId, subjectId):
+    chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
+    chatbot.reset_memory()
+    updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=[], conversationHistoryGeneralQuestions=[])
 
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
     questions, answers = getConversationHistoryGeneral(userId, subjectId)
