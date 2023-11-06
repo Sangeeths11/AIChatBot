@@ -18,10 +18,8 @@
         <div v-if="mode.valueOf() === 'Resources'" class="p-4">
                 <label class="mb-2 text-green" for="resourceSelect">Resource Select</label>
                 <select id="resourceSelect" class="border p-2 rounded w-full mb-4">
-                    <option>Doc 1</option>
-                    <option>Doc 2</option>
-                    <option>Video 1</option>
-                    <option>Video 2</option>
+                    <option v-for="document in documents" :key="document.url">{{ document.name }}</option>
+                    <option v-for="video in videos" :key="video.url">{{ video.name }}</option>
                 </select>
         </div>
         
@@ -68,12 +66,31 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import axios from 'axios';
+
 // Typescript interface for the message object
 interface Message {
     sender: string;
     content: string;
     time: string;
     status: string;
+}
+
+
+const videos = ref<Video[]>([]); // Ein leeres Array für die Fächer vom Typ 'Video'
+const documents = ref<Document[]>([]); // Ein leeres Array für die Fächer vom Typ 'Document'
+
+const selectedVideo = ref('');
+const selectedDocument = ref('');
+
+interface Video {
+    name: string;
+    url: string;
+}
+
+interface Document {
+    name: string;
+    url: string;
 }
 
 const mode = ref('General');  // Hier erstellen Sie eine ref
@@ -106,6 +123,38 @@ const sendMessage = () => {
         }, 1000);
     }
 };
+const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
+// const userId = '0izCCZBtsVolmwwMIgav';
+// const subjectId = 'yXR6ea6BeOt8KABr7PZQ'
+const errorMessage = ref('');
+
+const route = useRoute();
+const subjectUserID = route.params.id;
+
+
+const subjectId = (subjectUserID as string).split('&')[0];
+const userId = (subjectUserID as string).split('&')[1];
+
+const getVideos = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/users/${userId}/subjects/${subjectId}/videos`);
+        videos.value = response.data.videos as Video[];
+    } catch (error) {
+        errorMessage.value = 'An error occurred while fetching the videos. Please try again later.';
+    }
+};
+const getDocuments = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/users/${userId}/subjects/${subjectId}/documents`);
+        documents.value = response.data.documents as Document[];
+    } catch (error) {
+        errorMessage.value = 'An error occurred while fetching the documents. Please try again later.';
+    }
+};
+onMounted(() => {
+    getVideos();
+    getDocuments();
+});
 </script>
 
 <style>
