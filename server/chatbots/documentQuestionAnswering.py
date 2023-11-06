@@ -51,6 +51,8 @@ def documentQA(userId, subjectId, prompt):
     
     # add answer to history
     extendChatHistoryWithAnswer(prompt, result["answer"])
+    
+    return {"question": prompt, "answer": result["answer"]}
 
 # Gets all the urls for documents and videos on the subject
 def getAllDocumentsOnSubject(userId, subjectId):
@@ -92,31 +94,24 @@ def buildVectorstore(documents):
 
 
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
-    hist = getConversationHistoryResources(userId, subjectId)
-    hist.append([prompt, ""])
-    updateSubject(userId, subjectId, conversationHistoryDocs=hist)
+    questions, answers = getConversationHistoryResources(userId, subjectId)
+    questions.append(prompt)
+    updateSubject(userId, subjectId, conversationHistoryDocsQuestions=questions)
     
 
 def extendChatHistoryWithAnswer(userId, subjectId, answer):
-    hist = getConversationHistoryResources(userId, subjectId)
-    hist[-1][1] = answer
-    updateSubject(userId, subjectId, conversationHistoryDocs=hist)
+    questions, answers = getConversationHistoryResources(userId, subjectId)
+    answers.append(answer)
+    updateSubject(userId, subjectId, conversationHistoryDocsAnswers=answers)
 
 
 def clearConversationHistoryResources(userId, subjectId):
     updateSubject(userId, subjectId, conversationHistoryDocs=[])
 
-def clearConversationHistoryGeneral(userId, subjectId):
-    updateSubject(userId, subjectId, conversationHistoryGeneral=[])
     
 def getConversationHistoryResources(userId, subjectId):
     subject = getSubjectById(userId, subjectId)
     if not subject:
         return []
-    return subject["conversationHistoryDocs"]
+    return subject["conversationHistoryDocsQuestions"], subject["conversationHistoryDocsAnswers"]
 
-def getConversationHistoryGeneral(userId, subjectId):
-    subject = getSubjectById(userId, subjectId)
-    if not subject:
-        return []
-    return subject["conversationHistoryGeneral"]

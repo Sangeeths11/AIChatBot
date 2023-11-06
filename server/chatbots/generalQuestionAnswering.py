@@ -7,6 +7,9 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 
+from api.endpoints.subjects.model import getSubjectById, updateSubject
+
+
 # Definiere eine Klasse für den Chatbot
 class Chatbot:
     def __init__(self, user_id):
@@ -68,22 +71,48 @@ active_chatbots = []
 
 
 # Funktion, um die Antwort zu bekommen
-def get_chatbot_response(user_id, user_input, subject):
+def get_chatbot_response(userId, subjectId, userInput):
+    subject = getSubjectById(userId, subjectId)
+    
+    extendChatHistoryWithPrompt(userId, subjectId, userInput)
+    
     # Suche nach dem Chatbot mit der gegebenen User-ID
-    chatbot = next((bot for bot in active_chatbots if bot.user_id == user_id), None)
+    chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
 
     # Wenn kein Chatbot gefunden wurde, erstelle einen neuen und füge ihn zur Liste hinzu
     if not chatbot:
-        chatbot = Chatbot(user_id)
+        chatbot = Chatbot(userId)
         active_chatbots.append(chatbot)
 
     # Erhalte die Antwort vom Chatbot
-    return chatbot.get_response(user_input, subject)
+    response = chatbot.get_response(userInput, subject)
 
+    extendChatHistoryWithAnswer(userId, subjectId, response)
+    
+    return {"question": userInput, "answer": response}
 
 # Beispiel
-user_id = "user123"
-subject = "Math"
-user_input = "Hello"
-response = get_chatbot_response(user_id, user_input, subject)
-print("AI:", response)
+# user_id = "user123"
+# subject = "Math"
+# user_input = "Hello"
+# response = get_chatbot_response(user_id, user_input, subject)
+# print("AI:", response)
+
+
+
+def extendChatHistoryWithPrompt(userId, subjectId, prompt):
+    questions, answers = getConversationHistoryGeneral(userId, subjectId)
+    questions.append(prompt)
+    updateSubject(userId, subjectId, conversationHistoryGeneralQuestions=questions)
+    
+
+def extendChatHistoryWithAnswer(userId, subjectId, answer):
+    questions, answers = getConversationHistoryGeneral(userId, subjectId)
+    answers.append(answer)
+    updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=answers)
+    
+def getConversationHistoryGeneral(userId, subjectId):
+    subject = getSubjectById(userId, subjectId)
+    if not subject:
+        return []
+    return subject["conversationHistoryGeneralQuestions"], subject["conversationHistoryGeneralAnswers"]

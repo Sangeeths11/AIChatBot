@@ -3,7 +3,9 @@ from firebase_admin import credentials, firestore
 from flask_restful import Resource, reqparse
 from flask import jsonify
 import api.appconfig as config
-from chatbots.documentQuestionAnswering import documentQA, getConversationHistoryGeneral, getConversationHistoryResources
+from chatbots.documentQuestionAnswering import documentQA, getConversationHistoryResources
+from chatbots.generalQuestionAnswering import get_chatbot_response, getConversationHistoryGeneral
+from itertools import zip_longest
 
 
 db = firestore.client()
@@ -15,10 +17,11 @@ def getConversationHistory(userId, subjectId, chatbot, count = None):
     if chatbot is None: chatbot = "general"
     
     if chatbot == "resources":
-        hist = getConversationHistoryResources(userId, subjectId)
+        questions, answers = getConversationHistoryResources(userId, subjectId)
     elif chatbot == "general":
-        hist = getConversationHistoryGeneral(userId, subjectId)
+        questions, answers = getConversationHistoryGeneral(userId, subjectId)
 
+    hist = assembleList(questions, answers)
     if not count or count == "":
         return hist
     
@@ -37,7 +40,13 @@ def promptChatbot(userId, subjectId, chatbot, prompt = "Erzähl mir etwas über 
     if chatbot is None: chatbot = "general"
     
     if chatbot == "resources":
-        hist = documentQA(userId, subjectId, prompt)
+        return documentQA(userId, subjectId, prompt)
     elif chatbot == "general":
-        pass
-        #chatbot general prompting 
+        return get_chatbot_response(userId, subjectId, prompt,)
+    else:
+        return None
+
+
+# Return in form [[q, a],[q, a],[q, ""]]
+def assembleList(questions, answers):
+    return list(zip_longest(questions, answers, fillvalue=""))

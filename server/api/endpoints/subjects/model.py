@@ -19,8 +19,10 @@ def getSubjectById(userId, subjectId):
 def createNewSubject(userId, name, imageUrl=None):
     time, ref = db.collection("users").document(userId).collection("subjects").add({
         "name": name,
-        "conversationHistoryDocs" : [],
-        "conversationHistoryGeneral" : [],
+        "conversationHistoryDocsQuestions" : [],
+        "conversationHistoryDocsAnswers" : [],
+        "conversationHistoryGeneralQuestions" : [],
+        "conversationHistoryGeneralAnswers" : [],
         })
     ref.update({"id": ref.id})
 
@@ -28,17 +30,21 @@ def createNewSubject(userId, name, imageUrl=None):
         ref.update({"imageUrl" : imageUrl})
     return ref.id
 
-def updateSubject(userId, subjectId, imageUrl=None, name=None, conversationHistoryDocs=None, conversationHistoryGeneral=None):
+def updateSubject(userId, subjectId, imageUrl=None, name=None, conversationHistoryDocsQuestions=None, conversationHistoryDocsAnswers=None,  conversationHistoryGeneralQuestions=None, conversationHistoryGeneralAnswers=None):
     ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
     data = {}
     if name:
         data["name"] = name
     if imageUrl:
         data["imageUrl"] = imageUrl
-    if conversationHistoryDocs:
-        data["conversationHistoryDocs"] = conversationHistoryDocs
-    if conversationHistoryGeneral:
-        data["conversationHistoryGeneral"] = conversationHistoryGeneral
+    if conversationHistoryDocsQuestions:
+        data["conversationHistoryDocsQuestions"] = conversationHistoryDocsQuestions
+    if conversationHistoryDocsAnswers:
+        data["conversationHistoryDocsAnswers"] = conversationHistoryDocsAnswers
+    if conversationHistoryGeneralQuestions:
+        data["conversationHistoryGeneralQuestions"] = conversationHistoryGeneralQuestions
+    if conversationHistoryGeneralAnswers:
+        data["conversationHistoryGeneralAnswers"] = conversationHistoryGeneralAnswers
     if data and ref:
         ref.update(data)
     return True
@@ -68,54 +74,4 @@ def generate(userId, subjectId):
     subject = data["name"]
     result = videoWorkflow(userId, subjectId, subject)
     return result.id
-    
-# ------------- Chatbots ---------------
-
-from chatbots.documentQuestionAnswering import documentQA
-def postDocsPrompt(userId, subjectId, prompt):
-    
-    # add prompt
-    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
-    hist = ref.get().to_dict()["conversationHistoryDocs"]
-    hist.append([prompt, ""])
-    data = {
-        "conversationHistoryDocs" : hist
-    }
-    ref.update(data)
-
-    # get answer
-    answer = documentQA(userId, subjectId, prompt)
-    
-    # add the answer
-    hist[-1] = [prompt, answer]
-    data = {
-        "conversationHistoryDocs" : hist
-    }
-    ref.update(data)
-    
-    
-    
-    
-# from server.chatbots.generalQuestionAnswering import ......
-def postGeneralPrompt(userId, subjectId, prompt):
-    
-    # add prompt
-    ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
-    hist = ref.get().to_dict()["conversationHistoryGeneral"]
-    hist.append([prompt, ""])
-    data = {
-        "conversationHistoryGeneral" : hist
-    }
-    ref.update(data)
-
-
-    answer = "Get General bot answer"
-
-
-    # add the answer
-    hist[-1] = [prompt, answer]
-    data = {
-        "conversationHistoryGeneral" : hist
-    }
-    ref.update(data)
     

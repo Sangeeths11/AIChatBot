@@ -22,5 +22,5 @@ class Chatbot(Resource):
 
     def post(self, userId, subjectId):
         args = self.parser.parse_args()
-        promptChatbot(userId, subjectId, chatbot=args.get("chatbot", None), prompt=args["prompt"] )
-        return {"message": "prompt has been posted"}
+        conversationStep = promptChatbot(userId, subjectId, chatbot=args.get("chatbot", None), prompt=args["prompt"] )
+        return {"message": "Sent successfully", "question": conversationStep.get("question", ""), "answer": conversationStep.get("answer", "")}
