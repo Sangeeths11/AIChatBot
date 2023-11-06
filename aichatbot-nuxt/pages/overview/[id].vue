@@ -9,7 +9,7 @@
                 <!-- Stellen Sie sicher, dass subject ein Objekt ist, das den Namen und andere Informationen enthält -->
                 <img :src="subject.image" alt="Fachbild" class="w-full h-32 object-cover rounded-md">
                 <h1 class="mt-2 text-center">{{ subject.name }}</h1>
-                <button @click="learn" class="absolute bottom-2 left-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded focus:outline-none">
+                <button @click="learn(subject.id)" class="absolute bottom-2 left-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded focus:outline-none">
                 Lernen
                 </button>
                 <button @click="ressource(subject.id)" class="absolute bottom-2 left-2 ml-24 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded focus:outline-none">
@@ -60,8 +60,9 @@ const addSubject = (subjectID : string) => {
     router.push({ path: '/subjectSetting/' + id});
 };
 
-const learn = () => {
-    router.push({ path: '/chatform'});
+const learn = (subjectID : string) => {
+    const id = subjectID + '&' + userID;
+    router.push({ path: '/chatform/' + id});
 };
 
 const ressource = (subjectID : string) => {
