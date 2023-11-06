@@ -101,7 +101,7 @@ def get_chatbot_response(userId, subjectId, userInput):
     extendChatHistoryWithPrompt(userId, subjectId, userInput)
 
     # Suche nach dem Chatbot mit der gegebenen User-ID
-    chatbot = next((bot for bot in active_chatbots if (bot.user_id == userId and bot.subject_id = subjectId)), None)
+    chatbot = next((bot for bot in active_chatbots if (bot.user_id == userId) and (bot.subject_id == subjectId)), None)
 
     # Wenn kein Chatbot gefunden wurde, erstelle einen neuen und füge ihn zur Liste hinzu
     if not chatbot:
