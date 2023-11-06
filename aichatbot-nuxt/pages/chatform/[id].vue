@@ -28,7 +28,7 @@
         <div v-for="message in messages" :key="message.time" :class="['chat', message.sender === 'You' ? 'chat-end' : 'chat-start']">
             <div class="chat-image avatar">
                 <div class="w-10 rounded-full">
-                    <img src="../assets/images/Chatbot.png" />
+                    <img src="../../assets/images/Chatbot.png" />
                 </div>
             </div>
             <div class="chat-header">
