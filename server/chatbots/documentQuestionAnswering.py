@@ -15,7 +15,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.prompts import PromptTemplate
-
+import chromadb
 import api.appconfig as config
 
 from api.endpoints.subjects.model import getSubjectById, updateSubject
@@ -25,6 +25,10 @@ from api.endpoints.videos.model import getAllVideos
 openai.api_key = os.getenv("OPENAI_API_KEY")
 import requests
 from itertools import zip_longest
+import uuid
+
+
+chromaClient = chromadb.PersistentClient(path=config.VECTORSTORE_PATH)
 
     
 def documentQA(userId, subjectId, prompt):
@@ -44,14 +48,16 @@ def documentQA(userId, subjectId, prompt):
     documents = splitFiles(urlList)
     
     # IF NECESSARY
-    vectordb = buildVectorstore(documents)
+    #vectordb = getOrCreateVectorstore(subjectId, documents)
+    vectordb = buildVectorstore(documents, userId, subjectId)
     
     # “higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic”
     qa = ConversationalRetrievalChain.from_llm(
-        ChatOpenAI(temperature=0.5, model_name="gpt-4"),
+        ChatOpenAI(temperature=0.8, model_name="gpt-4"),
         vectordb.as_retriever(search_kwargs={'k': 6}),
         return_source_documents=True,
-        verbose=True
+        verbose=True,
+        handle_parsing_errors=True
     )
 
     result = qa({"question": prompt, "chat_history": chat_history})
@@ -83,21 +89,27 @@ def splitFiles(urlList):
             loader = UnstructuredURLLoader([file])
             documents.extend(loader.load())
             
-        #for mathematical pdfs, maybe try to convert to latex, then upload as latex, for better undestanding
     return documents
     
     
 def splitDocuments(documents):
-    textSplitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=10)
+    textSplitter = RecursiveCharacterTextSplitter(chunk_size=900, chunk_overlap=30)
     documents = textSplitter.split_documents(documents)
     return documents
     
     
-def buildVectorstore(documents):
-    vectordb = Chroma.from_documents(documents, embedding=OpenAIEmbeddings(), persist_directory=config.VECTORSTORE_PATH)
+def buildVectorstore(documents, userId, subjectId):
+    vectordb = Chroma.from_documents(documents, embedding=OpenAIEmbeddings(), persist_directory=f'{config.VECTORSTORE_PATH}{userId}/{subjectId}/')
     vectordb.persist()
-    return vectordb
+    return vectordb 
 
+
+# def getOrCreateVectorstore(name, documents):
+#     collection = chromaClient.get_or_create_collection(name=name)
+#     for doc in documents:
+#         uuid_name = uuid.uuid1()
+#         collection.upsert(ids=[str(uuid_name)], documents=doc.page_content)
+#     return collection
 
 
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
@@ -119,9 +131,11 @@ def clearConversationHistoryResources(userId, subjectId):
 def getConversationHistoryResources(userId, subjectId):
     subject = getSubjectById(userId, subjectId)
     if not subject:
-        return []
+        return [], []
     return subject.get("conversationHistoryDocsQuestions", []), subject.get("conversationHistoryDocsAnswers", [])
 
 
 def assembleList(questions, answers):
     return list(zip_longest(questions, answers, fillvalue=""))
+
+

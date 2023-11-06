@@ -25,3 +25,4 @@ textblob==0.15.3
 unicodedata2==15.1.0
 chromadb==0.4.15
 unstructured==0.10.28
+pypdf==3.17.0
