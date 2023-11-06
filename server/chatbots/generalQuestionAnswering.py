@@ -14,7 +14,7 @@ from api.endpoints.subjects.model import getSubjectById, updateSubject
 
 
 class Chatbot:
-    def __init__(self, user_id, subject_name):
+    def __init__(self, user_id, subject_id, subject_name):
         self.subject_name = subject_name
         self.template2 = """You are a AI Tutor helping with all kinds of different fields. Your name is ChouChou and you have a upbeat personality.
 First you ask the student in which language he wants to be tutored. 
@@ -37,14 +37,16 @@ Assistant:"""
             llm=OpenAI(temperature=0),
             prompt=prompt,
             verbose=False,
-            memory=ConversationBufferWindowMemory(k=2),
+            memory=ConversationBufferWindowMemory(k=5),
         )
         self.user_id = user_id
+        self.subject_id = subject_id
 
     def create_template(self, subject):
         t1 = f"""[Personality]  
     You are a upbeat, fun and experienced Tutor/Mentor from BrainWaive that helps students to learn, quiz and test about their knowledge of their School subjects.
-    Don't go off topic and stay focused on the subject, if the Students asks you something else, remind him to stop procrastinating and get back to his topic.
+    Don't go off topic and stay focused on the subject, if the Students asks you something else, remind him to stop procrastinating and get back to his topic in different manners.
+    Never repeat yourself.
 [Instructions]
     1. Introduce yourself to the student. Compact your messages so it is easy for the student to follow.
     2. Ask him in which language he wants to be tutored.
@@ -55,10 +57,10 @@ Assistant:"""
     5. Continue asking questions until the student response with **quit**.
 [Example Responses]
     ```
-    Hey there, math enthusiast! 😄 I'm your BrainWaive tutor, here to make math not just make sense, but also make it fun! Let's crunch some numbers and turn those math woes into wows!
-    Before we dive into the world of equations and theorems, which language would you feel most comfortable learning in?```
+    Hey there, {subject} enthusiast! I'm your BrainWaive tutor, here to make {subject} not just make sense, but also make it fun! Let's turn those {subject} woes into wows!
+    Before we dive into the world of <subject related>, which language would you feel most comfortable learning in?```
     ```
-    💭Thoughts: student prefers to jump into solving problems right away.
+    Thoughts: student prefers to jump into solving problems right away.
     ---
     Great! Jumping straight into problem-solving can be a very effective way to learn. It's hands-on and can help solidify concepts through practice.
     Now, let's figure out what type of problems you enjoy tackling. Do you find it more engaging to work on real-world scenarios, or do you prefer more abstract problems?
@@ -73,29 +75,42 @@ Assistant:"""
 
     def get_response(self, user_input):
         return self.chain.predict(human_input=user_input)
+    
+    
+    def reset_memory(self):
+    	self.chain.memory.clear()
 
 
 # Liste der aktiven Chatbots
 active_chatbots = []
 
+#funktion um history zu löschen.
+def clearConversationHistoryGeneral(userId, subjectId):
+    chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
+    chatbot.reset_memory()
+    updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=[], conversationHistoryGeneralQuestions=[])
+
 
 # Funktion, um die Antwort zu bekommen
 def get_chatbot_response(userId, subjectId, userInput):
+    if userInput.lower() == "clear":
+        clearConversationHistoryGeneral(userId, subjectId)
+        return {"question": userInput, "answer": "Chat history cleared"}
     subject = getSubjectById(userId, subjectId)
     subjectName = subject.get("name")
     extendChatHistoryWithPrompt(userId, subjectId, userInput)
 
     # Suche nach dem Chatbot mit der gegebenen User-ID
-    chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
+    chatbot = next((bot for bot in active_chatbots if (bot.user_id == userId) and (bot.subject_id == subjectId)), None)
 
     # Wenn kein Chatbot gefunden wurde, erstelle einen neuen und füge ihn zur Liste hinzu
     if not chatbot:
-        chatbot = Chatbot(userId, subjectName)
+        chatbot = Chatbot(userId, subjectId, subjectName)
         active_chatbots.append(chatbot)
 
     # Erhalte die Antwort vom Chatbot
     response = chatbot.get_response(userInput)
-    print(response)
+    # print(response)
     extendChatHistoryWithAnswer(userId, subjectId, response)
 
     return {"question": userInput, "answer": response}

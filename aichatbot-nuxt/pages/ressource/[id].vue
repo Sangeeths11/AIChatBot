@@ -3,8 +3,12 @@
         <h1 class="p-10">Ressourcen</h1>
         
         <div class="flex justify-center mb-6 w-">
-            <button class="bg-green-600 text-white px-6 py-2 rounded-tl-lg rounded-bl-lg" @click="activeTab = 'video'">Video</button>
-            <button class="bg-gray-200 text-gray-600 px-6 py-2 rounded-tr-lg rounded-br-lg" @click="activeTab = 'document'">Dokument</button>
+            <button class="bg-gray-200 text-gray-600 px-6 py-2"
+            :class="activeTab === 'video' ? 'bg-green-600 text-white' : ''" 
+            @click="activeTab = 'video'">Video</button>
+            <button class="bg-gray-200 text-gray-600 px-6 py-2" 
+            :class="activeTab === 'document' ? 'bg-green-600 text-white' : ''"
+            @click="activeTab = 'document'">Dokument</button>
         </div>
         <div class="flex justify-center mt-6">
             <select v-if="activeTab === 'video'" v-model="selectedVideo" class="select select-bordered w-80">
