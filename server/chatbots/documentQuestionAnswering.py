@@ -25,6 +25,10 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
     
 def documentQA(userId, subjectId, prompt):
+    if prompt.lower() == "clear":
+        clearConversationHistoryResources(userId, subjectId)
+        return {"question": prompt, "answer": "Chat history cleared"}
+
 
     # Add prompt to history
     extendChatHistoryWithPrompt(userId, subjectId, prompt)
@@ -47,7 +51,6 @@ def documentQA(userId, subjectId, prompt):
 
     result = pdf_qa(
         {"question": prompt, "chat_history": chat_history})
-    print(f"Answer: " + result["answer"])
     
     # add answer to history
     extendChatHistoryWithAnswer(prompt, result["answer"])
@@ -106,7 +109,7 @@ def extendChatHistoryWithAnswer(userId, subjectId, answer):
 
 
 def clearConversationHistoryResources(userId, subjectId):
-    updateSubject(userId, subjectId, conversationHistoryDocs=[])
+    updateSubject(userId, subjectId, conversationHistoryDocsAnswers=[], conversationHistoryDocsQuestions=[])
 
     
 def getConversationHistoryResources(userId, subjectId):
