@@ -115,4 +115,4 @@ def getConversationHistoryGeneral(userId, subjectId):
     subject = getSubjectById(userId, subjectId)
     if not subject:
         return []
-    return subject["conversationHistoryGeneralQuestions"], subject["conversationHistoryGeneralAnswers"]
+    return subject.get("conversationHistoryGeneralQuestions", []), subject.get("conversationHistoryGeneralAnswers", [])
