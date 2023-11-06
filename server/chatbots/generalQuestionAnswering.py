@@ -91,9 +91,9 @@ def clearConversationHistoryGeneral(userId, subjectId):
 
 # Funktion, um die Antwort zu bekommen
 def get_chatbot_response(userId, subjectId, userInput):
-    if prompt.lower() == "clear":
+    if userInput.lower() == "clear":
         clearConversationHistoryGeneral(userId, subjectId)
-        return {"question": prompt, "answer": "Chat history cleared"}
+        return {"question": userInput, "answer": "Chat history cleared"}
     subject = getSubjectById(userId, subjectId)
     subjectName = subject.get("name")
     extendChatHistoryWithPrompt(userId, subjectId, userInput)

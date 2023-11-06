@@ -90,7 +90,6 @@
     if (!input.files) return;
 
         documentsFile.value = Array.from(input.files);
-        alert(documentsFile.value)
     };
 
     const image: Ref<File[]> = ref([]);
@@ -100,7 +99,6 @@
         if (!input.files) return;
     
         image.value = Array.from(input.files);
-        alert(image.value)
     };
     
     const saveSettings = async () => {
