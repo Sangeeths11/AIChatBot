@@ -20,13 +20,14 @@ def videoWorkflow(userId, subjectId, subject):
     videos = []
     for q in queries:
         videos.extend(getVideos(q))
+        
     outputJson = {"videos": videos}
     bestVideos = selectBestVideos(subject, json.dumps(outputJson, indent=2))
     
     for v in bestVideos["videos"]:
-        print(v["name"])
+        v = addEmbedUrl(v)
         videoId = createNewVideo(userId, subjectId, v["name"],v["url"])
-        transcriptUrl = transcribeVideo(v["url"], videoId)
+        transcriptUrl = transcribeVideo(v["watchUrl"], videoId)
         updateVideo(userId, subjectId, videoId, v["name"],v["url"], transcriptUrl)
     
 def generateSearchQuery(subject = "learning", count = 3):
@@ -39,15 +40,18 @@ def generateSearchQuery(subject = "learning", count = 3):
 def getVideos(search_query = "How to learn"):
     return google.youtubeSearch(search_query, 2)
 
-
-
+def addEmbedUrl(video):
+    embedUrl =  google.getEmbedUrl(video)
+    video["url"] = embedUrl
+    return video
+    
 # Select the most fitting / best video
 def selectBestVideos(subject, videos):
-    prompt = prompts.getBestVideosPrompt(subject, videos, count=3)
-    with open("server/videoOperations/transcripts/best.txt", 'w') as file:
+    prompt = prompts.getBestVideosPrompt(subject, videos, count=1)
+    with open("server/videoOperations/transcripts/bestVideosPrompt.txt", 'w') as file:
         file.write(prompt)
     response = gpt.getCompletion(prompt)
-    with open("server/videoOperations/transcripts/log.txt", 'w') as file:
+    with open("server/videoOperations/transcripts/bestVideosCompletion.txt", 'w') as file:
         file.write(response)
     bestVideos = json.loads(response)
     return bestVideos

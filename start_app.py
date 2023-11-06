@@ -7,6 +7,7 @@ from installRequiredments import setup_requirements
 from Setup import setup_frontend, open_browser
 from concurrent.futures import Future
 
+
 def create_environment_variable_file():
     # Create the environment variable file if it doesn't exist
     if not os.path.exists('.env'):
@@ -17,6 +18,7 @@ def create_environment_variable_file():
         # Write the credentials to a file
         with open('.env', 'w') as env_file:
             env_file.write(decoded_creds)
+
 
 r = input("""Welcome to BrainWaive.
 If this is the first you use this project, we'll need to install some dependencies and packages.
@@ -48,15 +50,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 # Function to run a command in a separate thread and print its output
 def run_process(command, shell=True, ready_future=None, ready_signal=None):
-    print(os.getcwd())
+    # print(os.getcwd())
     process = subprocess.Popen(
         command,
         shell=shell,  # Necessary for commands like 'cd aichatbot-nuxt && yarn run dev'
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        universal_newlines=True
+        universal_newlines=True,
+        encoding='utf-8'
     )
 
     def check_ready():
@@ -68,7 +72,6 @@ def run_process(command, shell=True, ready_future=None, ready_signal=None):
 
     threading.Thread(target=check_ready).start()
     return process
-
 
 
 # Function to terminate all running processes and exit
@@ -86,7 +89,7 @@ frontend_ready = Future()
 # Start the backend server and wait for it to be ready
 backend_process = run_process(
     ['python', './server/app.py'],
-    shell=False,
+    shell=True,
     ready_future=backend_ready,
     ready_signal='Running on http://127.0.0.1:5000'  # Adjust this to the actual signal from your server output
 )

@@ -1,10 +1,19 @@
 {
   "videos": [
     {
-      "name": "Regression Analysis | Full Course",
-      "url": "https://rr5---sn-1gi7znek.googlevideo.com/videoplayback?expire=1699247352&ei=mCBIZdPqJbfN6dsPmJaqoAE&ip=31.10.136.86&id=o-AN5MsYh9Xb8jLycO1NMN3gQNxPg_QXBXhhl2y5x8P-Hv&itag=22&source=youtube&requiressl=yes&mh=kR&mm=31%2C26&mn=sn-1gi7znek%2Csn-hpa7znsz&ms=au%2Conr&mv=m&mvi=5&pl=18&initcwndbps=2711250&vprv=1&mime=video%2Fmp4&cnr=14&ratebypass=yes&dur=2716.479&lmt=1649500939458938&mt=1699225496&fvip=5&fexp=24007246&beids=24350018&c=ANDROID_EMBEDDED_PLAYER&txp=5432434&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=ANLwegAwRQIgcrspvME9o45zSqBL-4RybnnN_txyVqnRFCfaSfr9ydgCIQDdu8U4TGHsGPfC9qiSTu2AzpQ3xB3XJcbBAF9S7BIqxg%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AM8Gb2swRgIhALvFWXApHmYmgvEgOJ3kvetG9DZkDnmJkv3gwdmg3TviAiEAjstGoIkwsN41eskdrJhwtVHs4yZvFkaDJN2uUWbL_Ug%3D",
+      "name": "StatQuest: PCA main ideas in only 5 minutes!!!",
+      "url": "https://www.youtube.com/watch?v=HMOI_lkzW08",
+      "sentimentScore": 13
+    },
+    {
+      "name": "Principal component analysis step by step | PCA explained step by step | PCA in statistics",
+      "url": "https://www.youtube.com/watch?v=osgqQy9Hr8s",
       "sentimentScore": 12
     },
     {
-      "name": "An Introduction to Linear Regression Analysis",
-      "url": "https://rr5---sn-1gieen7e.googlevideo.com/videoplayback?expire=1699247347&ei=kyBIZZCAL8jB6dsPxOSHsAs&ip=31.10.136.86&id=o-APW7kg2YQId3bzgrhripcmd0IJlu3VuKJXHnQap3E1ks&itag=22&source=youtube&requiressl=yes&mh=J4&mm=31%2C26&mn=sn-1gieen7e%2Csn-hpa7knl7&ms=au%2Conr&mv=m&mvi=5&pl=18&initcwndbps=239000
+      "name": "Principal Component Analysis (PCA): With Practical Example in Minitab",
+      "url": "https://www.youtube.com/watch?v=f0_UWY3R8CY",
+      "sentimentScore": 13
+    }
+  ]
+}

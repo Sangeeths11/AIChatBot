@@ -25,14 +25,12 @@ def youtubeSearch(query, count=3):
             videoId = result["id"]["videoId"]
             videoTitle = result["snippet"]["title"]
             
-            yt = YouTube(f"https://www.youtube.com/watch?v={videoId}")
+            url = f"https://www.youtube.com/watch?v={videoId}"
             
-            videoStream = yt.streams.get_highest_resolution()
-            videoEmbedUrl = videoStream.url
-            
+
             sentimentScore = getSentimentOfVideo(videoId)
             if sentimentScore:
-                results.append({"name": videoTitle, "url": videoEmbedUrl, "sentimentScore": sentimentScore})
+                results.append({"name": videoTitle, "watchUrl": url, "sentimentScore": sentimentScore})
             else:
                 continue
     return results    
@@ -80,3 +78,11 @@ def getSentimentOfComments(commentList):
             negativeCount += 1
 
     return positiveCount - negativeCount
+
+
+def getEmbedUrl(video):
+    url = video.get("watchUrl", "")
+    yt = YouTube(url)
+    videoStream = yt.streams.get_highest_resolution()
+    embedUrl = videoStream.url
+    return embedUrl
