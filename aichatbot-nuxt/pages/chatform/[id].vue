@@ -16,10 +16,10 @@
             </button>
         </div>
         <div v-if="mode.valueOf() === 'Resources'" class="p-4">
-                <label class="mb-2 text-green" for="resourceSelect">Resource Select</label>
+                <label class="mb-2 text-green" for="resourceSelect">All Resource</label>
                 <select id="resourceSelect" class="border p-2 rounded w-full mb-4">
-                    <option v-for="document in documents" :key="document.url">{{ document.name }}</option>
-                    <option v-for="video in videos" :key="video.url">{{ video.name }}</option>
+                    <option v-for="document in documents" :key="document.url" disabled>{{ document.name }}</option>
+                    <option v-for="video in videos" :key="video.url" disabled>{{ video.name }}</option>
                 </select>
         </div>
         
@@ -49,10 +49,10 @@
                 placeholder="Type your message..."
                 v-model="newMessage"
                 class="p-2 border border-gray-300 rounded-l-md focus:outline-none focus:border-blue-400 flex-grow w-11/12 center"
-                @keyup.enter="sendMessage"
+                @keyup.enter="sendChatbotConversationMessage"
             />
             <button
-                @click="sendMessage"
+                @click="sendChatbotConversationMessage"
                 class="btn btn-primary w-1/12 rounded-r-md"
                 >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -80,9 +80,6 @@ interface Message {
 const videos = ref<Video[]>([]); // Ein leeres Array für die Fächer vom Typ 'Video'
 const documents = ref<Document[]>([]); // Ein leeres Array für die Fächer vom Typ 'Document'
 
-const selectedVideo = ref('');
-const selectedDocument = ref('');
-
 interface Video {
     name: string;
     url: string;
@@ -103,26 +100,7 @@ const messages = ref<Message[]>([]);
 
 const newMessage = ref('');
 
-const sendMessage = () => {
-    if (newMessage.value.trim() !== '') {
-        messages.value.push({
-            sender: 'You',
-            content: newMessage.value,
-            time: new Date().toLocaleTimeString(),
-            status: 'Delivered'
-        });
-        newMessage.value = '';
 
-        setTimeout(() => {
-            messages.value.push({
-                sender: 'Chatbot',
-                content: 'I received your message!',
-                time: new Date().toLocaleTimeString(),
-                status: 'Delivered'
-            });
-        }, 1000);
-    }
-};
 const baseUrl = 'http://127.0.0.1:5000/api'; // Replace with your actual base URL
 // const userId = '0izCCZBtsVolmwwMIgav';
 // const subjectId = 'yXR6ea6BeOt8KABr7PZQ'
@@ -151,6 +129,40 @@ const getDocuments = async () => {
         errorMessage.value = 'An error occurred while fetching the documents. Please try again later.';
     }
 };
+
+const sendChatbotConversationMessage = async () => {
+    try {
+        const response = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectId}/chats`, {
+            chatbot: mode.value === 'Resources' ? 'resources' : 'general', // Verwenden Sie .value für ref in Vue 3
+            prompt: newMessage.value
+        });
+
+        // Fügen Sie die vom Benutzer gesendete Nachricht hinzu
+        messages.value.push({
+            sender: 'You',
+            content: newMessage.value,
+            time: new Date().toLocaleTimeString(),
+            status: 'Delivered'
+        });
+
+        // Fügen Sie die Antwort des Chatbots hinzu
+        if (response.data && response.data.answer) {
+            messages.value.push({
+                sender: 'Chatbot',
+                content: response.data.answer, // Hier setzen Sie die Antwort des Chatbots
+                time: new Date().toLocaleTimeString(),
+                status: 'Delivered'
+            });
+        }
+
+        newMessage.value = ''; // Setzen Sie das Nachrichtenfeld zurück
+
+    } catch (error) {
+        errorMessage.value = 'An error occurred while sending the message. Please try again later.';
+        console.error('Error sending chat message:', error);
+    }
+};
+
 onMounted(() => {
     getVideos();
     getDocuments();
