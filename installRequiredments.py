@@ -9,7 +9,7 @@ import time
 def check_conda():
     """Check if Conda is installed."""
     try:
-        subprocess.check_output(['conda', '--version'], stderr=subprocess.STDOUT)
+        subprocess.check_output(['conda', '--version'], stderr=subprocess.STDOUT, encoding='utf-8')
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
@@ -80,12 +80,13 @@ def create_conda_env(file_path='environment.yml'):
 def install_with_pip():
     """Install packages using pip."""
     try:
-        subprocess.check_call(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
-        subprocess.check_call(['pip', 'install', '-r', 'requirements.txt'])
+        subprocess.run('python -m pip install --upgrade pip')
+        subprocess.run('pip install -r requirements.txt')
         print("Packages installed using pip.")
         time.sleep(5)
     except subprocess.CalledProcessError as e:
         print("An error occurred while installing packages with pip.")
+        print("please try again or install the packages manually. using 'pip install -r requirements.txt'")
         print(e.output.decode())
 
 
