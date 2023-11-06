@@ -14,6 +14,15 @@
                 class="py-2 px-4 rounded-tr-lg focus:outline-none transition-colors duration-200">
                 Resources
             </button>
+            <!-- Delete icon on left side top with icon -->
+            <button class="bg-red-600 text-white py-2 px-4 rounded-tr-lg focus:outline-none transition-colors duration-200"
+                @click="deleteChatbotConversation"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
         </div>
         <div v-if="mode.valueOf() === 'Resources'" class="p-4">
                 <label class="mb-2 text-green" for="resourceSelect">All Resource</label>
@@ -130,19 +139,35 @@ const getDocuments = async () => {
     }
 };
 
-const sendChatbotConversationMessage = async () => {
+const deleteChatbotConversation = async () => {
     try {
         const response = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectId}/chats`, {
             chatbot: mode.value === 'Resources' ? 'resources' : 'general', // Verwenden Sie .value für ref in Vue 3
-            prompt: newMessage.value
+            prompt: 'clear'
         });
 
-        // Fügen Sie die vom Benutzer gesendete Nachricht hinzu
-        messages.value.push({
+        //page reload
+        location.reload();
+
+        newMessage.value = ''; 
+
+    } catch (error) {
+        errorMessage.value = 'An error occurred while sending the message. Please try again later.';
+        console.error('Error sending chat message:', error);
+    }
+};
+
+const sendChatbotConversationMessage = async () => {
+    messages.value.push({
             sender: 'You',
             content: newMessage.value,
             time: new Date().toLocaleTimeString(),
             status: 'Delivered'
+        });
+    try {
+        const response = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectId}/chats`, {
+            chatbot: mode.value === 'Resources' ? 'resources' : 'general', // Verwenden Sie .value für ref in Vue 3
+            prompt: newMessage.value
         });
 
         // Fügen Sie die Antwort des Chatbots hinzu
@@ -155,7 +180,30 @@ const sendChatbotConversationMessage = async () => {
             });
         }
 
-        newMessage.value = ''; // Setzen Sie das Nachrichtenfeld zurück
+        newMessage.value = ''; 
+
+    } catch (error) {
+        errorMessage.value = 'An error occurred while sending the message. Please try again later.';
+        console.error('Error sending chat message:', error);
+    }
+};
+
+const startChatbotConversation = async () => {
+    try {
+        const response = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectId}/chats`, {
+            chatbot: mode.value === 'Resources' ? 'resources' : 'general', // Verwenden Sie .value für ref in Vue 3
+            prompt: 'hey'
+        });
+
+        // Fügen Sie die Antwort des Chatbots hinzu
+        if (response.data && response.data.answer) {
+            messages.value.push({
+                sender: 'Chatbot',
+                content: response.data.answer, // Hier setzen Sie die Antwort des Chatbots
+                time: new Date().toLocaleTimeString(),
+                status: 'Delivered'
+            });
+        }
 
     } catch (error) {
         errorMessage.value = 'An error occurred while sending the message. Please try again later.';
@@ -166,6 +214,7 @@ const sendChatbotConversationMessage = async () => {
 onMounted(() => {
     getVideos();
     getDocuments();
+    startChatbotConversation();
 });
 </script>
 
