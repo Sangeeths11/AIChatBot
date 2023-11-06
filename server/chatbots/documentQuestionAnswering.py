@@ -47,17 +47,17 @@ def documentQA(userId, subjectId, prompt):
     vectordb = buildVectorstore(documents)
     
     # “higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic”
-    pdf_qa = ConversationalRetrievalChain.from_llm(
-        ChatOpenAI(temperature=0.9, model_name="gpt-3.5-turbo"),
+    qa = ConversationalRetrievalChain.from_llm(
+        ChatOpenAI(temperature=0.5, model_name="gpt-4"),
         vectordb.as_retriever(search_kwargs={'k': 6}),
         return_source_documents=True,
-        verbose=False
+        verbose=True
     )
 
-    result = pdf_qa({"question": prompt, "chat_history": chat_history})
+    result = qa({"question": prompt, "chat_history": chat_history})
     
     # add answer to history
-    extendChatHistoryWithAnswer(prompt, result["answer"])
+    extendChatHistoryWithAnswer(userId, subjectId, result["answer"])
     
     return {"question": prompt, "answer": result["answer"]}
 
