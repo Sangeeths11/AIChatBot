@@ -73,6 +73,7 @@ active_chatbots = []
 # Funktion, um die Antwort zu bekommen
 def get_chatbot_response(userId, subjectId, userInput):
     subject = getSubjectById(userId, subjectId)
+    subjectName = subject.get("name")
     
     extendChatHistoryWithPrompt(userId, subjectId, userInput)
     
@@ -85,7 +86,7 @@ def get_chatbot_response(userId, subjectId, userInput):
         active_chatbots.append(chatbot)
 
     # Erhalte die Antwort vom Chatbot
-    response = chatbot.get_response(userInput, subject)
+    response = chatbot.get_response(userInput, subjectName)
 
     extendChatHistoryWithAnswer(userId, subjectId, response)
     

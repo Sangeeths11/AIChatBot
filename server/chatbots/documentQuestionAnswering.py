@@ -113,5 +113,4 @@ def getConversationHistoryResources(userId, subjectId):
     subject = getSubjectById(userId, subjectId)
     if not subject:
         return []
-    return subject["conversationHistoryDocsQuestions"], subject["conversationHistoryDocsAnswers"]
-
+    return subject.get("conversationHistoryDocsQuestions", []), subject.get("conversationHistoryDocsAnswers", [])
