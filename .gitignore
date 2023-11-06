@@ -27,3 +27,4 @@ logs
 credsFirestore.json
 server/env.env
 /venv/
+__pycache__
