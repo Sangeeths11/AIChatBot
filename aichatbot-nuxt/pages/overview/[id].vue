@@ -7,7 +7,7 @@
             <!-- Using a v-for loop to generate 35 cards -->
             <div v-for="(subject, index) in subjects" :key="index" class="card bg-white p-4 rounded shadow-lg">
                 <!-- Stellen Sie sicher, dass subject ein Objekt ist, das den Namen und andere Informationen enthält -->
-                <img :src="subject.image" alt="Fachbild" class="w-full h-32 object-cover rounded-md">
+                <img :src="subject.imageUrl" alt="Fachbild" class="w-full h-32 object-cover rounded-md">
                 <h1 class="mt-2 text-center">{{ subject.name }}</h1>
                 <button @click="learn(subject.id)" class="absolute bottom-2 left-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded focus:outline-none">
                 Lernen
@@ -16,7 +16,7 @@
                 Ressourcen
                 </button>
                 <button @click="addSubject(subject.id)" class="absolute bottom-2 right-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded focus:outline-none">
-                    Einstellungen
+                Einstellungen
                 </button>
                 <!-- Delete -->
                 <button @click="deleteSubject(subject.id)" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded focus:outline-none">
@@ -49,7 +49,7 @@ const route = useRoute();
 
 interface Subject {
   name: string;
-  image: string;
+  imageUrl: string;
   id: string;
 }
 
