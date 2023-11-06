@@ -32,3 +32,4 @@ dependencies:
       - openai-whisper==20230918
       - chromadb==0.4.15
       - unstructured==0.10.28
+      - pypdf==3.17.0
