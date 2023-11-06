@@ -26,3 +26,4 @@ logs
 # credentials
 credsFirestore.json
 server/env.env
+/venv/
