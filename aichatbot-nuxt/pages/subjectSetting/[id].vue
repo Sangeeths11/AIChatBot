@@ -106,7 +106,7 @@
     const saveSettings = async () => {
         try {
             // Erster API-Aufruf, um das Subject zu speichern
-            const response = await axios.post(`${baseUrl}/users/${userId}/subjects`, {
+            const response = await axios.post(`${baseUrl}/users/${userId}/subjects?name=${subjectName.value}`, {
                 name: subjectName.value,
             });
             console.log('Subject saved:', response.data);
