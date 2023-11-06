@@ -39,7 +39,7 @@ class Subject(Resource):
         return {"message": "Subject created", "subjectId": newSubjectId, "imageUrl" : imageUrl}, 201
 
     def put(self, userId, subjectId):
-        args = self.parser.parse_args()
+        #args = self.parser.parse_args()
 
         if "file" in request.files:
             file = request.files["file"]
@@ -47,7 +47,7 @@ class Subject(Resource):
         if not imageUrl:
             return {"message": "Fileupload failed"}, 400
 
-        success = updateSubject(userId, subjectId, name=args["name"], imageUrl=imageUrl)
+        success = updateSubject(userId, subjectId, imageUrl=imageUrl)
         if success:
             return {"message": "subject updated"}, 200
         return {"message": "subject not found"}, 404

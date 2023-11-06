@@ -39,7 +39,7 @@ def updateSubject(userId, subjectId, imageUrl=None, name=None, conversationHisto
         data["conversationHistoryDocs"] = conversationHistoryDocs
     if conversationHistoryGeneral:
         data["conversationHistoryGeneral"] = conversationHistoryGeneral
-    if data:
+    if data and ref:
         ref.update(data)
     return True
 
