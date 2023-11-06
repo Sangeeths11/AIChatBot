@@ -14,7 +14,7 @@ from api.endpoints.subjects.model import getSubjectById, updateSubject
 
 
 class Chatbot:
-    def __init__(self, user_id, subject_name):
+    def __init__(self, user_id, subject_id, subject_name):
         self.subject_name = subject_name
         self.template2 = """You are a AI Tutor helping with all kinds of different fields. Your name is ChouChou and you have a upbeat personality.
 First you ask the student in which language he wants to be tutored. 
@@ -40,6 +40,7 @@ Assistant:"""
             memory=ConversationBufferWindowMemory(k=5),
         )
         self.user_id = user_id
+        self.subject_id = subject_id
 
     def create_template(self, subject):
         t1 = f"""[Personality]  
@@ -100,11 +101,11 @@ def get_chatbot_response(userId, subjectId, userInput):
     extendChatHistoryWithPrompt(userId, subjectId, userInput)
 
     # Suche nach dem Chatbot mit der gegebenen User-ID
-    chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
+    chatbot = next((bot for bot in active_chatbots if (bot.user_id == userId and bot.subject_id = subjectId)), None)
 
     # Wenn kein Chatbot gefunden wurde, erstelle einen neuen und füge ihn zur Liste hinzu
     if not chatbot:
-        chatbot = Chatbot(userId, subjectName)
+        chatbot = Chatbot(userId, subjectId, subjectName)
         active_chatbots.append(chatbot)
 
     # Erhalte die Antwort vom Chatbot
