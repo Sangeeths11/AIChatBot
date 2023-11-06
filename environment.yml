@@ -30,3 +30,5 @@ dependencies:
       - protobuf==4.25.0
       - grpcio-status==1.59.2
       - openai-whisper==20230918
+      - chromadb==0.4.15
+      - unstructured==0.10.28

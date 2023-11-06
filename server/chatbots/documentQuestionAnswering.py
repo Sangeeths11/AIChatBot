@@ -6,6 +6,7 @@ import openai
 from langchain.document_loaders import PyPDFLoader
 from langchain.document_loaders import Docx2txtLoader
 from langchain.document_loaders import TextLoader
+from langchain.document_loaders import UnstructuredURLLoader
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.llms import OpenAI
@@ -22,6 +23,8 @@ from api.endpoints.documents.model import getAllDocuments
 from api.endpoints.videos.model import getAllVideos
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+import requests
+from itertools import zip_longest
 
     
 def documentQA(userId, subjectId, prompt):
@@ -34,7 +37,9 @@ def documentQA(userId, subjectId, prompt):
     extendChatHistoryWithPrompt(userId, subjectId, prompt)
     
     
-    chat_history = getConversationHistoryResources(userId, subjectId)
+    questions, answers = getConversationHistoryResources(userId, subjectId)
+    chat_history = assembleList(questions, answers)
+    
     urlList = getAllDocumentsOnSubject(userId, subjectId)
     documents = splitFiles(urlList)
     
@@ -42,18 +47,17 @@ def documentQA(userId, subjectId, prompt):
     vectordb = buildVectorstore(documents)
     
     # “higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic”
-    pdf_qa = ConversationalRetrievalChain.from_llm(
-        ChatOpenAI(temperature=0.9, model_name="gpt-3.5-turbo"),
+    qa = ConversationalRetrievalChain.from_llm(
+        ChatOpenAI(temperature=0.5, model_name="gpt-4"),
         vectordb.as_retriever(search_kwargs={'k': 6}),
         return_source_documents=True,
-        verbose=False
+        verbose=True
     )
 
-    result = pdf_qa(
-        {"question": prompt, "chat_history": chat_history})
+    result = qa({"question": prompt, "chat_history": chat_history})
     
     # add answer to history
-    extendChatHistoryWithAnswer(prompt, result["answer"])
+    extendChatHistoryWithAnswer(userId, subjectId, result["answer"])
     
     return {"question": prompt, "answer": result["answer"]}
 
@@ -76,7 +80,7 @@ def splitFiles(urlList):
             loader = Docx2txtLoader(file)
             documents.extend(loader.load())
         elif file.endswith('.txt'):
-            loader = TextLoader(file)
+            loader = UnstructuredURLLoader([file])
             documents.extend(loader.load())
             
         #for mathematical pdfs, maybe try to convert to latex, then upload as latex, for better undestanding
@@ -117,3 +121,7 @@ def getConversationHistoryResources(userId, subjectId):
     if not subject:
         return []
     return subject.get("conversationHistoryDocsQuestions", []), subject.get("conversationHistoryDocsAnswers", [])
+
+
+def assembleList(questions, answers):
+    return list(zip_longest(questions, answers, fillvalue=""))
