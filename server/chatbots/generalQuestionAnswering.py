@@ -82,9 +82,18 @@ Assistant:"""
 # Liste der aktiven Chatbots
 active_chatbots = []
 
+#funktion um history zu löschen.
+def clearConversationHistoryGeneral(userId, subjectId):
+    chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
+    chatbot.reset_memory()
+    updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=[], conversationHistoryGeneralQuestions=[])
+
 
 # Funktion, um die Antwort zu bekommen
 def get_chatbot_response(userId, subjectId, userInput):
+    if prompt.lower() == "clear":
+        clearConversationHistoryGeneral(userId, subjectId)
+        return {"question": prompt, "answer": "Chat history cleared"}
     subject = getSubjectById(userId, subjectId)
     subjectName = subject.get("name")
     extendChatHistoryWithPrompt(userId, subjectId, userInput)
@@ -104,10 +113,6 @@ def get_chatbot_response(userId, subjectId, userInput):
 
     return {"question": userInput, "answer": response}
 
-def clearConversationHistoryGeneral(userId, subjectId):
-    chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
-    chatbot.reset_memory()
-    updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=[], conversationHistoryGeneralQuestions=[])
 
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
     questions, answers = getConversationHistoryGeneral(userId, subjectId)
