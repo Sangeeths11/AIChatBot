@@ -37,7 +37,7 @@ YOUTUBE_AUDIO_TRANSCRIPS_PATH = "server/videoOperations/transcripts/"
 
 
 # Chatbots
-VECTORSTORE_PATH = "/server/chatbots/vectorstore/"
+VECTORSTORE_PATH = "server/chatbots/vectorstore/"
 
 
 # Google Cloud Storage
