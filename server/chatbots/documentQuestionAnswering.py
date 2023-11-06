@@ -99,7 +99,7 @@ def splitDocuments(documents):
     
     
 def buildVectorstore(documents, userId, subjectId):
-    vectordb = Chroma.from_documents(documents, embedding=OpenAIEmbeddings(), persist_directory=f'{config.VECTORSTORE_PATH}/{userId}/{subjectId}/')
+    vectordb = Chroma.from_documents(documents, embedding=OpenAIEmbeddings(), persist_directory=f'{config.VECTORSTORE_PATH}{userId}/{subjectId}/')
     vectordb.persist()
     return vectordb 
 
