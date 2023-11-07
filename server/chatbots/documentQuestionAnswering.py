@@ -28,7 +28,7 @@ from itertools import zip_longest
 import uuid
 
 
-chromaClient = chromadb.PersistentClient(path=config.VECTORSTORE_PATH)
+#chromaClient = chromadb.PersistentClient(path=config.VECTORSTORE_PATH)
 
     
 def documentQA(userId, subjectId, prompt):
@@ -56,9 +56,8 @@ def documentQA(userId, subjectId, prompt):
         ChatOpenAI(temperature=0.8, model_name="gpt-4"),
         vectordb.as_retriever(search_kwargs={'k': 6}),
         return_source_documents=True,
-        verbose=True,
-        handle_parsing_errors=True
-    )
+        verbose=True
+        )
 
     result = qa({"question": prompt, "chat_history": chat_history})
     
