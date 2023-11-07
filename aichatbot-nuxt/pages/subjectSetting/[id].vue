@@ -103,45 +103,79 @@
     
     const saveSettings = async () => {
         try {
-            // Erster API-Aufruf, um das Subject zu speichern
-            const response = await axios.post(`${baseUrl}/users/${userId}/subjects?name=${subjectName.value}`, {
-                name: subjectName.value,
-            });
-            console.log('Subject saved:', response.data);
-            
-
-            const subjectIdResponse = response.data.subjectId;
-            if (documentsFile.value.length > 0) {
-                // Prepare FormData to upload files
-                const formData = new FormData();
-                documentsFile.value.forEach((file) => {
-                    formData.append('file', file); // 'files' should be the field expected by your API
-                });
-                  
-                console.log('formData', formData);
-                const documentResponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}/documents`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
+                if(subjectId === 'new')
+                {
+                // Erster API-Aufruf, um das Subject zu speichern
+                    const response = await axios.post(`${baseUrl}/users/${userId}/subjects?name=${subjectName.value}`, {
+                        name: subjectName.value,
+                    });
+                    console.log('Subject saved:', response.data);
+                    const subjectIdResponse = response.data.subjectId;
+                    if (documentsFile.value.length > 0) {
+                        // Prepare FormData to upload files
+                        const formData = new FormData();
+                        documentsFile.value.forEach((file) => {
+                            formData.append('file', file); // 'files' should be the field expected by your API
+                        });
+                        
+                        console.log('formData', formData);
+                        const documentResponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}/documents`, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
+                        console.log('Documents saved:', documentResponse.data);
                     }
-                });
-                console.log('Documents saved:', documentResponse.data);
-            }
-
-            if (image.value.length > 0) {
-                // Prepare FormData to upload files
-                const formData = new FormData();
-                image.value.forEach((file) => {
-                    formData.append('file', file); // 'files' should be the field expected by your API
-                });
-                  
-                console.log('formData', formData);
-                const imageResponse = await axios.put(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
+                    if (image.value.length > 0) {
+                        // Prepare FormData to upload files
+                        const formData = new FormData();
+                        image.value.forEach((file) => {
+                            formData.append('file', file); // 'files' should be the field expected by your API
+                        });
+                        
+                        console.log('formData', formData);
+                        const imageResponse = await axios.put(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}`, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
+                        console.log('Image saved:', imageResponse.data);
                     }
-                });
-                console.log('Image saved:', imageResponse.data);
-            }
+                }
+                else
+                {
+                    if (documentsFile.value.length > 0) {
+                        // Prepare FormData to upload files
+                        const formData = new FormData();
+                        documentsFile.value.forEach((file) => {
+                            formData.append('file', file); // 'files' should be the field expected by your API
+                        });
+                        
+                        console.log('formData', formData);
+                        const documentResponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectId}/documents`, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
+                        console.log('Documents saved:', documentResponse.data);
+                    }
+                    if (image.value.length > 0) {
+                        // Prepare FormData to upload files
+                        const formData = new FormData();
+                        image.value.forEach((file) => {
+                            formData.append('file', file); // 'files' should be the field expected by your API
+                        });
+                        
+                        console.log('formData', formData);
+                        const imageResponse = await axios.put(`${baseUrl}/users/${userId}/subjects/${subjectId}`, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
+                        console.log('Image saved:', imageResponse.data);
+                    }
+                }
+               
 
         } catch (error) {
             errorMessage.value = 'An error occurred. Please try again later.';
