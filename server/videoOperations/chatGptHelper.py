@@ -42,37 +42,39 @@ def extractText(data):
             text += extractText(value)
     return text
     
+import time
+
 def getVideoData(url, transcriptionName):
     yt = YouTube(url)  
+    text = ""
 
 
-
-    # Get the available caption tracks (subtitles)
-    print(f"captions: {yt.captions}")
-    language = ""
-    captions = yt.caption_tracks
-    if "en" in captions:
-        language = "en"
-    elif "a.en" in captions:
-        language = "a.en"
-    elif "de" in captions:
-        language = "de"
+    # print(yt.caption_tracks())
     
-    if language != "":
-        print(f"Language: {language}")
-        caption = yt.captions[language]
-        text = extractText(caption.json_captions)
-        text = text.strip()
-    else:
+    # for ln in ["en", "a.en", "de"]:
+    #     cpt = yt.caption_tracks.get(ln, None)
+    #     if cpt is not None:
+    #         print(cpt)
+    #         text = extractText(cpt.json_captions)
+    #         text = text.strip()
+    #         break
+        
+        
+    if len(text) == 0:
         # If no captions are available, transcribe using whisper
         audioStreamItag = yt.streams.filter(only_audio=True).order_by(attribute_name="abr").first().itag
         audioFilePath = yt.streams.get_by_itag(audioStreamItag).download(max_retries=5, filename=f"{transcriptionName}.txt",  output_path="server/videoOperations/youtubeAudio")
         print(f"Downloaded audio for {yt.title}")
+        
+        startTime = time.time()
+
+        print(f"started loading model and transcribing")
         options = whisper.DecodingOptions()
         whisperModel = whisper.load_model("tiny.en")
         result = whisperModel.transcribe(audioFilePath) 
         text = result.get("text", None)
         print(f"transcribing for {yt.title} successful")
+        print(f"Transcribing took: {time.time()-startTime}")
 
         try:
             os.remove(audioFilePath)

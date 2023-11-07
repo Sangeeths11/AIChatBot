@@ -20,7 +20,6 @@ def videoWorkflow(userId, subjectId, subject):
     videos = []
     for q in queries:
         videos.extend(getVideos(q))
-        
     outputJson = {"videos": videos}
     bestVideos = selectBestVideos(subject, json.dumps(outputJson, indent=2))
     
@@ -45,14 +44,22 @@ def addEmbedUrl(video):
     video["url"] = embedUrl
     return video
     
+class TextColor:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    RESET = '\033[0m'  # Reset text color to the default
+    
 # Select the most fitting / best video
 def selectBestVideos(subject, videos):
-    prompt = prompts.getBestVideosPrompt(subject, videos, count=1)
+    prompt = prompts.getBestVideosPrompt(subject, videos, count=2)
     with open("server/videoOperations/transcripts/bestVideosPrompt.txt", 'w') as file:
         file.write(prompt)
     response = gpt.getCompletion(prompt)
     with open("server/videoOperations/transcripts/bestVideosCompletion.txt", 'w') as file:
         file.write(response)
+    print("selectedVideos: \n "+ TextColor.BLUE + response + TextColor.RESET)
     bestVideos = json.loads(response)
     return bestVideos
 

@@ -6,12 +6,22 @@ import json
 #import appconfig as config
 from pytube import YouTube
 from dotenv import load_dotenv
+import api.appconfig as config
 load_dotenv()
 #os.environ["GOOGLE_API_KEY"] = config.GOOGLE_API_KEY
-youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))
 
 
-def youtubeSearch(query, count=3):
+from google.oauth2 import service_account
+
+# Load the credentials from the JSON file
+credentials = service_account.Credentials.from_service_account_file(config.CREDENTIALS_PATH, scopes=['https://www.googleapis.com/auth/youtube.force-ssl'])
+
+
+#youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))
+youtube = build("youtube", "v3", credentials=credentials)
+
+
+def youtubeSearch(query, count=2):
     response = youtube.search().list(
         q=query,
         type="video",
@@ -37,7 +47,7 @@ def youtubeSearch(query, count=3):
     
     
 
-def getSentimentOfVideo(videoId, commentCount = 20):
+def getSentimentOfVideo(videoId, commentCount = 12):
     commentList = getCommentsOfVideo(videoId, commentCount)
     if commentList:
         return getSentimentOfComments(commentList)
@@ -48,14 +58,14 @@ def getSentimentOfVideo(videoId, commentCount = 20):
 def getCommentsOfVideo(videoId, commentCount):
     try:
         comments = youtube.commentThreads().list(
-            part='snippet',
+            part="snippet",
             videoId=videoId,
-            textFormat='plainText',
+            textFormat="plainText",
         ).execute()
-        
+    
         commentList = []
-        for comment in comments['items'][:min(commentCount, comments["pageInfo"]["totalResults"], comments["pageInfo"]["resultsPerPage"])]:
-            commentText = comment['snippet']['topLevelComment']['snippet']['textDisplay']
+        for comment in comments["items"][:min(commentCount, comments["pageInfo"]["totalResults"], comments["pageInfo"]["resultsPerPage"])]:
+            commentText = comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"]
             commentList.append(commentText)
             
         return commentList

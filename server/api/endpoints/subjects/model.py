@@ -71,7 +71,7 @@ from videoOperations.videoWorkflow import videoWorkflow
 # @celery.task
 def generate(userId, subjectId):
     data = getSubjectById(userId, subjectId)
-    subject = data["name"]
+    subject = data.get("name", None)
     result = videoWorkflow(userId, subjectId, subject)
     return result
     
