@@ -93,6 +93,5 @@ def getSentimentOfComments(commentList):
 def getEmbedUrl(video):
     url = video.get("watchUrl", "")
     yt = YouTube(url)
-    videoStream = yt.streams.get_highest_resolution()
-    embedUrl = videoStream.url
-    return embedUrl
+    return yt.embed_url
+    

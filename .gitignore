@@ -28,3 +28,4 @@ credsFirestore.json
 server/env.env
 /venv/
 __pycache__
+server/chatbots/vectorstore/*
