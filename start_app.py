@@ -64,11 +64,17 @@ def run_process(command, shell=True, ready_future=None, ready_signal=None):
     )
 
     def check_ready():
-        for line in iter(process.stdout.readline, ''):
-            print(line, end='')  # Print the server output in real-time
-            if ready_signal and ready_signal in line and not ready_future.done():
-                ready_future.set_result(True)  # Indicate that the server is ready
-        process.stdout.close()
+        try:
+            for line in iter(process.stdout.readline, ''):
+                print(line, end='')  # Print the server output in real-time
+                if ready_signal and ready_signal in line and not ready_future.done():
+                    ready_future.set_result(True)  # Indicate that the server is ready
+        except:
+            print("couldnt decode character probably :D")
+        finally:
+            process.stdout.close()
+        
+
 
     threading.Thread(target=check_ready).start()
     return process
