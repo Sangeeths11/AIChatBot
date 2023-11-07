@@ -141,6 +141,10 @@
                         });
                         console.log('Image saved:', imageResponse.data);
                     }
+                    const videoGenerateresponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}/generate`, {
+                        name: subjectName.value,
+                    });
+                    console.log('Video Generator:', videoGenerateresponse.data);
                 }
                 else
                 {
