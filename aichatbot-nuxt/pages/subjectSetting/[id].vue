@@ -29,6 +29,13 @@
             @change="handleFilesChange" multiple
             />
         </div>
+        <div class="my-6">
+          <label class="block text-white-600 font-bold mb-2">Generate Videos:</label>
+          <div class="my-6 flex items-center">
+            <input type="checkbox" id="generateVideosCheckbox" v-model="shouldGenerateVideos" class="form-checkbox h-5 w-5 text-green-600 bg-transparent border-gray-300 rounded focus:ring-green-500">
+            <label for="generateVideosCheckbox" class="ml-2 text-white-700">Check to generate videos for this subject</label>
+          </div>
+        </div>
 
         <div class="my-6">
             <button @click="saveSettings" class="text-white-600 font-bold mb-2"
@@ -41,13 +48,13 @@
             <h2 class="text-gray-600 font-bold mb-4">Data Overview</h2>
             <h3 class="text-gray-600 font-bold mb-2">Documente:</h3>
             <ul>
-                <li v-for="document in documents" :key=document.name class="mb-2">
+                <li v-for="document in documents" :key=document.name class="mb-2" style="color:#424242">
                     {{document.name}}
                 </li>
             </ul>
             <h3 class="text-gray-600 font-bold mb-2">Videos:</h3>
             <ul>
-                <li v-for="video in videos" :key=video.name class="mb-2">
+                <li v-for="video in videos" :key=video.name class="mb-2" style="color:#424242">
                     {{video.name}}
                 </li>
             </ul>
@@ -100,7 +107,9 @@
     
         image.value = Array.from(input.files);
     };
-    
+
+    const shouldGenerateVideos = ref(false); // State for the checkbox
+
     const saveSettings = async () => {
         try {
                 if(subjectId === 'new')
@@ -141,10 +150,12 @@
                         });
                         console.log('Image saved:', imageResponse.data);
                     }
-                    const videoGenerateresponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}/generate`, {
+                    if (shouldGenerateVideos.value) {
+                      const videoGenerateresponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectIdResponse}/generate`, {
                         name: subjectName.value,
-                    });
-                    console.log('Video Generator:', videoGenerateresponse.data);
+                      });
+                      console.log('Video generation triggered:', videoGenerateresponse.data);
+                    }
                 }
                 else
                 {
@@ -178,6 +189,13 @@
                         });
                         console.log('Image saved:', imageResponse.data);
                     }
+                    await getVideos();
+                    if (shouldGenerateVideos.value && videos.value.length === 0) {
+                      const videoGenerateresponse = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectId}/generate`, {
+                        name: subjectName.value,
+                      });
+                      console.log('Video generation triggered:', videoGenerateresponse.data);
+                    }
                 }
                
 
@@ -188,6 +206,7 @@
         }
         router.push({ path: '/overview/' + userId});
     };
+
 
 
     const getSubject = async () => {
@@ -262,9 +281,6 @@ button {
     border-radius: 5px;
 }
 
-.card {
-    background-color: #f5f5f5;
-}
 
 input[type="file"] {
     cursor: pointer;
@@ -277,6 +293,21 @@ input[type="file"] {
 .custom-file-input:focus::before {
     border-color: #4caf50;
     box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+}
+
+.form-checkbox {
+  accent-color: #4caf50;
+}
+
+.form-checkbox + label {
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.form-checkbox:checked {
+  background-color: #4caf50;
+  border-color: #4caf50;
 }
 
 </style>
