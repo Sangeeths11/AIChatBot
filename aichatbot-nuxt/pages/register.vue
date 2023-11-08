@@ -10,7 +10,8 @@
         <span class="label-text">Password:</span>
       </label>
       <input type="password" placeholder="Type here" class="input input-bordered  w-full" v-model="password"/>
-      <input type="password" placeholder="Type here again" class="input input-bordered w-full" v-model="passwordConfirmation"/>
+      <input type="password" placeholder="Type here again" class="input input-bordered w-full" v-model="passwordConfirmation"
+      @keyup.enter="register"/>
       <button @click="register">Sign up</button>
       <div class="helper-texts">
         <router-link to="login">Do you have an account? Log in</router-link>
