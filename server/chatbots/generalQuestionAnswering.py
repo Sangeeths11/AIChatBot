@@ -96,7 +96,7 @@ active_chatbots = []
 def clearConversationHistoryGeneral(userId, subjectId):
     chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
     chatbot.reset_memory()
-    updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=[], conversationHistoryGeneralQuestions=[])
+    updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=[], conversationHistoryGeneralQuestions=[], clearHistory=True)
 
 
 # Funktion, um die Antwort zu bekommen

@@ -81,7 +81,7 @@ def documentQA(userId, subjectId, prompt):
 
     # IF NECESSARY
     # vectordb = getOrCreateVectorstore(subjectId, documents)
-    #vectordb = buildVectorstore(documents, userId, subjectId)
+    # vectordb = buildVectorstore(documents, userId, subjectId)
     vectordb = vectorstore_manager.get_vectorstore(userId, subjectId, documents)
 
     # “higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic”
@@ -89,7 +89,7 @@ def documentQA(userId, subjectId, prompt):
         ChatOpenAI(temperature=0.8, model_name="gpt-4"),
         vectordb.as_retriever(search_kwargs={'k': 6}),
         return_source_documents=True,
-        verbose=True
+        verbose=False  # True for debug/output in console
     )
 
     result = qa({"question": prompt, "chat_history": chat_history})
@@ -132,7 +132,7 @@ def splitDocuments(documents):
     return documents
 
 
-#def buildVectorstore(documents, userId, subjectId):
+# def buildVectorstore(documents, userId, subjectId):
 #    vectordb = Chroma.from_documents(documents, embedding=OpenAIEmbeddings(),
 #                                     persist_directory=f'{config.VECTORSTORE_PATH}{userId}/{subjectId}/')
 #    vectordb.persist()
@@ -160,7 +160,7 @@ def extendChatHistoryWithAnswer(userId, subjectId, answer):
 
 
 def clearConversationHistoryResources(userId, subjectId):
-    updateSubject(userId, subjectId, conversationHistoryDocsAnswers=[], conversationHistoryDocsQuestions=[])
+    updateSubject(userId, subjectId, conversationHistoryDocsAnswers=[], conversationHistoryDocsQuestions=[], clearHistory=True)
 
 
 def getConversationHistoryResources(userId, subjectId):
