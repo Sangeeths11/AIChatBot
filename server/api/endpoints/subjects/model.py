@@ -30,24 +30,54 @@ def createNewSubject(userId, name, imageUrl=None):
         ref.update({"imageUrl" : imageUrl})
     return ref.id
 
-def updateSubject(userId, subjectId, imageUrl=None, name=None, conversationHistoryDocsQuestions=None, conversationHistoryDocsAnswers=None,  conversationHistoryGeneralQuestions=None, conversationHistoryGeneralAnswers=None):
+# def updateSubject(userId, subjectId, imageUrl=None, name=None, conversationHistoryDocsQuestions=None, conversationHistoryDocsAnswers=None,  conversationHistoryGeneralQuestions=None, conversationHistoryGeneralAnswers=None):
+#     ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
+#     data = {}
+#     if name:
+#         data["name"] = name
+#     if imageUrl:
+#         data["imageUrl"] = imageUrl
+#     if conversationHistoryDocsQuestions:
+#         data["conversationHistoryDocsQuestions"] = conversationHistoryDocsQuestions
+#     if conversationHistoryDocsAnswers:
+#         data["conversationHistoryDocsAnswers"] = conversationHistoryDocsAnswers
+#     if conversationHistoryGeneralQuestions:
+#         data["conversationHistoryGeneralQuestions"] = conversationHistoryGeneralQuestions
+#     if conversationHistoryGeneralAnswers:
+#         data["conversationHistoryGeneralAnswers"] = conversationHistoryGeneralAnswers
+#     if data and ref:
+#         ref.update(data)
+#     return True
+def updateSubject(userId, subjectId, imageUrl=None, name=None,
+                  conversationHistoryDocsQuestions=None, conversationHistoryDocsAnswers=None,
+                  conversationHistoryGeneralQuestions=None, conversationHistoryGeneralAnswers=None,
+                  clearHistory=False):
     ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
     data = {}
-    if name:
-        data["name"] = name
-    if imageUrl:
-        data["imageUrl"] = imageUrl
-    if conversationHistoryDocsQuestions:
-        data["conversationHistoryDocsQuestions"] = conversationHistoryDocsQuestions
-    if conversationHistoryDocsAnswers:
-        data["conversationHistoryDocsAnswers"] = conversationHistoryDocsAnswers
-    if conversationHistoryGeneralQuestions:
-        data["conversationHistoryGeneralQuestions"] = conversationHistoryGeneralQuestions
-    if conversationHistoryGeneralAnswers:
-        data["conversationHistoryGeneralAnswers"] = conversationHistoryGeneralAnswers
-    if data and ref:
+
+    if clearHistory:
+        data["conversationHistoryDocsQuestions"] = []
+        data["conversationHistoryDocsAnswers"] = []
+        data["conversationHistoryGeneralQuestions"] = []
+        data["conversationHistoryGeneralAnswers"] = []
+    else:
+        if name:
+            data["name"] = name
+        if imageUrl:
+            data["imageUrl"] = imageUrl
+        if conversationHistoryDocsQuestions is not None:
+            data["conversationHistoryDocsQuestions"] = conversationHistoryDocsQuestions
+        if conversationHistoryDocsAnswers is not None:
+            data["conversationHistoryDocsAnswers"] = conversationHistoryDocsAnswers
+        if conversationHistoryGeneralQuestions is not None:
+            data["conversationHistoryGeneralQuestions"] = conversationHistoryGeneralQuestions
+        if conversationHistoryGeneralAnswers is not None:
+            data["conversationHistoryGeneralAnswers"] = conversationHistoryGeneralAnswers
+
+    if data:
         ref.update(data)
     return True
+
 
 def deleteSubject(userId, subjectId):
     ref = db.collection("users").document(userId).collection("subjects").document(subjectId)
