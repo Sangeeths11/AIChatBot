@@ -20,29 +20,34 @@ def create_environment_variable_file():
             env_file.write(decoded_creds)
 
 
-r = input("""Welcome to BrainWaive.
-If this is the first you use this project, we'll need to install some dependencies and packages.
+def setup():
+    r = input("""If this is the first you use this project, we'll need to install some dependencies and packages.
 Shall we proceed?
 If you already installed everything just continue with 'n'.
 Proceed? y / n: """)
-if r.lower() == 'n':
-    print("Great! You already installed all packages for the backend.")
-    r2 = input("Do you want to setup the frontend? y / n: ")
-    if r2.lower() == 'y':
-        setup_frontend()
+    if r.lower() == 'n':
+        print("Great! You already installed all packages for the backend.")
+        r2 = input("Do you want to setup the frontend? y / n: ")
+        if r2.lower() == 'y':
+            setup_frontend()
+        else:
+            print("Okay, let's start the Application.")
+    elif r.lower() == 'y':
+        create_environment_variable_file()
+        setup_requirements()
+        r2 = input("Do you want to setup the frontend? y / n: ")
+        if r2.lower() == 'y':
+            setup_frontend()
+        else:
+            print("Okay, let's start the Application.")
     else:
-        print("Okay, let's start the Application.")
-elif r.lower() == 'y':
-    create_environment_variable_file()
-    setup_requirements()
-    r2 = input("Do you want to setup the frontend? y / n: ")
-    if r2.lower() == 'y':
-        setup_frontend()
-    else:
-        print("Okay, let's start the Application.")
-else:
-    print("Invalid input. Start again.")
-    sys.exit(1)
+        print("Invalid input. Start again.")
+        sys.exit(1)
+
+start = input("""Welcome to BrainWaive.
+Do you want to start the application (y) or do you need to setup the Project (n): """)
+if start.lower == 'n':
+    setup()
 
 create_environment_variable_file()
 
@@ -73,8 +78,6 @@ def run_process(command, shell=True, ready_future=None, ready_signal=None):
             print("couldnt decode character probably :D")
         finally:
             process.stdout.close()
-        
-
 
     threading.Thread(target=check_ready).start()
     return process
