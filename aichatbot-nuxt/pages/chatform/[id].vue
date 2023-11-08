@@ -138,7 +138,7 @@ const userId = (subjectUserID as string).split('&')[1];
 
 const scrollToBottom = () => {
   nextTick(() => {
-    const messagesContainer = document.querySelector('.messages-container');
+    const messagesContainer = document.querySelector('.messages-container')!;
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   });
 };
