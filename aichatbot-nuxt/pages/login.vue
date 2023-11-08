@@ -2,7 +2,8 @@
     <div class="login-container">
       <h1 class="p-10">Welcome to our Dashboard</h1>
       <input type="text" placeholder="Username" v-model=loginName>
-      <input type="password" placeholder="Password" v-model=loginPassword>
+      <input type="password" placeholder="Password" v-model=loginPassword
+      @keyup.enter="login"/>
       <button @click="login">Login</button>
       <div class="helper-texts">
         <router-link to="register">Don't have an account? Sign up</router-link>
