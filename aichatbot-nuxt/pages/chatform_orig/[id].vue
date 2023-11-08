@@ -1,40 +1,28 @@
 <template>
-  <div class="chat-container">
     <div class="p-4">
         <h1 class="mb-2">Mode Selection</h1>
-        <div class="flex justify-between space-x-0 mb-6">
-          <div>
-            <button
-                :class="[mode.valueOf() === 'General' ? 'bg-green-600 text-white' : 'bg-gray-300']"
-                @click="setMode('General')"
+        <div class="flex space-x-0 mb-6">
+            <button 
+                :class="[mode.valueOf() === 'General' ? 'bg-green-600 text-white' : 'bg-gray-300']" 
+                @click="setMode('General')" 
                 class="py-2 px-4 rounded-tl-lg focus:outline-none transition-colors duration-200">
                 General
             </button>
-            <button
-                :class="[mode.valueOf() === 'Resources' ? 'bg-green-600 text-white' : 'bg-gray-300']"
-                @click="setMode('Resources')"
+            <button 
+                :class="[mode.valueOf() === 'Resources' ? 'bg-green-600 text-white' : 'bg-gray-300']" 
+                @click="setMode('Resources')" 
                 class="py-2 px-4 rounded-tr-lg focus:outline-none transition-colors duration-200">
                 Resources
             </button>
-            </div>
-            <!-- Delete icon on left side top with icon
+            <!-- Delete icon on left side top with icon -->
             <button class="bg-red-600 text-white py-2 px-4 rounded-tr-lg focus:outline-none transition-colors duration-200"
                 @click="deleteChatbotConversation"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-            </button>-->
-          <div>
-            <button class="cancel-button bg-red-600 text-white py-2 px-4 rounded focus:outline-none transition-colors duration-200"
-            @click="deleteChatbotConversation">
-              Clear
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
             </button>
 
-        </div>
         </div>
         <div v-if="mode.valueOf() === 'Resources'" class="p-4">
                 <label class="mb-2 text-green" for="resourceSelect">All Resource</label>
@@ -43,11 +31,10 @@
                     <option v-for="video in videos" :key="video.url" disabled>{{ video.name }}</option>
                 </select>
         </div>
-  </div>
-
-    <!-- Chat Messages Container -->
-    <div class="messages-container" ref="messagesContainer">
-       <div v-for="message in messages" :key="message.time" :class="['chat', message.sender === 'You' ? 'chat-end' : 'chat-start']">
+        
+    </div>
+    <div class="">
+        <div v-for="message in messages" :key="message.time" :class="['chat', message.sender === 'You' ? 'chat-end' : 'chat-start']">
             <div class="chat-image avatar">
                 <div class="w-10 rounded-full">
                     <img src="../../assets/images/Chatbot.png" />
@@ -64,10 +51,8 @@
                 {{ message.status }}
             </div>
         </div>
-    </div>
 
-    <!-- User Input -->
-    <div class="input-container">
+        <div class="message-input flex items-center p-20">
             <input
                 type="text"
                 placeholder="Type your message..."
@@ -83,12 +68,13 @@
                     <path d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
             </button>
+        </div>
     </div>
-  </div>
 </template>
 
+
 <script lang="ts" setup>
-import { ref, nextTick } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 
 // Typescript interface for the message object
@@ -136,13 +122,6 @@ const subjectUserID = route.params.id;
 const subjectId = (subjectUserID as string).split('&')[0];
 const userId = (subjectUserID as string).split('&')[1];
 
-const scrollToBottom = () => {
-  nextTick(() => {
-    const messagesContainer = document.querySelector('.messages-container');
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  });
-};
-
 const getVideos = async () => {
     try {
         const response = await axios.get(`${baseUrl}/users/${userId}/subjects/${subjectId}/videos`);
@@ -170,7 +149,7 @@ const deleteChatbotConversation = async () => {
         //page reload
         location.reload();
 
-        newMessage.value = '';
+        newMessage.value = ''; 
 
     } catch (error) {
         errorMessage.value = 'An error occurred while sending the message. Please try again later.';
@@ -180,22 +159,11 @@ const deleteChatbotConversation = async () => {
 
 const sendChatbotConversationMessage = async () => {
     messages.value.push({
-        sender: 'You',
-        content: newMessage.value,
-        time: new Date().toLocaleTimeString(),
-        status: 'Delivered'
-    });
-
-    // Clear the input field
-    newMessage.value = '';
-
-    // Use nextTick to scroll after the DOM updates
-    await nextTick();
-
-    scrollToBottom();
-
-
-    // Proceed to send the message to the backend and handle the response
+            sender: 'You',
+            content: newMessage.value,
+            time: new Date().toLocaleTimeString(),
+            status: 'Delivered'
+        });
     try {
         const response = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectId}/chats`, {
             chatbot: mode.value === 'Resources' ? 'resources' : 'general', // Verwenden Sie .value für ref in Vue 3
@@ -212,14 +180,13 @@ const sendChatbotConversationMessage = async () => {
             });
         }
 
-        scrollToBottom();
+        newMessage.value = ''; 
 
     } catch (error) {
         errorMessage.value = 'An error occurred while sending the message. Please try again later.';
         console.error('Error sending chat message:', error);
     }
 };
-
 
 const startChatbotConversation = async () => {
     try {
@@ -244,7 +211,6 @@ const startChatbotConversation = async () => {
     }
 };
 
-
 onMounted(() => {
     getVideos();
     getDocuments();
@@ -267,47 +233,4 @@ onMounted(() => {
         border-top-color: #4caf50;  /* Grün wie im H1-Tag */
     }
 
-    .cancel-button {
-      margin-left: auto;
-    }
-
-</style>
-
-<style scoped>
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.mode-selection button {
-  padding: 0.5rem 1rem;
-  margin-right: 0.5rem;
-  cursor: pointer;
-  border: none;
-}
-
-.mode-selection .active {
-  background-color: #4caf50;
-}
-
-.chatbot-image img {
-  height: 50px;
-}
-
-.messages-container {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 0 2rem;
-}
-
-.input-container {
-  display: flex;
-  padding: 2rem;
-}
-
-.input-container input {
-  flex-grow: 1;
-  padding: 0.5rem;
-}
 </style>
