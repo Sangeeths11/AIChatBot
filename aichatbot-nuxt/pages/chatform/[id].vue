@@ -179,34 +179,34 @@ const deleteChatbotConversation = async () => {
 };
 
 const sendChatbotConversationMessage = async () => {
+    const promptMessageContent = newMessage.value;  // Copy the value to a new variable
+
     messages.value.push({
         sender: 'You',
-        content: newMessage.value,
+        content: promptMessageContent,  // Use the copied value
         time: new Date().toLocaleTimeString(),
         status: 'Delivered'
     });
 
-    // Clear the input field
-    newMessage.value = '';
+    newMessage.value = '';  // Clear the input field
 
     // Use nextTick to scroll after the DOM updates
     await nextTick();
 
     scrollToBottom();
 
-
     // Proceed to send the message to the backend and handle the response
     try {
         const response = await axios.post(`${baseUrl}/users/${userId}/subjects/${subjectId}/chats`, {
-            chatbot: mode.value === 'Resources' ? 'resources' : 'general', // Verwenden Sie .value für ref in Vue 3
-            prompt: newMessage.value
+            chatbot: mode.value === 'Resources' ? 'resources' : 'general',
+            prompt: promptMessageContent  // Use the copied value
         });
 
-        // Fügen Sie die Antwort des Chatbots hinzu
+        // Add the chatbot's response
         if (response.data && response.data.answer) {
             messages.value.push({
                 sender: 'Chatbot',
-                content: response.data.answer, // Hier setzen Sie die Antwort des Chatbots
+                content: response.data.answer,
                 time: new Date().toLocaleTimeString(),
                 status: 'Delivered'
             });
@@ -219,6 +219,7 @@ const sendChatbotConversationMessage = async () => {
         console.error('Error sending chat message:', error);
     }
 };
+
 
 
 const startChatbotConversation = async () => {
