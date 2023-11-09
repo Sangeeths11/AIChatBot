@@ -1,4 +1,5 @@
 <template>
+  <div class="header-logo"/>
     <div class="login-container">
       <h1 class="p-10">Welcome to our Dashboard</h1>
       <input type="text" placeholder="Username" v-model=loginName>

@@ -1,4 +1,5 @@
 <template>
+    <div class="header-logo"/>
     <div class="register-container">
       <h1>Welcome to our Dashboard</h1>
       <label class="label">

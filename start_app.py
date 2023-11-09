@@ -98,7 +98,7 @@ frontend_ready = Future()
 # Start the backend server and wait for it to be ready
 backend_process = run_process(
     ['python', './server/app.py'],
-    shell=True,
+    shell=True if os.name == 'nt' else False,  # True for Windows, False for Unix/Posix
     ready_future=backend_ready,
     ready_signal='Running on http://127.0.0.1:5000'  # Adjust this to the actual signal from your server output
 )

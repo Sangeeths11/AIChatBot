@@ -91,8 +91,11 @@ def documentQA(userId, subjectId, prompt):
         return_source_documents=True,
         verbose=False  # True for debug/output in console
     )
-
-    result = qa({"question": prompt, "chat_history": chat_history})
+    try:
+        result = qa({"question": prompt, "chat_history": chat_history})
+    except Exception as e:
+        print(e)
+        return {"question": prompt, "answer": "Sorry, an Error happened and I can't answer your question."}
 
     # add answer to history
     extendChatHistoryWithAnswer(userId, subjectId, result["answer"])

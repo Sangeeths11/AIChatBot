@@ -1,4 +1,5 @@
 <template>
+    <div class="header-logo"/>
     <div>
         <h1 class="p-10">Ressourcen</h1>
         

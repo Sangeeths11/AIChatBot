@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.header-logo {
+    background-image: url("../images/logo_brainwaive_long.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: auto;
+    height: 5rem;
+    margin: 0.5rem auto 0 0.5rem;
+}

@@ -1,5 +1,6 @@
 <template>
   <div class="chat-container">
+      <!--<div class="header-logo"/>-->
     <div class="p-4">
         <h1 class="mb-2">Mode Selection</h1>
         <div class="flex justify-between space-x-0 mb-6">

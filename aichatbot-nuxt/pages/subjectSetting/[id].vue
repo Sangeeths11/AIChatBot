@@ -1,4 +1,5 @@
 <template>
+  <div class="header-logo"/>
     <div class="p-10">
         <h1>Subjects Settings</h1>
         
