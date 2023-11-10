@@ -27,6 +27,7 @@ logs
 
 # credentials
 credsFirestore.json
+firebase-credentials.json
 server/env.env
 
 # folders
