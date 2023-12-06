@@ -1,4 +1,36 @@
 def getVideoSearchQuery(topic, count=10):
+    """
+    Generates a list of search queries for a given topic.
+
+    Args:
+      topic (str): The topic to generate search queries for.
+      count (int, optional): The number of search queries to generate. Defaults to 10.
+
+    Returns:
+      str: A JSON string containing the generated search queries.
+
+    Examples:
+      >>> getVideoSearchQuery('Python', 5)
+      {
+        "queries": [
+          {
+            "query": "Python beginner tutorial"
+          },
+          {
+            "query": "Python advanced tutorial"
+          },
+          {
+            "query": "Python introduction"
+          },
+          {
+            "query": "Python in-depth"
+          },
+          {
+            "query": "Python deep-dive"
+          }
+        ]
+      }
+    """
     return """You are a searcher for the best educational content on youtube. 
     Your students wants some helpful resources on "topic": """ + topic + """.
 
@@ -26,6 +58,34 @@ def getVideoSearchQuery(topic, count=10):
     
     
 def getBestVideosPrompt(topic, videos, count=3):
+    """
+    Selects the top videos to learn about a given topic.
+
+    Args:
+      topic (str): The topic to select videos for.
+      videos (str): A JSON string containing the videos to select from.
+      count (int, optional): The number of videos to select. Defaults to 3.
+
+    Returns:
+      str: A JSON string containing the selected videos.
+
+    Examples:
+      >>> getBestVideosPrompt('Python', '[{"name": "Python Tutorial for Beginners", "watchurl": "www.example.com/python-tutorial-for-beginners", "sentimentScore": 0.9}, {"name": "Python Advanced Tutorial", "watchurl": "www.example.com/python-advanced-tutorial", "sentimentScore": 0.8}]', 2)
+      {
+        "videos": [
+          {
+            "name": "Python Tutorial for Beginners",
+            "watchurl": "www.example.com/python-tutorial-for-beginners",
+            "sentimentScore": 0.9
+          },
+          {
+            "name": "Python Advanced Tutorial",
+            "watchurl": "www.example.com/python-advanced-tutorial",
+            "sentimentScore": 0.8
+          }
+        ]
+      }
+    """
     return """
     Select the top """ + str(count) + """ videos to learn about """+ topic + """ from the options provided in the Json below.
     Use the "name", "watchurl", "sentimentScore" attributes of each video to determine which three are the best ones.

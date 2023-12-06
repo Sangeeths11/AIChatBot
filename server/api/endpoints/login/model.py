@@ -12,6 +12,20 @@ db = firestore.client()
 # You should replace these placeholders with actual database operations
 
 def tryLogin(name, password):
+    """
+    Attempts to log in a user with the given name and password.
+
+    Args:
+      name (str): The name of the user.
+      password (str): The password of the user.
+
+    Returns:
+      str: The ID of the user if the login is successful, None otherwise.
+
+    Examples:
+      >>> tryLogin('John', 'password123')
+      '123456789'
+    """
 
     query = db.collection("users").where('name', '==', name).where('password', '==', password)
     queryResp = query.stream()

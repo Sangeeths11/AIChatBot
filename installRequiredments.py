@@ -33,10 +33,34 @@ def create_conda_environment_from_file(file_path, env_name):
         print(e.output.decode())
 
 def get_conda_env_name():
+    """
+    Gets the name of the currently activated Conda environment.
+
+    Returns:
+      str: The name of the currently activated Conda environment, or None if no Conda environment is activated.
+    """
     return os.environ.get('CONDA_DEFAULT_ENV', None)
 
 
 def create_conda_env(file_path='environment.yml'):
+    """
+    Creates a Conda environment from a .yml file.
+
+    Args:
+      file_path (str): The path to the .yml file.
+
+    Returns:
+      None
+
+    Side Effects:
+      Creates a Conda environment.
+
+    Notes:
+      If a Conda environment is already activated, the user will be prompted to use the active environment or create a new one.
+
+    Examples:
+      >>> create_conda_env('environment.yml')
+    """
 
     current_env_name = get_conda_env_name()
     if current_env_name is not None:
@@ -91,6 +115,21 @@ def install_with_pip():
 
 
 def setup_requirements():
+    """
+    Sets up the requirements for the project.
+
+    Returns:
+      None
+
+    Side Effects:
+      Installs packages with either Conda or pip.
+
+    Notes:
+      If Conda is available, the user will be prompted to use Conda or pip for package installation.
+
+    Examples:
+      >>> setup_requirements()
+    """
     # 1. Check if Node.js is installed
     if not shutil.which("node"):
         print("Node.js is not installed. Please install it from https://nodejs.org/en/download/ and try again.")

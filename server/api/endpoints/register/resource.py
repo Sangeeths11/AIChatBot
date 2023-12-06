@@ -6,7 +6,16 @@ from api.endpoints.register.model import uploadImage, tryRegisterUser, RegisterE
 
 
 class Register(Resource):
+    """
+    Resource for registering a new user.
+    """
     def __init__(self):
+        """
+        Initializes the Register class.
+
+        Args:
+          self (Register): The Register instance.
+        """
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name')
         self.parser.add_argument('password')
@@ -14,6 +23,19 @@ class Register(Resource):
 
 
     def post(self):
+        """
+        Handles a POST request for registering a new user.
+
+        Args:
+          self (Register): The Register instance.
+
+        Returns:
+          dict: A message and userId if successful, or an error message if unsuccessful.
+
+        Examples:
+          >>> Register.post()
+          {'message': 'User created', 'userId': newUserId}
+        """
         args = self.parser.parse_args()
         imageUrl = None
         if "file" not in request.files:

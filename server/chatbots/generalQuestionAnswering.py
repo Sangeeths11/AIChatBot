@@ -13,7 +13,23 @@ from api.endpoints.subjects.model import getSubjectById, updateSubject
 
 
 class Chatbot:
+    """
+    A class for a chatbot that helps with tutoring and mentoring.
+
+    Args:
+      user_id (str): The user's ID.
+      subject_id (str): The subject's ID.
+      subject_name (str): The subject's name.
+    """
     def __init__(self, user_id, subject_id, subject_name):
+        """
+        Initializes the Chatbot class.
+
+        Args:
+          user_id (str): The user's ID.
+          subject_id (str): The subject's ID.
+          subject_name (str): The subject's name.
+        """
         self.subject_name = subject_name
         self.template2 = """You are a AI Tutor helping with all kinds of different fields. Your name is ChouChou and you have a upbeat personality.
 First you ask the student in which language he wants to be tutored. 
@@ -42,6 +58,15 @@ Assistant:"""
         self.subject_id = subject_id
 
     def create_template(self, subject):
+        """
+        Creates a template for the chatbot.
+
+        Args:
+          subject (str): The subject to create the template for.
+
+        Returns:
+          str: The template for the chatbot.
+        """
         t1 = f"""Prompt-Template for Tutor- and Mentor-chatbot:
 # Greeting
     [Fun and upbeat welcome message with references to {subject}]
@@ -82,9 +107,21 @@ Assistant:"""
         return t1 + t2
 
     def get_response(self, user_input):
+        """
+        Gets the response from the chatbot.
+
+        Args:
+          user_input (str): The user's input.
+
+        Returns:
+          str: The chatbot's response.
+        """
         return self.chain.predict(human_input=user_input)
 
     def reset_memory(self):
+        """
+        Resets the memory of the chatbot.
+        """
         self.chain.memory.clear()
 
 
@@ -94,6 +131,13 @@ active_chatbots = []
 
 # funktion um history zu löschen.
 def clearConversationHistoryGeneral(userId, subjectId):
+    """
+    Clears the conversation history of the chatbot.
+
+    Args:
+      userId (str): The user's ID.
+      subjectId (str): The subject's ID.
+    """
     chatbot = next((bot for bot in active_chatbots if bot.user_id == userId), None)
     chatbot.reset_memory()
     updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=[], conversationHistoryGeneralQuestions=[], clearHistory=True)
@@ -101,6 +145,17 @@ def clearConversationHistoryGeneral(userId, subjectId):
 
 # Funktion, um die Antwort zu bekommen
 def get_chatbot_response(userId, subjectId, userInput):
+    """
+    Gets the response from the chatbot.
+
+    Args:
+      userId (str): The user's ID.
+      subjectId (str): The subject's ID.
+      userInput (str): The user's input.
+
+    Returns:
+      dict: A dictionary containing the user's input and the chatbot's response.
+    """
     if userInput.lower() == "clear":
         clearConversationHistoryGeneral(userId, subjectId)
         return {"question": userInput, "answer": "Chat history cleared"}
@@ -125,18 +180,60 @@ def get_chatbot_response(userId, subjectId, userInput):
 
 
 def extendChatHistoryWithPrompt(userId, subjectId, prompt):
+    """
+    Adds a prompt to the conversation history of a subject.
+
+    Args:
+      userId (str): The ID of the user.
+      subjectId (str): The ID of the subject.
+      prompt (str): The prompt to add to the conversation history.
+
+    Side Effects:
+      Updates the conversation history of the subject.
+
+    Examples:
+      >>> extendChatHistoryWithPrompt("txzUE0ZwDjgT9rK5zjUu", "DuFdJczI0xorjilmQect", "Tell me something about principal component analysis and its usecases for visualization.")
+    """
     questions, answers = getConversationHistoryGeneral(userId, subjectId)
     questions.append(prompt)
     updateSubject(userId, subjectId, conversationHistoryGeneralQuestions=questions)
 
 
 def extendChatHistoryWithAnswer(userId, subjectId, answer):
+    """
+    Adds an answer to the conversation history of a subject.
+
+    Args:
+      userId (str): The ID of the user.
+      subjectId (str): The ID of the subject.
+      answer (str): The answer to add to the conversation history.
+
+    Side Effects:
+      Updates the conversation history of the subject.
+
+    Examples:
+      >>> extendChatHistoryWithAnswer("txzUE0ZwDjgT9rK5zjUu", "DuFdJczI0xorjilmQect", "Principal component analysis is a statistical technique used to reduce the dimensionality of data.")
+    """
     questions, answers = getConversationHistoryGeneral(userId, subjectId)
     answers.append(answer)
     updateSubject(userId, subjectId, conversationHistoryGeneralAnswers=answers)
 
 
 def getConversationHistoryGeneral(userId, subjectId):
+    """
+    Gets the conversation history of a subject.
+
+    Args:
+      userId (str): The ID of the user.
+      subjectId (str): The ID of the subject.
+
+    Returns:
+      list: A list of questions and answers in the conversation history.
+
+    Examples:
+      >>> getConversationHistoryGeneral("txzUE0ZwDjgT9rK5zjUu", "DuFdJczI0xorjilmQect")
+      (["Tell me something about principal component analysis and its usecases for visualization."], ["Principal component analysis is a statistical technique used to reduce the dimensionality of data."])
+    """
     subject = getSubjectById(userId, subjectId)
     if not subject:
         print("No subject found")

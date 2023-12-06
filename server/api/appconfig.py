@@ -8,11 +8,38 @@ import atexit
 load_dotenv(find_dotenv())
 
 def cleanup_credentials_file(file_path):
+    """
+    Deletes a credentials file.
+
+    Args:
+      file_path (str): The path of the credentials file to delete.
+
+    Side Effects:
+      Deletes the file at the given path.
+
+    Examples:
+      >>> cleanup_credentials_file('firebase_credentials.json')
+      Deleted credentials file: firebase_credentials.json
+    """
     if os.path.exists(file_path):
         os.remove(file_path)
         print(f"Deleted credentials file: {file_path}")
 
 def get_Firebase_credentials():
+    """
+    Gets Firebase credentials from the environment variable and writes them to a file.
+
+    Side Effects:
+      Writes the credentials to a file.
+      Registers a cleanup function to delete the credentials file.
+
+    Raises:
+      ValueError: If the FIRESTORE_CREDENTIALS_BASE64 environment variable is not set.
+
+    Examples:
+      >>> get_Firebase_credentials()
+      Deleted credentials file: firebase_credentials.json
+    """
     # Get the encoded Firestore credentials from the environment variable
     encoded_creds = os.environ.get('FIRESTORE_CREDENTIALS_BASE64')
     if not encoded_creds:

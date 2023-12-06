@@ -11,6 +11,9 @@ from googleapiclient.errors import HttpError
 
 
 def main():
+    """
+    Main function to run the GoogleClient class.
+    """
     client = GoogleClient()
     
     
@@ -22,11 +25,23 @@ def main():
 
 # Class to handle everything with the Creation, Deletion of events, calendars and so forth
 class GoogleClient():
+    """
+    Class to handle everything with the Creation, Deletion of events, calendars and so forth.
+    """
     # Class variables    
     SCOPES = ["https://www.googleapis.com/auth/calendar"] 
     CREDENTIALS_PATH = 'credentials.json'
 
     def __init__(self, calendarName="BrainWaive"):
+        """
+        Initializes the GoogleClient class.
+
+        Args:
+          calendarName (str, optional): The name of the calendar to create. Defaults to "BrainWaive".
+
+        Side Effects:
+          Creates a calendar with the given name.
+        """
         self.service = GoogleClient.createService()
         self.calendarName = calendarName
         calendar = self.createCalendar(calendarName, "Europe/Zurich")
@@ -36,6 +51,12 @@ class GoogleClient():
     # create the service, that is going to be used to make the requests to the GoogleCalendarApi
     @classmethod
     def createService(self):  
+        """
+        Creates the service used to make requests to the Google Calendar API.
+
+        Returns:
+          googleapiclient.discovery.Resource: The service used to make requests to the Google Calendar API.
+        """
         creds = None
         if os.path.exists('token.json'):
             creds = Credentials.from_authorized_user_file('token.json', GoogleClient.SCOPES)
@@ -60,6 +81,20 @@ class GoogleClient():
         
     # creates a calendar with the calendarName in the specified timezone
     def createCalendar(self, calendarName="BrainWaive", timezone ="Europe/Zurich"):
+        """
+        Creates a calendar with the given name in the specified timezone.
+
+        Args:
+          calendarName (str): The name of the calendar to create.
+          timezone (str): The timezone of the calendar.
+
+        Returns:
+          dict: The calendar created.
+
+        Examples:
+          >>> GoogleClient.createCalendar("TestCal", "Europe/Zurich")
+          {'summary': 'TestCal', 'timeZone': 'Europe/Zurich'}
+        """
         exists, calendar = self.calendarExist(calendarName, returnCalendar=True)
         if not exists:    
             try:  
@@ -77,6 +112,19 @@ class GoogleClient():
     # adds an Event with the most important fields to the calendar  
     # DateTimes in ISO 8601 format, for example '2013-02-14T13:15:03-08:00' (YYYY-MM-DDTHH:mm:ssZ) 
     def insertEvent(self, eventName, eventDescription, startDateTime, endDateTime, timezone = "Europe/Zurich"):
+        """
+        Adds an event with the most important fields to the calendar.
+
+        Args:
+          eventName (str): The name of the event.
+          eventDescription (str): The description of the event.
+          startDateTime (str): The start date and time of the event in ISO 8601 format.
+          endDateTime (str): The end date and time of the event in ISO 8601 format.
+          timezone (str, optional): The timezone of the event. Defaults to "Europe/Zurich".
+
+        Side Effects:
+          Prints the link to the event.
+        """
         event = {
         'summary': eventName,
         'description': eventDescription,
@@ -94,11 +142,37 @@ class GoogleClient():
 
     # Deletes an event from the calendar by its name
     def deleteEvent(self, eventName):
+        """
+        Deletes an event from the calendar by its name.
+
+        Args:
+          eventName (str): The name of the event to delete.
+
+        Examples:
+          >>> GoogleClient.deleteEvent("TestEvent")
+          Event deleted.
+        """
         eventId = self.getIdOfEventByName(eventName)
         self.service.events().delete(calendarId=self.calendarId, eventId=eventId).execute()
 
 
     def updateEvent(self, eventName, eventDescription, startDateTime, endDateTime, timezone = "Europe/Zurich"):
+        """
+        Updates an event in the Google Calendar.
+
+        Args:
+          eventName (str): The name of the event to update.
+          eventDescription (str): The description of the event to update.
+          startDateTime (str): The start date and time of the event to update.
+          endDateTime (str): The end date and time of the event to update.
+          timezone (str): The timezone of the event to update. Defaults to "Europe/Zurich".
+
+        Returns:
+          None
+
+        Examples:
+          >>> updateEvent("My Event", "My event description", "2020-08-01T10:00:00", "2020-08-01T11:00:00")
+        """
         # First retrieve the event from the API.
         eventId = self.getIdOfEventByName(eventName)
         event = self.service.events().get(calendarId=self.calendarId, eventId=eventId).execute()
@@ -119,6 +193,19 @@ class GoogleClient():
 
     # gets the id of an event by its name
     def getIdOfEventByName(self, eventName):
+        """
+        Retrieves the ID of an event by its name.
+
+        Args:
+          eventName (str): The name of the event to retrieve.
+
+        Returns:
+          str: The ID of the event.
+
+        Examples:
+          >>> getIdOfEventByName("My Event")
+          "123456789"
+        """
         try:
             events_result = self.service.events().list(
                 calendarId=self.calendarId,
@@ -140,6 +227,19 @@ class GoogleClient():
         
     # Gets the Id of the calendar by name, searching in the Calendarlist of the authenticated user
     def getIdOfCalendarByName(self, calendarName):
+        """
+        Retrieves the ID of a calendar by its name.
+
+        Args:
+          calendarName (str): The name of the calendar to retrieve.
+
+        Returns:
+          str: The ID of the calendar.
+
+        Examples:
+          >>> getIdOfCalendarByName("My Calendar")
+          "987654321"
+        """
         try:
             calendar_list = self.service.calendarList().list().execute()
             calendar_id = None
@@ -155,6 +255,21 @@ class GoogleClient():
     # true if the calendar already exists else false
     # by name
     def calendarExist(self, calendarName, returnCalendar=False):
+        """
+        Checks if a calendar exists by its name.
+
+        Args:
+          calendarName (str): The name of the calendar to check.
+          returnCalendar (bool): Whether to return the calendar object. Defaults to False.
+
+        Returns:
+          bool: Whether the calendar exists.
+          dict: The calendar object, if returnCalendar is True.
+
+        Examples:
+          >>> calendarExist("My Calendar")
+          True
+        """
         # The scope for the Calendar API
         SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 

@@ -35,8 +35,39 @@ CORS(app)
 # celery -A app.celery worker
 
 def main():
+    """
+    Initializes the Flask app and adds resources.
+
+    Args:
+      None
+
+    Returns:
+      None
+
+    Side Effects:
+      Initializes Firebase and adds resources to the Flask app.
+
+    Examples:
+      >>> main()
+    """
     @app.errorhandler(Exception)
     def handle_error(e):
+        """
+    Handles errors and returns a JSON response.
+
+    Args:
+      e (Exception): The exception to handle.
+
+    Returns:
+      jsonify: A JSON response with the error message.
+
+    Side Effects:
+      None
+
+    Examples:
+      >>> handle_error(HTTPException)
+      {'error': 'HTTPException'}
+    """
         code = 500
         if isinstance(e, HTTPException):
             code = e.code

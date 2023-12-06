@@ -9,6 +9,25 @@ from concurrent.futures import Future
 
 
 def create_environment_variable_file():
+    """
+    Creates an environment variable file if it does not exist.
+
+    Args:
+      None
+
+    Returns:
+      None
+
+    Side Effects:
+      Creates a file named '.env' in the current working directory.
+
+    Notes:
+      The file contains credentials parsed from a file named 'env-cred'.
+
+    Examples:
+      >>> create_environment_variable_file()
+      None
+    """
     # Create the environment variable file if it doesn't exist
     if not os.path.exists('.env'):
         with open('env-cred', 'r') as creds_file:
@@ -21,6 +40,28 @@ def create_environment_variable_file():
 
 
 def setup():
+    """
+    Prompts the user to install dependencies and packages if necessary.
+
+    Args:
+      None
+
+    Returns:
+      None
+
+    Side Effects:
+      Installs dependencies and packages if the user agrees.
+
+    Notes:
+      If the user agrees, the function will call 'setup_requirements' and 'setup_frontend'.
+
+    Examples:
+      >>> setup()
+      If this is the first you use this project, we'll need to install some dependencies and packages.
+      Shall we proceed?
+      If you already installed everything just continue with 'n'.
+      Proceed? y / n: y
+    """
     r = input("""If this is the first you use this project, we'll need to install some dependencies and packages.
 Shall we proceed?
 If you already installed everything just continue with 'n'.
@@ -58,6 +99,28 @@ load_dotenv()
 
 # Function to run a command in a separate thread and print its output
 def run_process(command, shell=True, ready_future=None, ready_signal=None):
+    """
+    Runs a command in a separate thread and prints its output.
+
+    Args:
+      command (list): The command to run.
+      shell (bool): Whether to run the command in a shell.
+      ready_future (Future): A future to indicate server readiness.
+      ready_signal (str): A signal to indicate server readiness.
+
+    Returns:
+      subprocess.Popen: The process object.
+
+    Side Effects:
+      Prints the server output in real-time.
+
+    Notes:
+      If the ready_future and ready_signal are provided, the function will set the future to indicate server readiness when the signal is detected.
+
+    Examples:
+      >>> run_process(['python', './server/app.py'], shell=True, ready_future=backend_ready, ready_signal='Running on http://127.0.0.1:5000')
+      <subprocess.Popen object at 0x7f8f9f9f9f90>
+    """
     # print(os.getcwd())
     process = subprocess.Popen(
         command,
@@ -69,6 +132,28 @@ def run_process(command, shell=True, ready_future=None, ready_signal=None):
     )
 
     def check_ready():
+        """
+    Checks if the server is ready.
+
+    Args:
+      process (subprocess.Popen): The process object.
+      ready_future (Future): A future to indicate server readiness.
+      ready_signal (str): A signal to indicate server readiness.
+
+    Returns:
+      None
+
+    Side Effects:
+      Prints the server output in real-time.
+      Sets the future to indicate server readiness when the signal is detected.
+
+    Notes:
+      This function is called by 'run_process'.
+
+    Examples:
+      >>> check_ready(backend_process, backend_ready, 'Running on http://127.0.0.1:5000')
+      None
+    """
         try:
             for line in iter(process.stdout.readline, ''):
                 print(line, end='')  # Print the server output in real-time
@@ -85,6 +170,26 @@ def run_process(command, shell=True, ready_future=None, ready_signal=None):
 
 # Function to terminate all running processes and exit
 def terminate_processes(processes):
+    """
+    Terminates all running processes and exits.
+
+    Args:
+      processes (list): A list of process objects.
+
+    Returns:
+      None
+
+    Side Effects:
+      Terminates all running processes.
+      Exits the application.
+
+    Notes:
+      This function is called when the user presses Ctrl+C.
+
+    Examples:
+      >>> terminate_processes([backend_process, frontend_process])
+      Exiting application.
+    """
     for process in processes:
         if process.poll() is None:  # If the process is still running
             process.terminate()  # Terminate the process
